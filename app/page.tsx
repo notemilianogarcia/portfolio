@@ -16,13 +16,13 @@ export default async function HomePage() {
   return (
     <main>
       {/* Hero Band */}
-      <SectionBand theme="dark" variant="panel">
+      <SectionBand theme="dark" variant="full">
         <div className="flex flex-col items-start justify-center gap-6 py-12">
-          <h1 className="font-heading text-4xl md:text-6xl font-bold text-accent mb-2">
-            Emiliano Garcia Ochoa
+          <h1 className="font-heading text-4xl md:text-6xl font-bold text-[color:var(--color-text)] mb-2">
+            Emiliano Garcia
           </h1>
           <p className="text-lg md:text-2xl text-text-2 max-w-2xl">
-            ML Engineer & Researcher. Building reliable, efficient systems and publications at the intersection of research and production.
+            M.A.C. candidate and Software Engineering graduate building AI-driven systems for research and industry. Experienced in ML, data pipelines, and applied deep learning.
           </p>
           <div className="flex gap-4 mt-6">
             <a href="/projects" className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg transition-transform hover:scale-105">
@@ -88,7 +88,7 @@ export default async function HomePage() {
       )}
 
       {/* Contact Band */}
-      <SectionBand theme="dark" variant="panel" title="Contact">
+      <SectionBand theme="dark" variant="full" title="Contact" className="text-center">
         <div className="flex flex-col items-center gap-4">
           <p className="text-lg text-text-2">Email: hello@example.com</p>
           <div className="flex gap-6">

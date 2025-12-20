@@ -1,28 +1,69 @@
 [
   {
     "id": "exp-1",
-    "company": "Tech AI Labs",
-    "role": "Senior ML Engineer",
-    "location": "San Francisco, CA",
-    "period": "2023 - Present",
+    "company": "Wilfrid Laurier University",
+    "role": "Graduate Research and Teaching Assistant",
+    "location": "Waterloo, ON",
+    "period": "Sep 2025 - Present",
     "description": [
-      "Leading development of large-scale RAG systems for enterprise document intelligence.",
-      "Optimized inference latency by 40% using model quantization and custom CUDA kernels.",
-      "Mentoring a team of 4 junior engineers on best practices for production ML."
+      "Developing deep learning pipelines for multi-modal cognitive health assessment (speech, text, and auxiliary features) as part of master’s thesis research.",
+      "Designing preprocessing workflows (feature extraction, spectrograms, embeddings) and evaluating multiple neural architectures for multi-class classification and regression.",
+      "Running systematic experiments, ablation studies, and tuning to improve accuracy and robustness; preparing manuscripts with supervisor.",
+      "Supporting course instruction through grading, feedback, student guidance, and clarification of complex ML, data, and software engineering concepts."
     ],
-    "tags": ["PyTorch", "LLMs", "CUDA", "Python"]
+    "tags": ["Deep Learning", "Speech", "Python", "Teaching"]
   },
   {
     "id": "exp-2",
-    "company": "Research University",
-    "role": "Graduate Researcher",
-    "location": "Boston, MA",
-    "period": "2021 - 2023",
+    "company": "Autodesk Research",
+    "role": "Software Developer Intern",
+    "location": "Toronto, ON",
+    "period": "May 2023 - Sep 2023",
     "description": [
-      "Published 3 papers in top-tier AI conferences (NeurIPS, ICML) on efficient transformer architectures.",
-      "Developed a novel pruning technique that reduces model size by 3x with <1% accuracy loss.",
-      "Collaborated with cross-functional teams to implement research prototypes in production."
+      "Led development of AI-driven optimization solutions for the Human-Centered Building Design (HCBD) initiative, integrating advanced data science methodologies with architectural analysis to enhance space utilization and occupant experience.",
+      "Engineered robust data processing pipelines to transform raw architectural data into clean, analyzable datasets, implementing path-planning algorithms to model and visualize occupant movement patterns within building spaces.",
+      "Developed a sophisticated machine learning tool that optimized architectural space allocation based on occupancy patterns, demonstrating strong proficiency in Python programming and scientific computing libraries.",
+      "Applied geometry processing techniques and visualization tools to enhance data analysis workflows, enabling better understanding of spatial relationships in architectural designs."
     ],
-    "tags": ["Research", "Transformers", "JAX", "NLP"]
+    "tags": ["Python", "ML", "Data Processing", "Architecture"]
+  },
+  {
+    "id": "exp-3",
+    "company": "Thompson Rivers University",
+    "role": "Undergraduate Research Assistant",
+    "location": "Kamloops, BC",
+    "period": "May 2022 - Jan 2023",
+    "description": [
+      "Collaborated with Department Chair Dr. Emad Mohammed on pioneering research investigating cognitive similarities between COVID-19 and Alzheimer's disease patients through advanced machine learning techniques and audio processing.",
+      "Developed automated systems for transforming speech data into 2D frequency representations, enabling novel approaches to disease detection through computer vision techniques.",
+      "Engineered and evaluated ensemble learning solutions combining multiple CNN architectures to optimize prediction accuracy for Alzheimer's disease detection from speech patterns.",
+      "Designed and implemented machine learning models using clustering techniques to identify meaningful patterns in demographic and cognitive data."
+    ],
+    "tags": ["Deep Learning", "Speech", "CNN", "Clustering"]
+  },
+  {
+    "id": "exp-4",
+    "company": "Thompson Rivers University Enterprise Systems",
+    "role": "Software Analyst Intern",
+    "location": "Kamloops, BC",
+    "period": "Sep 2023 - Dec 2023",
+    "description": [
+      "Developed automation solutions for the Enterprise Systems team, leveraging FormFusion and Argos tools to streamline data extraction and reporting processes from Oracle databases.",
+      "Designed and implemented custom database queries and reporting workflows to meet complex institutional requirements, significantly improving efficiency of business operations.",
+      "Optimized system integration between enterprise tools through automated data transformation pipelines, reducing manual processing time while ensuring data accuracy and compliance."
+    ],
+    "tags": ["Automation", "Oracle", "Reporting", "Data Pipelines"]
+  },
+  {
+    "id": "exp-5",
+    "company": "Lululemon",
+    "role": "Guest Experience Lead / Educator",
+    "location": "Kamloops, BC / Waterloo, ON",
+    "period": "Apr 2024 - Present",
+    "description": [
+      "Directed daily store operations and coached team members to achieve sales and efficiency targets.",
+      "Implemented structured feedback and training practices to foster collaboration and high performance."
+    ],
+    "tags": ["Retail", "Leadership", "Training"]
   }
 ]

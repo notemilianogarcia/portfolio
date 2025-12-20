@@ -1,14 +1,20 @@
 [
   {
-    "school": "MIT",
-    "degree": "MSc, Computer Science",
-    "field": "Machine Learning",
-    "period": "2019 - 2021"
+    "school": "Wilfrid Laurier University",
+    "degree": "Master of Applied Computing (M.A.C.)",
+    "field": "Applied Computing / Machine Learning",
+    "period": "Sep 2025 - Present"
   },
   {
-    "school": "Stanford University",
-    "degree": "BSc, Mathematics",
-    "field": "Mathematics",
-    "period": "2015 - 2019"
+    "school": "Thompson Rivers University",
+    "degree": "Bachelor of Engineering (B.Eng.)",
+    "field": "Software Engineering",
+    "period": "Sep 2020 - Apr 2025"
+  },
+  {
+    "school": "ITESM, Colima, Mexico",
+    "degree": "High School Diploma",
+    "field": "Science & Technology",
+    "period": "Aug 2016 - May 2019"
   }
 ]

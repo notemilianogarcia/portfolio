@@ -61,7 +61,7 @@ export function SectionBand({
         ) : (
           <div className="mx-auto max-w-6xl">
             {(title || subtitle) && (
-              <div className="mb-12 text-center md:text-left">
+              <div className={cn("mb-12", className)}>
                 {title && (
                   <h2 className="font-heading text-3xl md:text-4xl font-bold tracking-tight mb-4">
                     {title}
