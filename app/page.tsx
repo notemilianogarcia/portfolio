@@ -17,20 +17,30 @@ export default async function HomePage() {
     <main>
       {/* Hero Band */}
       <SectionBand theme="dark" variant="full">
-        <div className="flex flex-col items-start justify-center gap-6 py-12">
-          <h1 className="font-heading text-4xl md:text-6xl font-bold text-[color:var(--color-text)] mb-2">
-            Emiliano Garcia
-          </h1>
-          <p className="text-lg md:text-2xl text-text-2 max-w-2xl">
-            M.A.C. candidate and Software Engineering graduate building AI-driven systems for research and industry. Experienced in ML, data pipelines, and applied deep learning.
-          </p>
-          <div className="flex gap-4 mt-6">
-            <a href="/projects" className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg transition-transform hover:scale-105">
-              View Projects
-            </a>
-            <a href="/resume.pdf" className="rounded-xl border border-accent px-6 py-3 text-sm font-bold text-accent bg-bg transition-transform hover:scale-105">
-              Download Resume
-            </a>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-12">
+          <div className="flex flex-col items-start justify-center gap-6 min-w-0">
+            <h1 className="font-heading text-4xl md:text-6xl font-bold text-[color:var(--color-text)] mb-2">
+              Emiliano Garcia
+            </h1>
+            <p className="text-lg md:text-2xl text-text-2 max-w-2xl">
+              M.A.C. candidate and Software Engineering graduate building AI-driven systems for research and industry. Experienced in ML, data pipelines, and applied deep learning.
+            </p>
+            <div className="flex gap-4 mt-6">
+              <a href="/projects" className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg transition-transform hover:scale-105">
+                View Projects
+              </a>
+              <a href="/resume.pdf" className="rounded-xl border border-accent px-6 py-3 text-sm font-bold text-accent bg-bg transition-transform hover:scale-105">
+                Download Resume
+              </a>
+            </div>
+          </div>
+          <div className="flex items-center justify-center shrink-0 max-w-[420px] w-full">
+            <img
+              src="/illustration-home.svg"
+              alt="Homepage illustration"
+              className="h-auto max-h-[70vh] w-full rounded-2xl translate-y-12 md:translate-y-20"
+              style={{ objectFit: 'contain', display: 'block' }}
+            />
           </div>
         </div>
       </SectionBand>

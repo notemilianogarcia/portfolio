@@ -22,6 +22,17 @@ interface ExperienceAccordionProps {
   className?: string;
 }
 
+function getLogoForCompany(company: string): string | undefined {
+  const map: Record<string, string> = {
+    "Wilfrid Laurier University": "/logos/wilfrid-laurier.png",
+    "Autodesk Research": "/logos/autodesk.png",
+    "Thompson Rivers University": "/logos/tru.png",
+    "Thompson Rivers University (Enterprise Systems)": "/logos/tru.png",
+    "Lululemon": "/logos/lululemon.png",
+  };
+  return map[company];
+}
+
 export function ExperienceAccordion({ items, className }: ExperienceAccordionProps) {
   return (
     <Accordion.Root
@@ -29,39 +40,41 @@ export function ExperienceAccordion({ items, className }: ExperienceAccordionPro
       collapsible
       className={cn("flex flex-col gap-4", className)}
     >
-      {items.map((item) => (
-        <Accordion.Item
-          key={item.id}
-          value={item.id}
-          className="group overflow-hidden rounded-2xl border border-border bg-surface-2 transition-all hover:border-accent/30"
-        >
-          <Accordion.Header className="flex">
-            <Accordion.Trigger className="flex flex-1 items-center justify-between p-6 text-left outline-none">
-              <div className="flex items-center gap-4">
-                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-surface border border-border flex items-center justify-center">
-                  {item.logo ? (
-                    <Image
-                      src={item.logo}
-                      alt={item.company}
-                      fill
-                      className="object-contain p-2"
-                    />
-                  ) : (
-                    <span className="text-xl font-bold text-accent">
-                      {item.company.charAt(0)}
-                    </span>
-                  )}
+      {items.map((item) => {
+        const logo = getLogoForCompany(item.company);
+        return (
+          <Accordion.Item
+            key={item.id}
+            value={item.id}
+            className="group overflow-hidden rounded-2xl border border-border bg-surface-2 transition-all hover:border-accent/30"
+          >
+            <Accordion.Header className="flex">
+              <Accordion.Trigger className="flex flex-1 items-center justify-between p-6 text-left outline-none">
+                <div className="flex items-center gap-4">
+                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-surface border border-border flex items-center justify-center">
+                    {logo ? (
+                      <Image
+                        src={logo}
+                        alt={item.company}
+                        fill
+                        className="object-cover rounded-xl"
+                      />
+                    ) : (
+                      <span className="text-xl font-bold text-accent">
+                        {item.company.charAt(0)}
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-lg font-bold text-text">
+                      {item.role}
+                    </h3>
+                    <p className="text-sm font-medium text-text-2">
+                      {item.company}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-heading text-lg font-bold text-text">
-                    {item.role}
-                  </h3>
-                  <p className="text-sm font-medium text-text-2">
-                    {item.company}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-6">
                 <div className="hidden md:flex flex-col items-end text-right">
                   <div className="flex items-center gap-1.5 text-xs text-text-2">
                     <Calendar size={12} />
@@ -111,7 +124,8 @@ export function ExperienceAccordion({ items, className }: ExperienceAccordionPro
             </div>
           </Accordion.Content>
         </Accordion.Item>
-      ))}
+        );
+      })}
     </Accordion.Root>
   );
 }
