@@ -1,22 +1,26 @@
 [
-  { "name": "Python", "category": "language" },
-  { "name": "SQL", "category": "language" },
-  { "name": "JavaScript", "category": "language" },
-  { "name": "C++", "category": "language" },
-  { "name": "React", "category": "frontend" },
-  { "name": "HTML/CSS", "category": "frontend" },
-  { "name": "Node.js", "category": "backend" },
-  { "name": "FastAPI", "category": "backend" },
   { "name": "PyTorch", "category": "ml" },
   { "name": "TensorFlow/Keras", "category": "ml" },
   { "name": "scikit-learn", "category": "ml" },
   { "name": "Pandas", "category": "ml" },
   { "name": "NumPy", "category": "ml" },
+
   { "name": "AWS", "category": "ops" },
   { "name": "Docker", "category": "ops" },
   { "name": "Git", "category": "ops" },
   { "name": "CI/CD", "category": "ops" },
-  { "name": "LangChain", "category": "ml" },
-  { "name": "LangGraph", "category": "ml" },
-  { "name": "MCP", "category": "ml" }
+
+  { "name": "Python", "category": "language" },
+  { "name": "SQL", "category": "language" },
+  { "name": "JavaScript", "category": "language" },
+  { "name": "C++", "category": "language" },
+
+  { "name": "Node.js", "category": "backend" },
+  { "name": "FastAPI", "category": "backend" },
+  { "name": "LangChain", "category": "backend" },
+  { "name": "LangGraph", "category": "backend" },
+  { "name": "MCP", "category": "backend" },
+
+  { "name": "React", "category": "frontend" },
+  { "name": "HTML/CSS", "category": "frontend" }
 ]

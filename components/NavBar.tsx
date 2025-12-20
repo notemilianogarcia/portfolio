@@ -19,7 +19,7 @@ export function NavBar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-8">
           <Link href="/" className="font-heading text-xl font-bold tracking-tighter text-accent">
-            EGO
+            EG
           </Link>
           <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
@@ -52,7 +52,7 @@ export function NavBar() {
             <Github size={20} />
           </a>
           <a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/in/emiliano-garcia-ochoa/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-text-2 hover:text-accent transition-colors"

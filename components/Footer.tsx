@@ -13,7 +13,7 @@ export function Footer() {
 
           <div className="flex items-center gap-6">
             <a
-              href="mailto:hello@example.com"
+              href="mailto:emiliano.gar.och@gmail.com"
               className="flex items-center gap-2 text-sm text-text-2 hover:text-accent transition-colors"
             >
               <Mail size={16} />
@@ -29,7 +29,7 @@ export function Footer() {
               GitHub
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/emiliano-garcia-ochoa/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-text-2 hover:text-accent transition-colors"
