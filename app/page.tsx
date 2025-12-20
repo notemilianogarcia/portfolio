@@ -1,65 +1,102 @@
-import Image from "next/image";
 
-export default function Home() {
+import { SectionBand } from "@/components/SectionBand";
+import { ExperienceAccordion } from "@/components/ExperienceAccordion";
+import { ProjectGrid } from "@/components/ProjectGrid";
+import { PublicationCard } from "@/components/PublicationCard";
+import { TagChip } from "@/components/TagChip";
+import { getAllProjects, getAllPublications } from "@/lib/content";
+import skills from "@/data/skills.json";
+import experience from "@/data/experience.json";
+
+export default async function HomePage() {
+  const projects = await getAllProjects();
+  const publications = await getAllPublications();
+  const featuredPub = publications.find((p: any) => p.featured);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main>
+      {/* Hero Band */}
+      <SectionBand theme="dark" variant="panel">
+        <div className="flex flex-col items-start justify-center gap-6 py-12">
+          <h1 className="font-heading text-4xl md:text-6xl font-bold text-accent mb-2">
+            Emiliano Garcia Ochoa
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg md:text-2xl text-text-2 max-w-2xl">
+            ML Engineer & Researcher. Building reliable, efficient systems and publications at the intersection of research and production.
           </p>
+          <div className="flex gap-4 mt-6">
+            <a href="/projects" className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg transition-transform hover:scale-105">
+              View Projects
+            </a>
+            <a href="/resume.pdf" className="rounded-xl border border-accent px-6 py-3 text-sm font-bold text-accent bg-bg transition-transform hover:scale-105">
+              Download Resume
+            </a>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </SectionBand>
+
+      {/* Skills Band */}
+      <SectionBand theme="dark" variant="panel" title="Skills">
+        <div className="flex flex-wrap gap-3 justify-center">
+          {skills.map((skill: any) => {
+            // Map categories to IDE-like accent colors
+            let skillType = "other";
+            if (skill.category) {
+              const cat = skill.category.toLowerCase();
+              if (["ml", "machine learning", "ai"].includes(cat)) skillType = "ml";
+              else if (["languages", "language"].includes(cat)) skillType = "language";
+              else if (["database", "databases"].includes(cat)) skillType = "database";
+              else if (["infra", "infrastructure", "ops", "devops"].includes(cat)) skillType = "infra";
+              else if (["frontend", "ui", "ux"].includes(cat)) skillType = "frontend";
+              else if (["backend", "server"].includes(cat)) skillType = "backend";
+              else skillType = cat;
+            }
+            return (
+              <TagChip
+                key={skill.name}
+                variant="skill"
+                skillType={skillType}
+              >
+                {skill.name}
+              </TagChip>
+            );
+          })}
         </div>
-      </main>
-    </div>
+      </SectionBand>
+
+      {/* Featured Experience Band */}
+      <SectionBand theme="dark" variant="panel" title="Featured Experience">
+        <ExperienceAccordion items={experience.slice(0, 2)} />
+        <div className="mt-6 text-right">
+          <a href="/about" className="text-sm text-accent underline">See all on About</a>
+        </div>
+      </SectionBand>
+
+      {/* Selected Projects Band */}
+      <SectionBand theme="dark" variant="panel" title="Selected Projects">
+        <ProjectGrid projects={projects.slice(0, 2)} />
+      </SectionBand>
+
+      {/* Featured Publication Band (light) */}
+      {featuredPub && (
+        <SectionBand theme="light" variant="panel" title="Featured Publication">
+          <PublicationCard publication={featuredPub} showAbstract />
+          <div className="mt-4 text-right">
+            <a href={`/publications/${featuredPub.slug}`} className="text-sm text-accent underline">Read full</a>
+          </div>
+        </SectionBand>
+      )}
+
+      {/* Contact Band */}
+      <SectionBand theme="dark" variant="panel" title="Contact">
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-lg text-text-2">Email: hello@example.com</p>
+          <div className="flex gap-6">
+            <a href="https://github.com" className="text-text-2 hover:text-accent">GitHub</a>
+            <a href="https://linkedin.com" className="text-text-2 hover:text-accent">LinkedIn</a>
+          </div>
+        </div>
+      </SectionBand>
+    </main>
   );
 }

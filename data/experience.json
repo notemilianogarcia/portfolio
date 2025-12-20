@@ -1,0 +1,28 @@
+[
+  {
+    "id": "exp-1",
+    "company": "Tech AI Labs",
+    "role": "Senior ML Engineer",
+    "location": "San Francisco, CA",
+    "period": "2023 - Present",
+    "description": [
+      "Leading development of large-scale RAG systems for enterprise document intelligence.",
+      "Optimized inference latency by 40% using model quantization and custom CUDA kernels.",
+      "Mentoring a team of 4 junior engineers on best practices for production ML."
+    ],
+    "tags": ["PyTorch", "LLMs", "CUDA", "Python"]
+  },
+  {
+    "id": "exp-2",
+    "company": "Research University",
+    "role": "Graduate Researcher",
+    "location": "Boston, MA",
+    "period": "2021 - 2023",
+    "description": [
+      "Published 3 papers in top-tier AI conferences (NeurIPS, ICML) on efficient transformer architectures.",
+      "Developed a novel pruning technique that reduces model size by 3x with <1% accuracy loss.",
+      "Collaborated with cross-functional teams to implement research prototypes in production."
+    ],
+    "tags": ["Research", "Transformers", "JAX", "NLP"]
+  }
+]

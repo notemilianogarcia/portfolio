@@ -1,0 +1,14 @@
+[
+  { "name": "PyTorch", "category": "ml" },           
+  { "name": "JAX", "category": "ml" },                
+  { "name": "LangGraph", "category": "backend" },     
+  { "name": "Python", "category": "language" },       
+  { "name": "TypeScript", "category": "language" },   
+  { "name": "PostgreSQL", "category": "database" },   
+  { "name": "Redis", "category": "database" },        
+  { "name": "Next.js", "category": "frontend" },      
+  { "name": "React", "category": "frontend" },        
+  { "name": "Docker", "category": "ops" },            
+  { "name": "CUDA", "category": "infra" },            
+  { "name": "Figma", "category": "other" }           
+]
