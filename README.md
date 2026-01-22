@@ -57,34 +57,68 @@ npm run lint
 ## Project Structure
 
 ```
-portfolio/
-├── code/                         # Next.js application
-│   ├── app/                      # App Router
-│   │   ├── blog/                 # Blog posts
-│   │   ├── projects/             # Project case studies
-│   │   ├── publications/         # Publications
-│   │   └── page.tsx              # Homepage
-│   ├── components/               # Reusable React components
-│   ├── content/                  # MDX content files
-│   ├── data/                     # JSON data
-│   ├── lib/                      # Utilities
-│   ├── public/                   # Static assets & resume.pdf
-│   ├── next.config.ts
-│   ├── tsconfig.json
-│   └── package.json
-└── README.md                     # This file
+code/
+├── app/                          # Next.js App Router
+│   ├── layout.tsx                # Root layout
+│   ├── page.tsx                  # Homepage
+│   ├── blog/
+│   │   ├── page.tsx              # Blog list
+│   │   └── [slug]/page.tsx       # Blog post
+│   ├── projects/
+│   │   ├── page.tsx              # Projects grid
+│   │   └── [slug]/page.tsx       # Project details
+│   ├── publications/
+│   │   ├── page.tsx              # Publications list
+│   │   └── [slug]/page.tsx       # Publication details
+│   └── about/page.tsx            # About page
+│
+├── components/                   # Reusable React components
+│   ├── NavBar.tsx                # Navigation header
+│   ├── Footer.tsx                # Footer
+│   ├── ProjectCard.tsx           # Project card display
+│   ├── SectionBand.tsx           # Section wrapper
+│   ├── TagChip.tsx               # Tag/chip component
+│   ├── ThemeProvider.tsx         # Dark/light theme
+│   ├── mdx/
+│   │   └── MDXComponents.tsx     # Markdown element mappings
+│   └── widgets/                  # Custom interactive components
+│
+├── content/                      # Content files (MDX)
+│   ├── blog/                     # Blog posts
+│   ├── projects/                 # Project case studies
+│   └── publications/             # Publication links
+│
+├── data/                         # JSON data files
+│   ├── skills.json
+│   ├── experience.json
+│   ├── education.json
+│   └── awards.json
+│
+├── lib/                          # Utilities and helpers
+│   ├── content.ts                # Content loader
+│   └── utils.ts                  # Utility functions
+│
+├── public/                       # Static assets
+│   ├── logos/
+│   ├── resume.pdf                # Resume (download link)
+│   └── illustration-home.svg
+│
+├── next.config.ts                # Next.js config
+├── tailwind.config.mjs            # Tailwind config
+├── tsconfig.json                 # TypeScript config
+└── package.json                  # Dependencies
 ```
 
 ## Adding Content
 
 ### New Blog Post
 
-Create a file in `code/content/blog/` with frontmatter:
+Create a file in `content/blog/` with frontmatter and MDX:
 
 ```mdx
 ---
 title: "Post Title"
-summary: "Brief summary"
+summary: "Brief summary for the blog list"
 date: "2026-01-22"
 tags: ["tag1", "tag2"]
 ---
@@ -96,7 +130,7 @@ Your content in markdown...
 
 ### New Project
 
-Create a file in `code/content/projects/`:
+Create a file in `content/projects/` with frontmatter:
 
 ```mdx
 ---
@@ -105,7 +139,7 @@ problem: "What problem does it solve?"
 approach: "How did you approach it?"
 result: "What was the outcome?"
 date: "2026-01-22"
-tags: ["Python", "ML"]
+tags: ["Python", "RAG", "ML"]
 featured: true
 ---
 
@@ -114,22 +148,74 @@ featured: true
 Detailed project description...
 ```
 
-## Features
+### New Publication
 
-- **Dynamic content loading** — add blog posts/projects as MDX files
-- **Dark/light theme toggle** — built-in theme support
-- **Responsive design** — works on mobile, tablet, desktop
-- **SEO optimized** — with next-seo configuration
-- **Fast performance** — static generation, minimal dependencies
-- **GitHub Flavored Markdown** — tables, code blocks, strikethrough
+Create a file in `content/publications/` following the same pattern.
+
+## Frontmatter Fields
+
+### Blog Posts
+- `title` — Post title
+- `summary` — Short description
+- `date` — ISO date (YYYY-MM-DD)
+- `tags` — Array of tags
+
+### Projects
+- `title` — Project name
+- `problem` — Problem statement
+- `approach` — Solution approach
+- `result` — Outcome/result
+- `date` — ISO date
+- `tags` — Array of tags
+- `featured` — Boolean (shows on homepage)
+
+### Publications
+- `title` — Publication title
+- `authors` — Array of authors
+- `date` — ISO date
+- `url` — Link to paper/resource
+- `summary` — Abstract/summary
+- `tags` — Array of tags
+- `featured` — Boolean (shows on homepage)
+
+## Markdown Support
+
+The site supports GitHub Flavored Markdown including:
+- Tables
+- Strikethrough
+- Task lists
+- Code blocks with syntax highlighting
+
+Custom MDX components available:
+- `<Callout type="info|warning|success">` — Highlighted callout boxes
+- `<Figure src="/path" caption="..." alt="..." />` — Figures with captions
+- `<Metric label="..." value="..." description="..." />` — Metric display
 
 ## Customization
 
-Edit these files to customize:
-- `code/app/globals.css` — Colors and theme
-- `code/components/NavBar.tsx` — Navigation links
-- `code/data/` — Skills, experience, education
-- `code/content/` — Blog posts, projects, publications
+### Colors & Theme
+
+Edit `app/globals.css` to modify the color palette. The site supports dark and light modes.
+
+### Navigation
+
+Update `navLinks` in `components/NavBar.tsx` to add/remove navigation items.
+
+### Data Files
+
+Edit JSON files in `data/` to update:
+- Skills and categories
+- Work experience
+- Education
+- Awards
+
+## Performance
+
+- **Next.js 16 + Turbopack** for fast builds
+- **App Router** for efficient code splitting
+- **Static generation** for all content pages
+- **Optimized images** with next/image
+- **Minimal dependencies** to keep bundle size small
 
 ## Deployment
 
@@ -143,6 +229,10 @@ The site is optimized for deployment on:
 
 MIT License — feel free to use this as a template for your own portfolio.
 
+## Contributing
+
+This is a personal portfolio, but the code is open for reference and learning. Fork and adapt as needed!
+
 ---
 
-Built with care to balance simplicity, performance, and beautiful design.
+Built with care to balance simplicity, performance, and beautiful design. Questions? Feel free to reach out.
