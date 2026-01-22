@@ -34,7 +34,6 @@ This is a personal portfolio site that serves as a curated space to share projec
 ### Installation
 
 ```bash
-cd code
 npm install
 npm run dev
 ```
@@ -57,7 +56,7 @@ npm run lint
 ## Project Structure
 
 ```
-code/
+portfolio/
 ├── app/                          # Next.js App Router
 │   ├── layout.tsx                # Root layout
 │   ├── page.tsx                  # Homepage
