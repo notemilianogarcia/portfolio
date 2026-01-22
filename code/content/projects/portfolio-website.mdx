@@ -1,0 +1,46 @@
+---
+title: "Personal Portfolio Website"
+problem: "Publish a fast, maintainable personal site with blog and project case studies."
+approach: "Next.js App Router + MDX content + Tailwind CSS; simple file-based content and reusable UI components."
+result: "Initial version live with blog and projects sections; ongoing improvements."
+date: "2026-01-22"
+tags: ["frontend", "Next.js", "TypeScript", "Tailwind", "MDX"]
+featured: true
+---
+
+# Personal Portfolio Website
+
+## Overview
+This project is the foundation of my personal site: projects, blog posts, and publications in a clean, fast UI. The priorities are maintainability, a great writing flow, and performance.
+
+## Problem
+I wanted a site that’s easy to update, fast to load, and pleasant to maintain — without a complex CMS or heavyweight tooling.
+
+## Approach
+- Next.js 16 (App Router) for routing and server-side rendering
+- Tailwind CSS 4 for composable, design‑system‑friendly styles
+- MDX + `gray-matter` so content is simple files with frontmatter
+- Reusable components for cards, sections, and MDX rendering
+
+## Result
+The first version is live with Projects, Blog, and Publications. Content is file‑based, builds are fast, and the UI is straightforward to extend.
+
+## Decisions and trade‑offs
+- File‑based content over CMS: better diffs and local iteration
+- App Router for modern Next.js patterns and layout control
+- Minimal dependencies to keep bundle size small
+
+## Architecture
+Content files live under `content/` and are loaded via helpers in `lib/content.ts`. Pages in the App Router render MDX with custom components for consistent typography and layout.
+
+## Performance notes
+Using the App Router and lean components keeps client payloads small. Static content routes are cached aggressively; images and assets can be optimized as needed.
+
+## Roadmap
+- More detailed case studies and embedded demos
+- Richer MDX components (callouts, code blocks, diagrams)
+- SEO and Open Graph polish
+- Accessibility and keyboard navigation improvements
+
+## Status
+Work in progress — I’ll keep shipping small improvements and write-ups as I go.
