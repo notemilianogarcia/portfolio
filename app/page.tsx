@@ -29,7 +29,7 @@ export default async function HomePage() {
               <a href="/projects" className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg transition-transform hover:scale-105">
                 View Projects
               </a>
-              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-accent px-6 py-3 text-sm font-bold text-accent bg-bg transition-transform hover:scale-105">
+              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="rounded-xl border-2 border-accent px-6 py-3 text-sm font-bold text-accent bg-bg transition-transform hover:scale-105">
                 Download Resume
               </a>
             </div>
