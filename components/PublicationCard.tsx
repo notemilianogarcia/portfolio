@@ -20,7 +20,7 @@ interface PublicationCardProps {
 
 export function PublicationCard({ publication, showAbstract = false }: PublicationCardProps) {
   return (
-    <div className="group relative flex flex-col gap-4 rounded-2xl border border-border bg-bg p-6 transition-all hover:border-accent/30">
+    <div className="group relative flex flex-col gap-4 rounded-2xl border border-border bg-surface-2 p-6 transition-all hover:border-accent/30">
       <div className="flex flex-col gap-1">
         <div className="flex items-start justify-between gap-4">
           <Link href={`/publications/${publication.slug}`}>
