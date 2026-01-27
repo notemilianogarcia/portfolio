@@ -74,9 +74,12 @@ portfolio/
 ├── components/                   # Reusable React components
 │   ├── NavBar.tsx                # Navigation header
 │   ├── Footer.tsx                # Footer
-│   ├── ProjectCard.tsx           # Project card display
+│   ├── ProjectCard.tsx           # Project card display (split click zones)
 │   ├── SectionBand.tsx           # Section wrapper
-│   ├── TagChip.tsx               # Tag/chip component
+│   ├── TagChip.tsx               # Tag/chip component with color variants
+│   ├── ExpandableTags.tsx        # Expandable tag display with +N overflow
+│   ├── PublicationCard.tsx       # Publication card with PDF link
+│   ├── EmailContact.tsx          # Email with copy-to-clipboard button
 │   ├── ThemeProvider.tsx         # Dark/light theme
 │   ├── mdx/
 │   │   └── MDXComponents.tsx     # Markdown element mappings
@@ -134,9 +137,7 @@ Create a file in `content/projects/` with frontmatter:
 ```mdx
 ---
 title: "Project Name"
-problem: "What problem does it solve?"
-approach: "How did you approach it?"
-result: "What was the outcome?"
+summary: "Concise one-sentence overview of the project."
 date: "2026-01-22"
 tags: ["Python", "RAG", "ML"]
 featured: true
@@ -161,11 +162,9 @@ Create a file in `content/publications/` following the same pattern.
 
 ### Projects
 - `title` — Project name
-- `problem` — Problem statement
-- `approach` — Solution approach
-- `result` — Outcome/result
+- `summary` — One-sentence project summary (replaces problem/approach/result)
 - `date` — ISO date
-- `tags` — Array of tags
+- `tags` — Array of tags (ordered by recruiter importance)
 - `featured` — Boolean (shows on homepage)
 
 ### Publications
@@ -190,9 +189,20 @@ Custom MDX components available:
 - `<Figure src="/path" caption="..." alt="..." />` — Figures with captions
 - `<Metric label="..." value="..." description="..." />` — Metric display
 
-## Customization
+## Features
 
-### Colors & Theme
+### Tags System
+- **Color-grouped tags** — Tags are organized by type (ML, Backend, Frontend, Language, Database, Ops, Other)
+- **Expandable tags** — Cards show 4 initial tags; additional tags display via "+N" button
+- **Tag display** — All tags visible on detail pages (projects, blog, publications)
+- **Recruiter-focused** — Tags ordered by importance, not implementation detail
+
+### Interactive Elements
+- **Split card interactions** — Top (title/summary) clickable to detail page; bottom (tags) non-interactive
+- **Copy email button** — One-click email copy to clipboard on homepage
+- **Hover states** — Consistent cursor styles and visual feedback
+
+
 
 Edit `app/globals.css` to modify the color palette. The site supports dark and light modes.
 
