@@ -49,7 +49,7 @@ export function ExperienceAccordion({ items, className }: ExperienceAccordionPro
             className="group overflow-hidden rounded-2xl border border-border bg-surface-2 transition-all hover:border-accent/30"
           >
             <Accordion.Header className="flex">
-              <Accordion.Trigger className="flex flex-1 items-center justify-between p-6 text-left outline-none">
+              <Accordion.Trigger className="flex flex-1 items-center justify-between p-6 text-left outline-none cursor-pointer">
                 <div className="flex items-center gap-4">
                   <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-surface border border-border flex items-center justify-center">
                     {logo ? (

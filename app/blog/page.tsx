@@ -1,38 +1,39 @@
 import { SectionBand } from "@/components/SectionBand";
 import { getAllPosts } from "@/lib/content";
-import { TagChip } from "@/components/TagChip";
+import { ExpandableTags } from "@/components/ExpandableTags";
 
 export default async function BlogPage() {
   const posts = await getAllPosts();
+  
+  // Custom order for blog posts
+  const postOrder = ["rag-benchmark-service", "welcome", "future-local-ml"];
+  const orderedPosts = postOrder
+    .map(slug => posts.find((p: any) => p.slug === slug))
+    .filter(Boolean)
+    .concat(posts.filter((p: any) => !postOrder.includes(p.slug)));
+  
   return (
     <main>
       <SectionBand theme="light" variant="panel" title="Blog">
         <div className="flex flex-col gap-8">
-          {posts.map((post: any) => (
-            <a
+          {orderedPosts.map((post: any) => (
+            <div
               key={post.slug}
-              href={`/blog/${post.slug}`}
-              className="block rounded-xl border border-border bg-surface-2 p-6 hover:border-accent/40"
+              className="rounded-xl border border-border bg-surface-2 p-6 transition-all hover:border-accent/40 hover:shadow-lg"
             >
-              <h3 className="font-heading text-lg font-bold text-text mb-2">{post.title}</h3>
-              <p className="text-sm text-text-2 mb-2">{post.summary}</p>
-              <div className="flex gap-2">
-                {post.tags?.map((tag: string) => {
-                  let skillType = "other";
-                  const tagLower = tag.toLowerCase();
-                  if (["ml", "machine learning", "ai", "pytorch", "jax"].includes(tagLower)) skillType = "ml";
-                  else if (["backend", "langgraph", "server", "api"].includes(tagLower)) skillType = "backend";
-                  else if (["language", "typescript", "python"].includes(tagLower)) skillType = "language";
-                  else if (["database", "postgresql", "redis", "sql"].includes(tagLower)) skillType = "database";
-                  else if (["frontend", "react", "next.js", "ui", "ux"].includes(tagLower)) skillType = "frontend";
-                  else if (["ops", "docker", "devops", "infra", "infrastructure", "cuda"].includes(tagLower)) skillType = "ops";
-                  else skillType = tagLower;
-                  return (
-                    <TagChip key={tag} variant="skill" skillType={skillType}>{tag}</TagChip>
-                  );
-                })}
+              <a
+                href={`/blog/${post.slug}`}
+                className="group/link block"
+              >
+                <h3 className="font-heading text-lg font-bold text-text mb-2 transition-colors group-hover/link:text-accent">
+                  {post.title}
+                </h3>
+                <p className="text-sm text-text-2 mb-2">{post.summary}</p>
+              </a>
+              <div className="mt-4 pt-4 border-t border-border">
+                <ExpandableTags tags={post.tags ?? []} expandable={true} maxInitialTags={5} />
               </div>
-            </a>
+            </div>
           ))}
         </div>
       </SectionBand>

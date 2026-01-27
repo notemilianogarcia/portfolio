@@ -3,6 +3,7 @@ import { getPostBySlug } from "@/lib/content";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { components as MDXComponents } from "@/components/mdx/MDXComponents";
 import remarkGfm from "remark-gfm";
+import { ExpandableTags } from "@/components/ExpandableTags";
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -12,6 +13,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <main>
       <SectionBand theme="light" variant="panel">
         <div className="prose max-w-2xl mx-auto">
+          {post.metadata.tags && post.metadata.tags.length > 0 && (
+            <div className="mb-8 pb-8 border-b border-border not-prose">
+              <ExpandableTags tags={post.metadata.tags} expandable={false} />
+            </div>
+          )}
           <MDXRemote source={post.content} components={MDXComponents} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
         </div>
       </SectionBand>

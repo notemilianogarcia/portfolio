@@ -1,43 +1,68 @@
 ---
-title: "Building a Reproducible RAG Benchmark Service"
-summary: "How I structured a baseline-first RAG system with BM25, offline metrics, and artifact versioning to keep experiments honest."
-date: "2026-01-22"
-tags: ["RAG", "Python", "BM25", "Evaluation", "ML Engineering"]
+title: "Building an Evaluation-First RAG System"
+summary: "A benchmark-driven RAG system for scientific question answering, designed to demonstrate disciplined evaluation, system design, and end-to-end ML engineering."
+date: "2026-01-26"
+tags: ["RAG", "Python", "Evaluation", "ML Engineering", "MLOps"]
 ---
 
-# Building a Reproducible RAG Benchmark Service
+# Building an Evaluation-First RAG System
 
-I wanted a Retrieval-Augmented Generation stack that proves value with measurements before adding complexity. This post walks through the baseline-first service I built, the discipline around evaluation, and how I keep experiments reproducible. It’s also a showcase of the applied search + generation work I’ve learned to deliver, aimed at demonstrating the sort of end-to-end skills teams need for today’s AI-heavy roadmaps.
+Over time, I've worked on many machine learning components in isolation: models, experiments, evaluation scripts, services, and production tooling. This project was a way to bring those pieces together into a single, coherent system and present how I approach building ML systems in practice.
 
-## Why I built it
-- Scientific QA needs traceable answers and honest baselines.
-- I wanted a repeatable way to prove changes help, not just ship a clever model.
-- This was my way to pull together retrieval, evaluation, and MLOps into one cohesive, production-ready pattern.
+Building an Evaluation-First RAG System is not about inventing a new technique or creating a flashy demo. It's about showing how I design, evaluate, and operate a retrieval-augmented generation system when correctness, reliability, and long-term iteration matter.
 
-## What I focused on (experience and goals)
-- **Clarity before scale:** BM25 first to surface data/query issues; don’t skip straight to embeddings.
-- **Evidence over intuition:** Offline metrics (Recall@5/10/50, MRR, nDCG, MAP) gate changes.
-- **Reproducibility:** Versioned indexes, datasets, and reports; runs tracked in MLflow.
-- **Sane engineering:** Makefile commands, 64 tests, 93% coverage so the codebase stays change-friendly.
-- **End-to-end ownership:** Data prep → indexing → retrieval → evaluation, all with the same quality bar.
+## What this project is
 
-## What I learned / signals I care about
-- Baselines tell the truth fast—BM25 exposes data quality and query patterns immediately.
-- Good evaluation hygiene (reports + artifacts) keeps future experiments honest.
-- A small test suite (64 tests, 93% coverage) pays for itself when you start swapping retrieval strategies.
-- Teams notice when you can move from notebook ideas to tracked, reproducible runs.
+At its core, this is a benchmark-driven RAG system for scientific question answering built on the SciFact dataset. The system retrieves relevant scientific claims and uses them to generate grounded answers with explicit citations, abstaining when the evidence is insufficient.
 
-## Impact so far
-- Reproducible BM25 baseline on SciFact with metric reports checked into version control.
-- MLflow run history + artifact versioning, so results are explainable and shareable.
-- A modular layout that’s ready for dense retrieval (sentence-transformers + FAISS) without rewriting the pipeline.
+What distinguishes the project is not the use of RAG itself, but how the system is structured and validated. Retrieval is treated as a first-class component, evaluation is central, and every improvement is justified through metrics rather than intuition.
 
-## What’s next
-- Drop in dense retrieval and compare against the baseline with the same harness.
-- Add lightweight dashboards for deltas across runs.
-- Wrap the best-performing path in a FastAPI service once it beats the baseline offline.
+## Why evaluation comes first
 
-If you want to reuse the approach, steal the structure: baseline-first, measure everything, version every artifact, then scale complexity. The project page has the deeper technical breakdown and stack details; this post is the why/how from my perspective.
+In many RAG implementations, generation quality is judged informally: answers "look good," so the system is assumed to be working. My approach is different.
+
+This system starts with explicit retrieval baselines and offline evaluation using standard information retrieval metrics such as **Recall@K**, **nDCG@K**, and **MRR@K**. Lexical (BM25) and dense (FAISS-based) retrievers share a unified interface and produce versioned artifacts that can be compared side-by-side.
+
+Only once retrieval quality is measured and understood does generation enter the picture. Even then, the generator is constrained: it must ground answers in retrieved evidence, include citations, and explicitly refuse to answer when retrieval confidence is low.
+
+## How the system is structured
+
+The project is organized as a clean, modular pipeline:
+
+- A **data and benchmark layer** handles dataset download, validation, and basic statistics.
+- A **retrieval layer** implements both lexical and dense retrieval with deterministic, versioned indexing.
+- An **evaluation harness** produces reproducible comparison reports across retrievers.
+- A **grounded RAG layer** generates citation-backed answers with abstention behavior.
+- A **FastAPI service**, packaged with Docker, exposes retrieval and question-answering endpoints.
+- A **monitoring and lifecycle layer** logs requests, detects drift, schedules re-evaluation, and gates promotion of new retrievers.
+
+Each stage has a clear responsibility and interfaces designed to support safe iteration.
+
+## Operating the system over time
+
+Beyond building the pipeline, I wanted to reflect how ML systems behave after deployment.
+
+The service logs structured request data such as query characteristics, latency, similarity score distributions, and abstention flags. These logs are used to compute drift signals that are meaningful for retrieval systems, rather than generic feature statistics.
+
+Drift does not automatically trigger retraining. Instead, it triggers scheduled re-evaluation against the benchmark. Promotion is gated: a new retriever is promoted only if it improves key metrics without regressing others. The active production retriever is selected via an explicit pointer file, making changes auditable and reversible.
+
+## What this project demonstrates
+
+This project reflects how I approach applied ML work:
+
+- **Evaluation discipline over intuition.**
+- **Baselines and comparisons before optimization.**
+- **System design that supports monitoring and iteration.**
+- **Clear operational boundaries between experimentation and production.**
+- **Honest behavior when evidence is weak.**
+
+It's not meant to capture every skill or tool I've worked with. Instead, it's a focused example of how I think about building reliable, measurable ML systems end-to-end.
+
+## Final thoughts
+
+This project is intentionally straightforward in scope and explicit in its assumptions. Rather than hiding complexity behind abstractions, it makes decisions visible and measurable.
+
+The full technical details live in the repository, and the project page summarizes the architecture and components. This post provides the context behind why the system was built this way and how it reflects the way I approach machine learning in practice.
 
 <div className="mt-12 pt-8 border-t border-border">
 	<div className="flex flex-wrap gap-4">

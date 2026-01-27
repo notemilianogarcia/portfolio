@@ -4,6 +4,7 @@ import { ExperienceAccordion } from "@/components/ExperienceAccordion";
 import { ProjectGrid } from "@/components/ProjectGrid";
 import { PublicationCard } from "@/components/PublicationCard";
 import { TagChip } from "@/components/TagChip";
+import { EmailContact } from "@/components/EmailContact";
 import { getAllProjects, getAllPublications } from "@/lib/content";
 import skills from "@/data/skills.json";
 import experience from "@/data/experience.json";
@@ -100,7 +101,7 @@ export default async function HomePage() {
       {/* Contact Band */}
       <SectionBand theme="dark" variant="full" title="Contact" className="text-center">
         <div className="flex flex-col items-center gap-4">
-          <p className="text-lg text-text-2">Email: emiliano.gar.och@gmail.com</p>
+          <EmailContact email="emiliano.gar.och@gmail.com" />
           <div className="flex gap-6">
             <a href="https://github.com" className="text-text-2 hover:text-accent">GitHub</a>
             <a href="https://www.linkedin.com/in/emiliano-garcia-ochoa/" className="text-text-2 hover:text-accent">LinkedIn</a>
