@@ -39,7 +39,7 @@ export default async function HomePage() {
             <img
               src="/illustration-home.svg"
               alt="Homepage illustration"
-              className="h-auto max-h-[70vh] w-full rounded-2xl translate-y-12 md:translate-y-20"
+              className="illustration-home h-auto max-h-[70vh] w-full rounded-2xl translate-y-12 md:translate-y-20"
               style={{ objectFit: 'contain', display: 'block' }}
             />
           </div>

@@ -191,3 +191,12 @@ a {
   border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
+
+/* Illustration theme adaptation */
+.illustration-home {
+  filter: none;
+}
+
+[data-theme="light"] .illustration-home {
+  filter: invert(1) hue-rotate(180deg);
+}
