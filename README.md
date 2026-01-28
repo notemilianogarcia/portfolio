@@ -86,13 +86,13 @@ lib/
 ### Prerequisites
 
 - Node.js 18+
-- pnpm (recommended) or npm
+- npm (recommended) or pnpm
 
 ### Setup
 
 ```bash
-pnpm install
-pnpm dev
+npm install
+npm run dev
 ```
 
 Development server runs at [http://localhost:3000](http://localhost:3000) with Turbopack.
@@ -100,14 +100,14 @@ Development server runs at [http://localhost:3000](http://localhost:3000) with T
 ### Build
 
 ```bash
-pnpm build
-pnpm start
+npm run build
+npm start
 ```
 
 ### Lint
 
 ```bash
-pnpm lint
+npm run lint
 ```
 
 ## Content Workflow
@@ -187,7 +187,7 @@ Available in any MDX file:
 The site is configured for static generation. Deploy to any static hosting:
 
 - **Vercel**: Connect repository, automatic deploys
-- **Netlify**: Build command `pnpm build`, publish directory `.next`
+- **Netlify**: Build command `npm run build`, publish directory `.next`
 - **GitHub Pages**: Requires `output: 'export'` in next.config.ts
 
 ## License
