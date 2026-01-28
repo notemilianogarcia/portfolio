@@ -11,7 +11,7 @@ export function TagChip({ children, variant = "default", skillType, className }:
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border border-border/50 cursor-default select-none",
+        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border border-border/50 cursor-default select-none whitespace-nowrap",
         variant === "mono" ? "font-mono" : "font-sans",
         variant === "skill" ? "skill-chip" : "bg-surface-2 text-text-2",
         className
