@@ -84,9 +84,16 @@ const MDXComponents = {
       {children}
     </a>
   ),
-  code: ({ children }: { children: React.ReactNode }) => (
-    <code className="bg-surface-2 text-accent px-2 py-1 rounded text-sm font-mono">{children}</code>
-  ),
+  code: ({ children, className }: { children: React.ReactNode; className?: string }) => {
+    // If className contains "language-", it's a code block (inside pre), not inline code
+    const isCodeBlock = className?.includes('language-');
+    if (isCodeBlock) {
+      return <code className={className}>{children}</code>;
+    }
+    return (
+      <code className="bg-surface-2 text-accent px-2 py-1 rounded text-sm font-mono">{children}</code>
+    );
+  },
   pre: ({ children }: { children: React.ReactNode }) => (
     <pre className="bg-surface-2 border border-border rounded-lg p-4 overflow-x-auto mb-4 text-sm font-mono text-text-2">{children}</pre>
   ),

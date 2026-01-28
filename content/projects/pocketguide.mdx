@@ -107,20 +107,17 @@ Modular separation: inference, evaluation, data generation, teacher providers. 1
 **Setup**
 
 ```bash
-
 git clone <repository-url>
 cd pocket-guide
 make env              # Create virtual environment
 source .venv/bin/activate
 make test             # Run test suite
 cp .env.example .env  # Configure API keys
-
 ```
 
 **Synthetic Data Generation**
 
 ```bash
-
 # Dry-run (no API calls)
 python -m pocketguide.teachers.smoke --dry-run
 
@@ -129,25 +126,20 @@ python -m pocketguide.data_generation.draft
 
 # Allow paid fallback if free models fail
 python -m pocketguide.data_generation.draft --fallback_to_paid
-
 ```
 
 **Evaluation**
 
 ```bash
-
 make eval  # Run full benchmark suite
 python -m pocketguide.eval.report_base_v0 --run_dir runs/eval/<timestamp>
-
 ```
 
 **Code Quality**
 
 ```bash
-
 make lint    # Check linting
 make format  # Auto-format
-
 ```
 
 ---
