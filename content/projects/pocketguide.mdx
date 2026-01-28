@@ -1,0 +1,183 @@
+---
+title: "PocketGuide"
+summary: "Offline travel assistant LLM with evaluation-first design, synthetic data generation pipeline, and rigorous benchmarking for visa requirements, customs, and itinerary planning."
+date: "2026-01-28"
+tags: ["LLM", "Evaluation", "Python", "ML Engineering", "Fine-tuning", "Synthetic Data", "OpenRouter"]
+featured: false
+---
+
+# PocketGuide
+
+Offline-capable travel assistant language model built with evaluation-first discipline, synthetic data generation, and production-ready architecture. Currently in active development with core infrastructure complete and data pipeline operational.
+
+## TL;DR
+
+- **Offline-first LLM** for travel guidance (visa, customs, budgeting, itineraries) with no external dependencies
+- **Evaluation-driven development** with 72-example benchmark suite and objective metrics
+- **Synthetic data pipeline** with OpenRouter teacher models, rate limiting, and cost-controlled fallback chain
+- **Structured output contracts** with schema validation (v0 envelope + v1 payloads)
+- **Production engineering** with 169 passing tests, Makefile commands, and reproducible provenance tracking
+
+**Status:** Foundation and evaluation infrastructure complete. Currently generating synthetic training data for model adaptation.
+
+## What I Built
+
+**Project Foundation**
+
+Established clean repository structure with stable Makefile commands, configuration management, and end-to-end pipeline placeholders. The architecture supports deterministic workflows with environment-based configuration via `.env` files and typed error handling throughout.
+
+**Evaluation Framework**
+
+Built comprehensive evaluation system with 72-example benchmark suite covering 7 travel categories (visa, customs, health, budget, itinerary, safety, local culture) across 3 difficulty levels. The framework includes schema-first validation, strict/lenient parsing modes, and automated report generation with metrics summary, failure analysis, and curated examples. Baseline evaluation of pre-adaptation model established reference metrics for all future improvements.
+
+**Behavioral Contracts**
+
+Implemented standard envelope schema (v0) for consistent response structure and specialized payload schemas (v1) for different travel query types. The validation engine enforces objective contract compliance with deterministic pass/fail criteria, enabling measurable improvements during model adaptation.
+
+**Synthetic Data Engine**
+
+Designed and implemented teacher-driven data generation pipeline with versioned prompt templates covering 4 payload types. The system uses **OpenRouter** as the backend with cost-controlled fallback chain (2 free models → 1 paid model) and 15 RPM rate limiting with exponential backoff. Dataset spec targets 120 examples across categories and difficulty levels with deterministic prompt planner CLI.
+
+Features include dry-run mode for testing, resume support for interrupted runs, append-only JSONL output with full provenance tracking (config snapshots, run metadata, reproducible hashing), and pass-rate statistics by type/category/difficulty/error. Teacher provider includes typed error handling, full observability (tokens, latency, fallback tracking), and optional `fallback_to_paid` flag for cost control.
+
+---
+
+## Tech Stack
+
+- **Python 3.11+**: Core language with type hints and Google-style docstrings
+- **OpenRouter**: Teacher model backend for synthetic data generation with multi-model fallback
+- **Ruff**: Linting and formatting for code quality
+- **pytest**: Testing framework with 169 tests covering data generation, validation, and evaluation
+- **JSONL**: Append-only data format with provenance metadata and schema versioning
+
+---
+
+## Current Status
+
+**✅ Completed (Milestones 0-3)**
+
+*Foundation:* Clean repository, stable commands, configuration files, end-to-end pipeline.
+
+*Baseline Evaluation:* Benchmark suite, evaluation framework, base model metrics, automated reporting.
+
+*Behavioral Contracts:* Envelope schema, payload schemas, validation engine, compliance measurement.
+
+*Synthetic Data Engine:* Prompt templates, dataset spec, teacher provider with rate limiting and fallback, draft generation CLI with provenance tracking and pass-rate statistics.
+
+**🔄 In Progress (Milestone 4)**
+
+*Data Quality & Splits:* Implementing deduplication, balancing, rejection filters, and leakage prevention. Creating clean held-out benchmark split separate from training data.
+
+**📋 Planned (Milestones 5-9)**
+
+*Model Adaptation (M5):* LoRA/QLoRA fine-tuning on cleaned synthetic dataset with experiment tracking.
+
+*Rigorous Evaluation (M6):* Base vs adapted model comparison with objective metrics and qualitative examples.
+
+*Evidence-Driven Iteration (M7):* Targeted fixes based on failure analysis, retrain, re-evaluate.
+
+*Deployment Realism (M8):* Model quantization, packaging for local/offline inference, resource constraints documentation.
+
+*Portfolio Finalization (M9):* Polish documentation, demo, results summary, limitations, safety considerations.
+
+---
+
+## Engineering Decisions
+
+**Evaluation-First Development**
+
+The project follows rigorous evaluation discipline before any model adaptation. Baseline metrics from open-source model establish reference point. Synthetic data generation is validated against schemas before training. All improvements will be measured objectively against held-out benchmarks with reproducible metrics and provenance tracking.
+
+**Cost-Controlled Data Generation**
+
+Teacher provider implements fallback chain from free models to paid models with explicit `fallback_to_paid` flag for cost control. Rate limiting (15 RPM) and exponential backoff prevent API throttling. Dry-run mode enables testing without API costs. All generation runs include token usage tracking and fallback statistics for budget visibility.
+
+**Reproducibility & Provenance**
+
+Every generated example includes full provenance: config snapshot, prompt hash, teacher model ID, generation timestamp, token counts. Append-only JSONL format prevents data loss. Deterministic prompt planning ensures consistent category/difficulty distribution. All evaluation runs saved with metadata for exact reproduction.
+
+**Clean Architecture & Testing**
+
+Modular separation: inference, evaluation, data generation, teacher providers. 169 tests cover validation logic, data pipeline, and evaluation framework. Makefile provides stable commands (`make test`, `make eval`, `make data`) for consistent developer experience. Type hints and docstrings throughout.
+
+---
+
+## Development Workflow
+
+**Setup**
+
+```bash
+git clone <repository-url>
+cd pocket-guide
+make env              # Create virtual environment
+source .venv/bin/activate
+make test             # Run test suite
+cp .env.example .env  # Configure API keys
+```
+
+**Synthetic Data Generation**
+
+```bash
+# Dry-run (no API calls)
+python -m pocketguide.teachers.smoke --dry-run
+
+# Real generation with free models only
+python -m pocketguide.data_generation.draft
+
+# Allow paid fallback if free models fail
+python -m pocketguide.data_generation.draft --fallback_to_paid
+```
+
+**Evaluation**
+
+```bash
+make eval  # Run full benchmark suite
+python -m pocketguide.eval.report_base_v0 --run_dir runs/eval/<timestamp>
+```
+
+**Code Quality**
+
+```bash
+make lint    # Check linting
+make format  # Auto-format
+```
+
+---
+
+## Results (Baseline)
+
+Baseline evaluation completed on open-source student model pre-adaptation. Metrics provide reference point for measuring improvements post-fine-tuning.
+
+Detailed results and failure analysis available in evaluation reports under `runs/eval/`. Full comparison with adapted model will be documented once Milestone 5 (Model Adaptation) is complete.
+
+---
+
+## Safety & Limitations
+
+**Current Limitations**
+
+This is a demonstration system in active development. The model has not been adapted yet and operates with baseline open-source capabilities. Output quality and reliability will improve significantly after synthetic data fine-tuning in Milestone 5.
+
+**Intended Use**
+
+PocketGuide provides general travel guidance and should not replace official government sources for visa requirements, health advisories, or safety warnings. Users must verify critical information independently.
+
+**Future Hardening**
+
+Planned safety improvements include evidence attribution, uncertainty quantification, and explicit abstention when information reliability is low. Production deployment (Milestone 8) will include additional safeguards and resource constraint documentation.
+
+<div className="mt-12 pt-8 border-t border-border">
+  <div className="flex flex-wrap gap-4">
+    <a 
+      href="https://github.com/notemilianogarcia/pocketguide"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-bold text-bg hover:opacity-90 transition-opacity"
+    >
+      <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      <span>View on GitHub</span>
+    </a>
+  </div>
+</div>
