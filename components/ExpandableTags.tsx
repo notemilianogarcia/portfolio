@@ -28,7 +28,7 @@ export function ExpandableTags({ tags = [], expandable = true, maxInitialTags = 
   tags.forEach((tag) => {
     let skillType = "other";
     const tagLower = tag.toLowerCase();
-    if (["ml", "machine learning", "ai", "pytorch", "jax", "rag", "information retrieval", "bm25", "faiss", "evaluation", "ml engineering", "mlops"].includes(tagLower)) skillType = "ml";
+    if (["ml", "machine learning", "ai", "pytorch", "jax", "rag", "information retrieval", "bm25", "faiss", "evaluation", "ml engineering", "mlops", "deep learning", "data generation"].includes(tagLower)) skillType = "ml";
     else if (["backend", "langgraph", "server", "api", "fastapi"].includes(tagLower)) skillType = "backend";
     else if (["language", "typescript", "python"].includes(tagLower)) skillType = "language";
     else if (["database", "postgresql", "redis", "sql"].includes(tagLower)) skillType = "database";
