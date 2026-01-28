@@ -86,7 +86,7 @@ lib/
 ### Prerequisites
 
 - Node.js 18+
-- npm (recommended) or pnpm
+- npm
 
 ### Setup
 
