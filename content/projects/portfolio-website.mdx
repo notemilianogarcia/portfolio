@@ -22,23 +22,21 @@ A statically-generated portfolio website built to showcase ML engineering work, 
 
 **Site Architecture**
 
-The application uses Next.js 16 App Router with React 19 Server Components for efficient code splitting and static generation. All content pages are pre-rendered at build time, eliminating runtime content fetching. The root layout handles font loading (Sora, Inter, JetBrains Mono), theme provider setup, and global metadata.
+The application uses **Next.js 16 App Router** with React 19 Server Components for efficient code splitting and static generation. All content pages are pre-rendered at build time, eliminating runtime content fetching. The root layout handles font loading (Sora, Inter, JetBrains Mono), theme provider setup, and global metadata.
 
 **Content System**
 
-Content lives in version-controlled MDX files organized by type (blog, projects, publications). Each file includes YAML frontmatter for metadata (title, date, tags, featured status) parsed via gray-matter. A content loading utility (`lib/content.ts`) reads files, extracts frontmatter, and sorts by date. MDX is rendered server-side using `next-mdx-remote` with custom component mappings for callouts, figures, and metrics.
+Content lives in version-controlled MDX files organized by type (blog, projects, publications). Each file includes YAML frontmatter for metadata (title, date, tags, featured status) parsed via **gray-matter**. A content loading utility (`lib/content.ts`) reads files, extracts frontmatter, and sorts by date. MDX is rendered server-side using **next-mdx-remote** with custom component mappings for callouts, figures, and metrics.
 
 **Component Library**
 
-Reusable components handle all interactive elements: project cards with split click zones (title navigates, tags remain selectable), expandable tag groups with color categorization (ML orange, backend blue, language green), publication cards with abstract toggles, and an email contact component with clipboard copy. Components follow a consistent depth-based shadow system and share theme tokens via CSS custom properties.
+Reusable components handle all interactive elements: **project cards with split click zones** (title navigates, tags remain selectable), **expandable tag groups** with color categorization (ML orange, backend blue, language green), **publication cards** with abstract toggles, and an **email contact component** with clipboard copy. Components follow a consistent depth-based shadow system and share theme tokens via CSS custom properties.
 
-**Tag System**
+**Tag System & Theming**
 
-Tags are categorized by type (ML, backend, language, database, frontend, ops) and assigned IDE-inspired colors for quick visual scanning. On cards, tags are grouped by category with a +N overflow button to prevent layout breaking. Tags are ordered by recruiter importance rather than alphabetically.
+Tags are categorized by type (ML, backend, language, database, frontend, ops) and assigned **IDE-inspired colors** for quick visual scanning. On cards, tags are grouped by category with a +N overflow button to prevent layout breaking. All colors are defined as CSS custom properties and toggled via a `data-theme` attribute on the root element, enabling seamless dark/light transitions without JavaScript.
 
-**Theming**
-
-All colors are defined as CSS custom properties in `globals.css` and toggled via a `data-theme` attribute on the root element. The theme provider manages state and persists preferences. This approach provides fine-grained control over tokens without Tailwind's theme configuration complexity.
+---
 
 ## Tech Stack
 
@@ -48,13 +46,30 @@ All colors are defined as CSS custom properties in `globals.css` and toggled via
 - **MDX + next-mdx-remote 5.0.0**: File-based content authoring with component composition and server-side rendering
 - **React 19.2.3**: Server Components reduce client JavaScript, improving initial load performance
 
+---
+
+## Why It Matters
+
+**Content-First Architecture**
+
+The portfolio prioritizes content authoring experience over infrastructure complexity. Markdown with frontmatter is universally readable and easily versioned in git. No database, no API layer, no CMS—just files that can be edited anywhere and tracked with standard version control.
+
+**Performance & User Experience**
+
+Static generation eliminates runtime content fetching and database queries. Every page loads instantly from a CDN. The split card interaction (clickable titles, selectable tags) respects user intent: navigate when clicking content, copy when selecting tags. Dark/light theming via CSS custom properties requires zero JavaScript, enabling fast theme switching.
+
+**Visual Consistency & Recruiter Signal**
+
+The IDE-inspired tag color system communicates visual hierarchy instantly—ML skills are orange, backend blue, frontend purple. This is not random decoration; it's a signal that design decisions are intentional and system-oriented. Consistent component styling across projects, publications, and blog posts demonstrates disciplined product thinking.
+
+---
+
 ## Engineering & Design Decisions
 
 - **File-based content over CMS**: Content versioned with git, no API latency, simple local editing, readable diffs
 - **Static generation over SSR**: All content pages pre-rendered at build time for consistent fast loads and CDN-friendly caching
 - **CSS custom properties over Tailwind themes**: Single `data-theme` attribute flip toggles entire color system without JavaScript
 - **Split card interactions**: Card titles link to detail pages, tag areas remain non-interactive for text selection and copying
-- **Tag color categorization**: Recruiters scan quickly; color grouping surfaces relevant skills (ML, backend, frontend) without reading every tag
 - **Minimal dependencies**: Radix UI for accessible primitives, Lucide for icons, no heavy frameworks or UI libraries
 
 ## Development & Deployment
