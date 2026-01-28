@@ -1,247 +1,195 @@
-# Emiliano Garcia's Portfolio
+# Emiliano Garcia Ochoa — Portfolio
 
-A minimal, performance-first personal portfolio website built with Next.js, TypeScript, and Tailwind CSS. Designed to showcase projects, blog posts, and publications with a focus on clean design and fast load times.
-
-**Live:** [emilianogarcia.com](https://emilianogarcia.com)
+Personal portfolio website showcasing ML engineering work, publications, and blog posts. Built with Next.js 16 App Router, React 19, and a file-based MDX content system.
 
 ## Overview
 
-This is a personal portfolio site that serves as a curated space to share projects, ideas, and research. The site emphasizes simplicity, maintainability, and developer experience through:
+A statically-generated portfolio site designed for fast load times and straightforward content management. Content is authored in MDX files with YAML frontmatter, rendered at build time via `next-mdx-remote`. The site includes sections for professional experience, projects, publications, and blog posts.
 
-- **File-based content** using MDX for blog posts, projects, and publications
-- **Zero-database architecture** — all content lives in version-controlled files
-- **Modular components** for reusability and consistent design
-- **Fast builds** powered by Next.js 16 with Turbopack
-- **Type-safe** throughout with TypeScript
+**Live:** [emilianogarcia.dev](https://emilianogarcia.dev)
 
 ## Tech Stack
 
-- **Framework:** Next.js 16 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS 4
-- **Content:** MDX with `next-mdx-remote`
-- **Frontmatter:** `gray-matter`
-- **Markdown Parsing:** `remark-gfm`
-- **UI Icons:** Lucide React
-- **Dev Tools:** ESLint, TypeScript
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16.1.0 (App Router, Turbopack) |
+| Runtime | React 19.2.3 with Server Components |
+| Language | TypeScript 5 (strict mode) |
+| Styling | Tailwind CSS 4 with CSS custom properties |
+| Content | MDX via next-mdx-remote 5.0.0, gray-matter, remark-gfm |
+| UI Primitives | Radix UI (accordion), Lucide React (icons) |
+| Fonts | Sora (headings), Inter (body), JetBrains Mono (code) |
 
-## Quick Start
+## Key Features
 
-### Prerequisites
-- Node.js 18+
-- npm or yarn
+- **File-based content system**: MDX files in `content/` with gray-matter frontmatter parsing
+- **Static generation**: All content pages pre-rendered at build time
+- **IDE-inspired tag colors**: Tags categorized by type (ML, backend, language, database, frontend, ops) with consistent color coding
+- **Expandable tag overflow**: Tags grouped by category with +N expansion for dense tag lists
+- **Split card interactions**: Card titles link to detail pages; tag sections remain non-navigating for text selection
+- **Dark/light theming**: CSS custom properties with `data-theme` attribute switching
+- **Custom MDX components**: Callout boxes, figures with captions, metric cards
+- **Copy-to-clipboard contact**: Email address with one-click copy functionality
 
-### Installation
+## Project Structure
 
-```bash
-npm install
-npm run dev
+```
+app/
+├── layout.tsx              # Root layout with fonts, ThemeProvider, metadata
+├── page.tsx                # Homepage: hero, skills, experience, projects
+├── globals.css             # CSS custom properties, tag colors, utilities
+├── about/page.tsx          # Experience, education, awards
+├── blog/
+│   ├── page.tsx            # Blog listing
+│   └── [slug]/page.tsx     # Blog post detail
+├── projects/
+│   ├── page.tsx            # Project grid
+│   └── [slug]/page.tsx     # Project detail
+└── publications/
+    ├── page.tsx            # Publication listing
+    └── [slug]/page.tsx     # Publication detail
+
+components/
+├── NavBar.tsx              # Site navigation
+├── Footer.tsx              # Site footer
+├── SectionBand.tsx         # Reusable section wrapper with theme variants
+├── ProjectCard.tsx         # Project card with split click zones
+├── PublicationCard.tsx     # Publication card with abstract toggle
+├── TagChip.tsx             # Tag pill with skill-type color variants
+├── ExpandableTags.tsx      # Grouped tags with +N overflow expansion
+├── EmailContact.tsx        # Email with copy-to-clipboard
+├── ExperienceAccordion.tsx # Collapsible experience entries
+├── ProjectGrid.tsx         # Responsive project card grid
+├── PublicationList.tsx     # Publication card list
+├── ThemeProvider.tsx       # Dark/light theme context
+└── mdx/
+    └── MDXComponents.tsx   # Custom MDX: Callout, Figure, Metric
+
+content/
+├── blog/                   # Blog posts (.mdx)
+├── projects/               # Project write-ups (.mdx)
+└── publications/           # Publication pages (.mdx)
+
+data/
+├── skills.json             # Skills with categories
+├── experience.json         # Work experience entries
+├── education.json          # Education history
+└── awards.json             # Awards and recognition
+
+lib/
+├── content.ts              # MDX content loading utilities
+└── utils.ts                # cn() classname helper
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+## Development
 
-### Build for Production
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended) or npm
+
+### Setup
 
 ```bash
-npm run build
-npm start
+pnpm install
+pnpm dev
+```
+
+Development server runs at [http://localhost:3000](http://localhost:3000) with Turbopack.
+
+### Build
+
+```bash
+pnpm build
+pnpm start
 ```
 
 ### Lint
 
 ```bash
-npm run lint
+pnpm lint
 ```
 
-## Project Structure
+## Content Workflow
 
-```
-portfolio/
-├── app/                          # Next.js App Router
-│   ├── layout.tsx                # Root layout
-│   ├── page.tsx                  # Homepage
-│   ├── blog/
-│   │   ├── page.tsx              # Blog list
-│   │   └── [slug]/page.tsx       # Blog post
-│   ├── projects/
-│   │   ├── page.tsx              # Projects grid
-│   │   └── [slug]/page.tsx       # Project details
-│   ├── publications/
-│   │   ├── page.tsx              # Publications list
-│   │   └── [slug]/page.tsx       # Publication details
-│   └── about/page.tsx            # About page
-│
-├── components/                   # Reusable React components
-│   ├── NavBar.tsx                # Navigation header
-│   ├── Footer.tsx                # Footer
-│   ├── ProjectCard.tsx           # Project card display (split click zones)
-│   ├── SectionBand.tsx           # Section wrapper
-│   ├── TagChip.tsx               # Tag/chip component with color variants
-│   ├── ExpandableTags.tsx        # Expandable tag display with +N overflow
-│   ├── PublicationCard.tsx       # Publication card with PDF link
-│   ├── EmailContact.tsx          # Email with copy-to-clipboard button
-│   ├── ThemeProvider.tsx         # Dark/light theme
-│   ├── mdx/
-│   │   └── MDXComponents.tsx     # Markdown element mappings
-│   └── widgets/                  # Custom interactive components
-│
-├── content/                      # Content files (MDX)
-│   ├── blog/                     # Blog posts
-│   ├── projects/                 # Project case studies
-│   └── publications/             # Publication links
-│
-├── data/                         # JSON data files
-│   ├── skills.json
-│   ├── experience.json
-│   ├── education.json
-│   └── awards.json
-│
-├── lib/                          # Utilities and helpers
-│   ├── content.ts                # Content loader
-│   └── utils.ts                  # Utility functions
-│
-├── public/                       # Static assets
-│   ├── logos/
-│   ├── resume.pdf                # Resume (download link)
-│   └── illustration-home.svg
-│
-├── next.config.ts                # Next.js config
-├── tailwind.config.mjs            # Tailwind config
-├── tsconfig.json                 # TypeScript config
-└── package.json                  # Dependencies
-```
+### Adding a Project
 
-## Adding Content
-
-### New Blog Post
-
-Create a file in `content/blog/` with frontmatter and MDX:
+Create `content/projects/your-project.mdx`:
 
 ```mdx
 ---
-title: "Post Title"
-summary: "Brief summary for the blog list"
-date: "2026-01-22"
-tags: ["tag1", "tag2"]
----
-
-# Post Title
-
-Your content in markdown...
-```
-
-### New Project
-
-Create a file in `content/projects/` with frontmatter:
-
-```mdx
----
-title: "Project Name"
-summary: "Concise one-sentence overview of the project."
-date: "2026-01-22"
-tags: ["Python", "RAG", "ML"]
+title: "Project Title"
+summary: "One-line description for cards."
+date: "2026-01-28"
+tags: ["Python", "FastAPI", "ML Engineering"]
 featured: true
 ---
 
-# Project Name
+# Project Title
 
-Detailed project description...
+Your MDX content here.
 ```
 
-### New Publication
+The project appears automatically on `/projects` and the homepage (if `featured: true`).
 
-Create a file in `content/publications/` following the same pattern.
+### Adding a Blog Post
 
-## Frontmatter Fields
+Create `content/blog/your-post.mdx` with the same frontmatter structure. Posts are sorted by date descending on `/blog`.
 
-### Blog Posts
-- `title` — Post title
-- `summary` — Short description
-- `date` — ISO date (YYYY-MM-DD)
-- `tags` — Array of tags
+### Frontmatter Fields
 
-### Projects
-- `title` — Project name
-- `summary` — One-sentence project summary (replaces problem/approach/result)
-- `date` — ISO date
-- `tags` — Array of tags (ordered by recruiter importance)
-- `featured` — Boolean (shows on homepage)
+| Field | Type | Description |
+|-------|------|-------------|
+| `title` | string | Display title |
+| `summary` | string | One-line description for cards |
+| `date` | string | ISO date (YYYY-MM-DD) |
+| `tags` | string[] | Array of tags (ordered by importance) |
+| `featured` | boolean | Show on homepage |
 
-### Publications
-- `title` — Publication title
-- `authors` — Array of authors
-- `date` — ISO date
-- `url` — Link to paper/resource
-- `summary` — Abstract/summary
-- `tags` — Array of tags
-- `featured` — Boolean (shows on homepage)
+### Tag Color System
 
-## Markdown Support
+Tags are automatically colored based on keywords:
 
-The site supports GitHub Flavored Markdown including:
-- Tables
-- Strikethrough
-- Task lists
-- Code blocks with syntax highlighting
+| Category | Color | Example Tags |
+|----------|-------|--------------|
+| ML | Orange (#FFB86C) | PyTorch, TensorFlow, RAG, Evaluation |
+| Backend | Blue (#82AAFF) | FastAPI, Flask, Node.js, REST |
+| Language | Green (#C3E88D) | Python, TypeScript, Rust, Go |
+| Database | Coral (#F78C6C) | PostgreSQL, Redis, MongoDB, FAISS |
+| Frontend | Purple (#BB80B3) | React, Next.js, Tailwind, CSS |
+| Ops | Red (#FF5370) | Docker, Kubernetes, CI/CD, AWS |
+| Other | Gray (#7F848E) | Uncategorized tags |
 
-Custom MDX components available:
-- `<Callout type="info|warning|success">` — Highlighted callout boxes
-- `<Figure src="/path" caption="..." alt="..." />` — Figures with captions
-- `<Metric label="..." value="..." description="..." />` — Metric display
+### Custom MDX Components
 
-## Features
+Available in any MDX file:
 
-### Tags System
-- **Color-grouped tags** — Tags are organized by type (ML, Backend, Frontend, Language, Database, Ops, Other)
-- **Expandable tags** — Cards show 4 initial tags; additional tags display via "+N" button
-- **Tag display** — All tags visible on detail pages (projects, blog, publications)
-- **Recruiter-focused** — Tags ordered by importance, not implementation detail
+```mdx
+<Callout type="info">Highlighted information box.</Callout>
 
-### Interactive Elements
-- **Split card interactions** — Top (title/summary) clickable to detail page; bottom (tags) non-interactive
-- **Copy email button** — One-click email copy to clipboard on homepage
-- **Hover states** — Consistent cursor styles and visual feedback
+<Figure src="/image.png" caption="Figure caption" alt="Alt text" />
 
+<Metric label="Accuracy" value="94.2%" description="On test set" />
+```
 
+## Design Decisions
 
-Edit `app/globals.css` to modify the color palette. The site supports dark and light modes.
+**File-based MDX**: No CMS, no database, no API calls. Content lives in the repository, versioned with git, rendered at build time.
 
-### Navigation
+**CSS custom properties over Tailwind themes**: Fine-grained control over color tokens across light/dark modes with a single `data-theme` attribute flip.
 
-Update `navLinks` in `components/NavBar.tsx` to add/remove navigation items.
+**Split card click zones**: Cards link to detail pages, but tags remain selectable text. Title/summary navigates; tag area does not.
 
-### Data Files
-
-Edit JSON files in `data/` to update:
-- Skills and categories
-- Work experience
-- Education
-- Awards
-
-## Performance
-
-- **Next.js 16 + Turbopack** for fast builds
-- **App Router** for efficient code splitting
-- **Static generation** for all content pages
-- **Optimized images** with next/image
-- **Minimal dependencies** to keep bundle size small
+**Tag color categorization**: Recruiters scan quickly. Color grouping surfaces relevant skills (ML orange, backend blue) without reading every tag.
 
 ## Deployment
 
-The site is optimized for deployment on:
-- **Vercel** (recommended — native Next.js support)
-- **Netlify**
-- **GitHub Pages**
-- Any Node.js hosting provider
+The site is configured for static generation. Deploy to any static hosting:
+
+- **Vercel**: Connect repository, automatic deploys
+- **Netlify**: Build command `pnpm build`, publish directory `.next`
+- **GitHub Pages**: Requires `output: 'export'` in next.config.ts
 
 ## License
 
-MIT License — feel free to use this as a template for your own portfolio.
-
-## Contributing
-
-This is a personal portfolio, but the code is open for reference and learning. Fork and adapt as needed!
-
----
-
-Built with care to balance simplicity, performance, and beautiful design. Questions? Feel free to reach out.
+MIT
