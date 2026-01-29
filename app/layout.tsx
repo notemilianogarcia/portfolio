@@ -28,13 +28,13 @@ export const metadata: Metadata = {
   description:
     "Research-driven machine learning engineer crafting efficient, reliable systems and publications.",
   icons: {
-    icon: '/favicon.ico?v=1',
-    apple: '/apple-touch-icon.png?v=1',
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
     other: [
-      { rel: 'icon', url: '/favicon-16x16.png?v=1', sizes: '16x16' },
-      { rel: 'icon', url: '/favicon-32x32.png?v=1', sizes: '32x32' },
-      { rel: 'icon', url: '/android-chrome-192x192.png?v=1', sizes: '192x192' },
-      { rel: 'icon', url: '/android-chrome-512x512.png?v=1', sizes: '512x512' },
+      { rel: 'icon', url: '/favicon-16x16.png', sizes: '16x16' },
+      { rel: 'icon', url: '/favicon-32x32.png', sizes: '32x32' },
+      { rel: 'icon', url: '/android-chrome-192x192.png', sizes: '192x192' },
+      { rel: 'icon', url: '/android-chrome-512x512.png', sizes: '512x512' },
     ],
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://example.com"),
