@@ -18,20 +18,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const project = await getProjectBySlug(slug);
   if (!project) return {};
   return {
-    title: project.title,
-    description: project.summary,
+    title: project.metadata.title,
+    description: project.metadata.summary,
     alternates: {
       canonical: `/projects/${slug}`,
     },
     openGraph: {
-      title: project.title,
-      description: project.summary,
+      title: project.metadata.title,
+      description: project.metadata.summary,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: project.title,
-      description: project.summary,
+      title: project.metadata.title,
+      description: project.metadata.summary,
     },
   };
 }

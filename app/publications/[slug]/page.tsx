@@ -16,20 +16,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const publication = await getPublicationBySlug(slug);
   if (!publication) return {};
   return {
-    title: publication.title,
-    description: publication.summary,
+    title: publication.metadata.title,
+    description: publication.metadata.summary,
     alternates: {
       canonical: `/publications/${slug}`,
     },
     openGraph: {
-      title: publication.title,
-      description: publication.summary,
+      title: publication.metadata.title,
+      description: publication.metadata.summary,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: publication.title,
-      description: publication.summary,
+      title: publication.metadata.title,
+      description: publication.metadata.summary,
     },
   };
 }
