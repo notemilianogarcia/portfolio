@@ -28,11 +28,11 @@ export function ExpandableTags({ tags = [], expandable = true, maxInitialTags = 
   tags.forEach((tag) => {
     let skillType = "other";
     const tagLower = tag.toLowerCase();
-    if (["ml", "machine learning", "ai", "pytorch", "jax", "rag", "information retrieval", "bm25", "faiss", "evaluation", "ml engineering", "mlops", "deep learning", "data generation", "speech", "cnn", "clustering", "multimodal", "health tech", "alzheimer's"].includes(tagLower)) skillType = "ml";
+    if (["ml", "machine learning", "ai", "pytorch", "jax", "rag", "information retrieval", "bm25", "faiss", "evaluation", "ml engineering", "mlops", "deep learning", "data generation", "speech", "cnn", "clustering", "multimodal", "health tech", "alzheimer's", "llm"].includes(tagLower)) skillType = "ml";
     else if (["backend", "langgraph", "server", "api", "fastapi", "data pipelines", "sql", "postgresql", "redis", "oracle"].includes(tagLower)) skillType = "backend";
     else if (["language", "typescript", "python"].includes(tagLower)) skillType = "language";
     else if (["frontend", "react", "next.js", "ui", "ux", "tailwind", "mdx"].includes(tagLower)) skillType = "frontend";
-    else if (["ops", "docker", "devops", "infra", "infrastructure", "cuda", "automation", "data processing"].includes(tagLower)) skillType = "ops";
+    else if (["ops", "docker", "devops", "infra", "infrastructure", "cuda", "automation", "data processing", "production engineering"].includes(tagLower)) skillType = "ops";
     else skillType = "other";
     const bucket = tagsByColor[skillType as keyof typeof tagsByColor] ?? tagsByColor.other;
     bucket.push({ tag, skillType });

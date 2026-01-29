@@ -21,7 +21,7 @@ export default function AboutPage() {
           ))}
         </div>
       </SectionBand>
-      <SectionBand theme="light" variant="panel" title="Awards">
+      <SectionBand theme="light" variant="panel" title="Honours & Certifications">
         <ul className="flex flex-col gap-3">
           {awards.map((award: any, idx: number) => (
             <li key={idx} className="rounded-xl border border-border bg-surface-2 px-4 py-2 text-sm text-text-2">
