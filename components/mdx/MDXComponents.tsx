@@ -119,10 +119,7 @@ const MDXComponents = {
   th: ({ children }: { children: React.ReactNode }) => (
     <th className="px-4 py-3 text-left text-text font-bold text-sm bg-surface-2">{children}</th>
   ),
-  Callout,
-  Figure,
   Metric,
 };
 
-export { Callout, Figure, Metric };
 export const components = MDXComponents;

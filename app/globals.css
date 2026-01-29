@@ -20,7 +20,7 @@
 }
 /* SectionBand panel variant - more depth */
 .section-panel {
-  background: linear-gradient(120deg, var(--color-surface-2) 80%, var(--color-surface) 100%);
+  background: linear-gradient(120deg, var(--color-surface-panel) 80%, var(--color-surface) 100%);
   box-shadow:
     0 2.5px 16px 0 rgb(0 0 0 / 0.10),
     0 1.5px 4px 0 rgb(0 0 0 / 0.06),
@@ -53,6 +53,7 @@
   --bg: #0b0f14;
   --surface: #121a23;
   --surface-2: #0f1620;
+  --surface-panel: #0f1720;
   --border: #223041;
   --text: #e6edf3;
   --text-2: #9fb0c0;
@@ -113,19 +114,48 @@ footer {
 
 [data-theme="light"] {
   --bg: #ffffff;
-  --surface: #f6f8fb;
+  /* Sections slightly darker than page background */
+  --surface-panel: #f2f5f8;
+  /* Cards/tiles should be pure white for maximum separation */
+  --surface: #ffffff;
   --surface-2: #ffffff;
-  --border: #e6eaf0;
+  /* Slightly stronger border to separate panels from background */
+  --border: #dfe6ee;
   --text: #0b1220;
   --text-2: #526176;
   --accent: #3B82F6;
   color-scheme: light;
 }
 
+/* Stronger tag tones for light theme to ensure contrast on white cards */
+[data-theme="light"] [data-skill="ml"] {
+  --skill-accent: #FF9B3D; /* warmer, vibrant orange */
+}
+[data-theme="light"] [data-skill="backend"] {
+  --skill-accent: #2563EB; /* vivid blue */
+}
+[data-theme="light"] [data-skill="language"] {
+  --skill-accent: #2E8B57; /* richer green with good contrast */
+}
+[data-theme="light"] [data-skill="database"] {
+  --skill-accent: #FF6B5F; /* coral/salmon vibrant */
+}
+[data-theme="light"] [data-skill="frontend"] {
+  --skill-accent: #9B5DE5; /* bright purple */
+}
+[data-theme="light"] [data-skill="ops"],
+[data-theme="light"] [data-skill="infra"] {
+  --skill-accent: #E11D48; /* strong rose red */
+}
+[data-theme="light"] [data-skill="other"] {
+  --skill-accent: #4B5563; /* neutral dark gray */
+}
+
 [data-theme="dark"] {
   --bg: #0b0f14;
   --surface: #121a23;
   --surface-2: #0f1620;
+  --surface-panel: #0f1720;
   --border: #223041;
   --text: #e6edf3;
   --text-2: #9fb0c0;
@@ -137,6 +167,7 @@ footer {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-surface-panel: var(--surface-panel);
   --color-border: var(--border);
   --color-text: var(--text);
   --color-text-2: var(--text-2);

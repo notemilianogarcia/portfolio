@@ -14,6 +14,21 @@ function resolveContentPath() {
 
 const CONTENT_PATH = resolveContentPath();
 
+interface ContentMetadata {
+  title: string;
+  summary?: string;
+  date: string;
+  tags?: string[];
+  featured?: boolean;
+  slug: string;
+  [key: string]: any;
+}
+
+interface ContentWithBody {
+  metadata: ContentMetadata;
+  content: string;
+}
+
 export async function getAllContent(type: "projects" | "publications" | "blog") {
   const dirPath = path.join(CONTENT_PATH, type);
   if (!fs.existsSync(dirPath)) return [];
@@ -35,7 +50,7 @@ export async function getAllContent(type: "projects" | "publications" | "blog") 
     .sort((a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()));
 }
 
-export async function getContentBySlug(type: "projects" | "publications" | "blog", slug: string) {
+export async function getContentBySlug(type: "projects" | "publications" | "blog", slug: string): Promise<ContentWithBody | null> {
   const filePath = path.join(CONTENT_PATH, type, `${slug}.mdx`);
   if (!fs.existsSync(filePath)) return null;
 
@@ -43,7 +58,7 @@ export async function getContentBySlug(type: "projects" | "publications" | "blog
   const { data, content } = matter(source);
 
   return {
-    metadata: { ...data, slug },
+    metadata: { ...data, slug } as ContentMetadata,
     content,
   };
 }

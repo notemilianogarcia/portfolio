@@ -2,7 +2,7 @@ import { Github, Linkedin, Mail } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="w-full border-t border-border bg-bg py-12">
+    <footer className="w-full border-t border-border bg-bg py-12" suppressHydrationWarning>
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex flex-col items-center md:items-start gap-2">
@@ -16,7 +16,7 @@ export function Footer() {
               href="mailto:emiliano.gar.och@gmail.com"
               className="flex items-center gap-2 text-sm text-text-2 hover:text-accent transition-colors"
             >
-              <Mail size={16} />
+              <span suppressHydrationWarning><Mail size={16} /></span>
               Email
             </a>
             <a
@@ -25,7 +25,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-text-2 hover:text-accent transition-colors"
             >
-              <Github size={16} />
+              <span suppressHydrationWarning><Github size={16} /></span>
               GitHub
             </a>
             <a
@@ -34,7 +34,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-text-2 hover:text-accent transition-colors"
             >
-              <Linkedin size={16} />
+              <span suppressHydrationWarning><Linkedin size={16} /></span>
               LinkedIn
             </a>
           </div>

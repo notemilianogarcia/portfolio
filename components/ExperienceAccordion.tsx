@@ -3,8 +3,7 @@
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDown, Calendar, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { TagChip } from "./TagChip";
-import Image from "next/image";
+import { ExpandableTags } from "./ExpandableTags";
 
 export interface ExperienceItem {
   id: string;
@@ -53,10 +52,12 @@ export function ExperienceAccordion({ items, className }: ExperienceAccordionPro
                 <div className="flex items-center gap-4">
                   <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-surface border border-border flex items-center justify-center">
                     {logo ? (
-                      <Image
+                      <img
                         src={logo}
-                        alt={item.company}
-                        fill
+                        alt={`${item.company} logo`}
+                        width={48}
+                        height={48}
+                        loading="lazy"
                         className="object-cover rounded-xl"
                       />
                     ) : (
@@ -103,24 +104,7 @@ export function ExperienceAccordion({ items, className }: ExperienceAccordionPro
                   </li>
                 ))}
               </ul>
-              <div className="flex flex-wrap gap-2">
-                {item.tags.map((tag) => {
-                  let skillType = "other";
-                  const tagLower = tag.toLowerCase();
-                  if (["ml", "machine learning", "ai", "pytorch", "jax"].includes(tagLower)) skillType = "ml";
-                  else if (["backend", "langgraph", "server", "api"].includes(tagLower)) skillType = "backend";
-                  else if (["language", "typescript", "python"].includes(tagLower)) skillType = "language";
-                  else if (["database", "postgresql", "redis", "sql"].includes(tagLower)) skillType = "database";
-                  else if (["frontend", "react", "next.js", "ui", "ux"].includes(tagLower)) skillType = "frontend";
-                  else if (["ops", "docker", "devops", "infra", "infrastructure", "cuda"].includes(tagLower)) skillType = "ops";
-                  else skillType = tagLower;
-                  return (
-                    <TagChip key={tag} variant="skill" skillType={skillType}>
-                      {tag}
-                    </TagChip>
-                  );
-                })}
-              </div>
+              <ExpandableTags id={item.id} tags={item.tags} expandable={false} />
             </div>
           </Accordion.Content>
         </Accordion.Item>

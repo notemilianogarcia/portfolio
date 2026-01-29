@@ -11,7 +11,7 @@
       "Running systematic experiments, ablation studies, and tuning to improve accuracy and robustness; preparing manuscripts with supervisor.",
       "Supporting course instruction through grading, feedback, student guidance, and clarification of complex ML, data, and software engineering concepts."
     ],
-    "tags": ["Deep Learning", "Speech", "Python", "Teaching"]
+    "tags": ["Deep Learning", "Multimodal", "Transformers", "Clinical Data", "Python", "Teaching"]
   },
   {
     "id": "exp-2",
@@ -39,7 +39,7 @@
       "Engineered and evaluated ensemble learning solutions combining multiple CNN architectures to optimize prediction accuracy for Alzheimer's disease detection from speech patterns.",
       "Designed and implemented machine learning models using clustering techniques to identify meaningful patterns in demographic and cognitive data."
     ],
-    "tags": ["Deep Learning", "Speech", "CNN", "Clustering"]
+    "tags": ["Deep Learning", "Alzheimer's", "Speech", "CNN"]
   },
   {
     "id": "exp-4",
@@ -52,7 +52,7 @@
       "Designed and implemented custom database queries and reporting workflows to meet complex institutional requirements, significantly improving efficiency of business operations.",
       "Optimized system integration between enterprise tools through automated data transformation pipelines, reducing manual processing time while ensuring data accuracy and compliance."
     ],
-    "tags": ["Automation", "Oracle", "Reporting", "Data Pipelines"]
+    "tags": ["SQL", "Automation", "Reporting", "Data Pipelines"]
   },
   {
     "id": "exp-5",

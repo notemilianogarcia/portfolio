@@ -1,9 +1,16 @@
 import { SectionBand } from "@/components/SectionBand";
-import { getPostBySlug } from "@/lib/content";
+import { getPostBySlug, getAllPosts } from "@/lib/content";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { components as MDXComponents } from "@/components/mdx/MDXComponents";
 import remarkGfm from "remark-gfm";
 import { ExpandableTags } from "@/components/ExpandableTags";
+
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
+  return posts.map((post: any) => ({
+    slug: post.slug,
+  }));
+}
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

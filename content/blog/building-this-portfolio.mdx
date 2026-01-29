@@ -5,29 +5,55 @@ date: "2026-01-22"
 tags: ["frontend", "Next.js", "TypeScript", "MDX", "Personal"]
 ---
 
-# Welcome — starting this personal space
+# Building This Portfolio
 
-Thanks for stopping by! I’m building this site as a lightweight, evolving home for my work and ideas across machine learning, audio, and systems. It’s intentionally simple right now and will keep improving over time — consider it a living notebook and portfolio rather than a finished product.
+This website is more than a place to list projects. It's a system for presenting technical work, research, and writing in a way that reflects how I think about engineering: clearly, intentionally, and with attention to the details that make software maintainable over time.
 
-## What you’ll find
+Building a portfolio from scratch instead of using a template was not about novelty. It was about control. Templates prioritize visual flexibility over content structure, and most assume a content management system or dynamic rendering. I needed something simpler: a static site that treats content as data, keeps versioning straightforward, and lets me iterate on the presentation layer without touching the content itself.
 
-- Projects: concise case studies highlighting the problem, approach, and result
-- Blog: shorter posts, design notes, and experiments
-- Publications: links and summaries for papers and related write‑ups
+## Why build custom
 
-## Why this stack
+The decision to build from scratch came down to a few key priorities.
 
-I’m using Next.js (App Router) with Tailwind CSS and MDX. Content lives in files under `content/` and is parsed via simple helpers — no heavy CMS, easy diffs, fast iteration.
+First, I wanted full control over how content is authored and structured. Writing in Markdown with frontmatter is simple, readable, and version-controlled by default. No database, no CMS, no API layer. Just files that can be edited anywhere and tracked with standard git workflows.
 
-## What to expect (work in progress)
+Second, I wanted the architecture to support long-term iteration. Projects, publications, and blog posts all follow the same pattern: metadata-driven, statically generated, and composable. Adding a new post or project means creating a file, not updating configuration or migrating data.
 
-I’ll ship small updates regularly:
+Third, I wanted the site itself to demonstrate how I approach frontend work. Every design decision, from the tag color system to the theme toggle mechanism, reflects values I apply to systems beyond the frontend: clarity, composability, and performance.
 
-- New project write-ups and interactive demos
-- Iterations on component design and content tooling
-- Occasional deep dives into research directions
+## Content-driven architecture
 
-If something looks off or you have feedback, I’d love to hear it. Thanks for reading — and welcome!
+The site is organized around a file-based content system. Each piece of content lives in a Markdown file with YAML frontmatter for metadata. A lightweight content loader reads these files at build time, parses the frontmatter, and sorts by date. There is no runtime content fetching.
+
+This structure separates content from presentation completely. The same content file can be rendered as a card, a full page, or an API response without modification. Components consume content as typed data, not as raw markup. This makes refactoring safe and makes the rendering layer testable.
+
+MDX extends this model by allowing components to live inside content. A blog post can include a custom figure, a collapsible section, or an interactive demo without breaking out of the content workflow. The rendering layer handles these components transparently.
+
+## Engineering perspective
+
+Frontend engineering is often dismissed as superficial, but the same principles that matter in backend systems apply here: modularity, composability, and performance.
+
+The component library is built on clear contracts. Each component has a defined interface, handles its own state, and composes predictably. The tag system, for example, groups tags by category, assigns colors based on type, and handles overflow gracefully. These behaviors are encapsulated, not scattered across the codebase.
+
+Performance is not an afterthought. Every page is statically generated at build time. No database queries, no API calls, no client-side data fetching. The site loads instantly from a CDN. Dark and light themes are handled via CSS custom properties, requiring zero JavaScript. These are not optimizations; they are consequences of architectural choices made early.
+
+The design itself reflects system thinking. The tag color system is inspired by IDE syntax highlighting: orange for ML, blue for backend, green for languages. This is not decoration. It is a visual signal that maps to how engineers categorize work. The split card interaction—clickable titles, selectable tags—respects user intent and demonstrates that small interaction details matter.
+
+## What this demonstrates
+
+This project shows how I approach systems when clarity and maintainability matter more than novelty.
+
+It demonstrates content architecture: how to structure information so it can be consumed, reused, and version-controlled without complexity. It demonstrates frontend discipline: building components that compose predictably, styling systems that remain readable, and performance patterns that scale. It demonstrates technical communication: how to present work clearly, with context, without overstating or underselling.
+
+It also reflects a broader philosophy: good systems are boring. They do not surprise you. They do what they are supposed to do, and they make it easy to iterate.
+
+## Final thoughts
+
+This website is not static. As projects evolve, as writing accumulates, as priorities shift, the site will adapt. The architecture supports that. New components can be added without rewriting the content system. New content can be published without touching the rendering layer. The design can be refined without breaking existing functionality.
+
+The portfolio is part of my broader body of work, but it also serves a specific purpose: it is the place where everything comes together. Projects, publications, experiments, and reflections all live here, structured and accessible.
+
+The technical details are available in the repository, and the project page covers the implementation specifics. This post explains why the site was built this way and what it demonstrates about how I work.
 
 <div className="mt-12 pt-8 border-t border-border">
 	<div className="flex flex-wrap gap-4">

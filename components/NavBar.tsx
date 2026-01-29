@@ -43,7 +43,7 @@ export function NavBar() {
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           <a
-            href="https://github.com"
+            href="https://github.com/notemilianogarcia/notemilianogarcia"
             target="_blank"
             rel="noopener noreferrer"
             className="text-text-2 hover:text-accent transition-colors"

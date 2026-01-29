@@ -50,12 +50,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${heading.variable} ${body.variable} ${mono.variable} bg-bg text-text antialiased`}
+        suppressHydrationWarning
       >
         <ThemeProvider>
-          <div className="min-h-screen bg-bg flex flex-col">
+          <div className="min-h-screen bg-bg flex flex-col" suppressHydrationWarning>
             <NavBar />
             <main className="flex-1 flex flex-col">{children}</main>
             <Footer />

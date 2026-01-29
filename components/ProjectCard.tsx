@@ -35,7 +35,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
       {(project.tags ?? []).length > 0 && (
         <div className="pt-4 mt-4 border-t border-border">
-          <ExpandableTags id={project.slug} tags={project.tags} expandable={true} maxInitialTags={4} />
+          <ExpandableTags id={project.slug} tags={project.tags} expandable={true} maxInitialTags={3} />
         </div>
       )}
     </div>

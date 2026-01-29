@@ -41,7 +41,7 @@ export function SectionBand({
           <div
             className={cn(
               "mx-auto max-w-6xl rounded-[28px] p-8 md:p-16 border border-border shadow-sm",
-              "bg-surface"
+              "bg-surface-panel"
             )}
           >
             {(title || subtitle) && (

@@ -24,7 +24,7 @@ export default async function HomePage() {
               Emiliano Garcia
             </h1>
             <p className="text-lg md:text-2xl text-text-2 max-w-2xl">
-              M.A.C. candidate and Software Engineering graduate building AI-driven systems for research and industry. Experienced in ML, data pipelines, and applied deep learning.
+              Master's of Applied Computing candidate and Software Engineering graduate, Engineer-In-Training, building AI-driven systems for research and industry. Experienced in ML, data pipelines, and applied deep learning.
             </p>
             <div className="flex gap-4 mt-6">
               <a href="/projects" className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg transition-transform hover:scale-105">
@@ -86,6 +86,9 @@ export default async function HomePage() {
       {/* Selected Projects Band */}
       <SectionBand theme="dark" variant="panel" title="Selected Projects">
         <ProjectGrid projects={projects.slice(0, 2)} />
+        <div className="mt-6 text-right">
+          <a href="/projects" className="text-sm text-accent underline">See all on Projects</a>
+        </div>
       </SectionBand>
 
       {/* Featured Publication Band (light) */}
@@ -103,8 +106,8 @@ export default async function HomePage() {
         <div className="flex flex-col items-center gap-4">
           <EmailContact email="emiliano.gar.och@gmail.com" />
           <div className="flex gap-6">
-            <a href="https://github.com" className="text-text-2 hover:text-accent">GitHub</a>
-            <a href="https://www.linkedin.com/in/emiliano-garcia-ochoa/" className="text-text-2 hover:text-accent">LinkedIn</a>
+            <a href="https://github.com/notemilianogarcia/notemilianogarcia" target="_blank" rel="noopener noreferrer" className="text-text-2 hover:text-accent">GitHub</a>
+            <a href="https://www.linkedin.com/in/emiliano-garcia-ochoa/" target="_blank" rel="noopener noreferrer" className="text-text-2 hover:text-accent">LinkedIn</a>
           </div>
         </div>
       </SectionBand>

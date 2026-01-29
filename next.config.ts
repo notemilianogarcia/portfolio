@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "export",
   turbopack: {
     // Ensure Turbopack uses the `code` folder as the project root
     root: __dirname,
