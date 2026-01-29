@@ -1,6 +1,15 @@
 import { SectionBand } from "@/components/SectionBand";
 import { ProjectGrid } from "@/components/ProjectGrid";
 import { getAllProjects } from "@/lib/content";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Projects",
+  description: "Explore Emiliano Garcia Ochoa's portfolio of machine learning and software engineering projects, including RAG systems, evaluation frameworks, and production applications.",
+  alternates: {
+    canonical: "/projects",
+  },
+};
 
 export default async function ProjectsPage() {
   const projects = await getAllProjects();

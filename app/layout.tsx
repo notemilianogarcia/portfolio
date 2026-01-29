@@ -27,7 +27,20 @@ export const metadata: Metadata = {
   title: "Emiliano Garcia Ochoa | ML Engineer & Researcher",
   description:
     "Research-driven machine learning engineer crafting efficient, reliable systems and publications.",
-  metadataBase: new URL("https://example.com"),
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+    other: [
+      { rel: 'icon', url: '/icon-16.png', sizes: '16x16' },
+      { rel: 'icon', url: '/icon-32.png', sizes: '32x32' },
+      { rel: 'icon', url: '/icon-192.png', sizes: '192x192' },
+      { rel: 'icon', url: '/icon-512.png', sizes: '512x512' },
+    ],
+  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://example.com"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Emiliano Garcia Ochoa | ML Engineer & Researcher",
     description:
@@ -61,6 +74,22 @@ export default function RootLayout({
             <main className="flex-1 flex flex-col">{children}</main>
             <Footer />
           </div>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Person",
+                "name": "Emiliano Garcia Ochoa",
+                "jobTitle": "ML Engineer & Researcher",
+                "url": process.env.NEXT_PUBLIC_SITE_URL || "https://example.com",
+                "sameAs": [
+                  "https://github.com/notemilianogarcia/notemilianogarcia",
+                  "https://www.linkedin.com/in/emiliano-garcia-ochoa/"
+                ]
+              })
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

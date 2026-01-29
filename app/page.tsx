@@ -18,19 +18,19 @@ export default async function HomePage() {
     <main>
       {/* Hero Band */}
       <SectionBand theme="dark" variant="full">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-12">
-          <div className="flex flex-col items-start justify-center gap-6 min-w-0">
-            <h1 className="font-heading text-4xl md:text-6xl font-bold text-[color:var(--color-text)] mb-2">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 py-6 md:py-12">
+          <div className="flex flex-col items-center md:items-start justify-center gap-4 md:gap-6 min-w-0 text-center md:text-left">
+            <h1 className="font-heading text-3xl md:text-6xl font-bold text-[color:var(--color-text)] mb-2">
               Emiliano Garcia
             </h1>
-            <p className="text-lg md:text-2xl text-text-2 max-w-2xl">
+            <p className="text-base md:text-2xl text-text-2 max-w-xl md:max-w-2xl">
               Master's of Applied Computing candidate and Software Engineering graduate, Engineer-In-Training, building AI-driven systems for research and industry. Experienced in ML, data pipelines, and applied deep learning.
             </p>
-            <div className="flex gap-4 mt-6">
-              <a href="/projects" className="rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg transition-transform hover:scale-105">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-4 md:mt-6">
+              <a href="/projects" className="min-h-11 rounded-xl bg-accent px-6 py-3 text-sm font-bold text-bg transition-transform hover:scale-105">
                 View Projects
               </a>
-              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="rounded-xl border-2 border-accent px-6 py-3 text-sm font-bold text-accent bg-bg transition-transform hover:scale-105">
+              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="min-h-11 rounded-xl border-2 border-accent px-6 py-3 text-sm font-bold text-accent bg-bg transition-transform hover:scale-105">
                 Download Resume
               </a>
             </div>
@@ -39,7 +39,7 @@ export default async function HomePage() {
             <img
               src="/illustration-home.svg"
               alt="Homepage illustration"
-              className="illustration-home h-auto max-h-[70vh] w-full rounded-2xl translate-y-12 md:translate-y-20"
+              className="illustration-home h-auto max-h-[35vh] md:max-h-[70vh] w-3/4 md:w-full rounded-2xl translate-y-12 md:translate-y-20"
               style={{ objectFit: 'contain', display: 'block' }}
             />
           </div>

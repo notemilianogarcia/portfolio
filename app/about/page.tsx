@@ -3,6 +3,15 @@ import { ExperienceAccordion } from "@/components/ExperienceAccordion";
 import experience from "@/data/experience.json";
 import education from "@/data/education.json";
 import awards from "@/data/awards.json";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description: "Learn about Emiliano Garcia Ochoa's background, experience, education, and achievements in machine learning and software engineering.",
+  alternates: {
+    canonical: "/about",
+  },
+};
 
 export default function AboutPage() {
   return (

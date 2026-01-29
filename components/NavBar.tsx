@@ -1,8 +1,9 @@
 
 "use client";
 import Link from "next/link";
-import { Github, Linkedin, FileText, Moon, Sun } from "lucide-react";
+import { Github, Linkedin, FileText, Moon, Sun, Menu, X } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
+import { useState } from "react";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -14,6 +15,7 @@ const navLinks = [
 
 export function NavBar() {
   const { theme, toggleTheme } = useTheme();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/50 bg-bg/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
@@ -35,6 +37,13 @@ export function NavBar() {
         </div>
 
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden rounded-full p-2 text-text-2 hover:text-accent transition-colors"
+            aria-label="Toggle mobile menu"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
           <button
             onClick={toggleTheme}
             className="rounded-full p-2 text-text-2 hover:text-accent transition-colors"
@@ -69,6 +78,33 @@ export function NavBar() {
             <FileText size={16} />
             Resume
           </a>
+        </div>
+      </div>
+      {/* Mobile Menu */}
+      <div className={`md:hidden ${mobileMenuOpen ? 'block' : 'hidden'} border-t border-border/50 bg-bg/95 backdrop-blur-md`}>
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex flex-col gap-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="text-sm font-medium text-text-2 transition-colors hover:text-accent py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-bg transition-transform hover:scale-105 active:scale-95 w-fit"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <FileText size={16} />
+              Resume
+            </a>
+          </div>
         </div>
       </div>
     </nav>

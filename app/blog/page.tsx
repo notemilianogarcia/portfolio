@@ -1,6 +1,15 @@
 import { SectionBand } from "@/components/SectionBand";
 import { getAllPosts } from "@/lib/content";
 import { ExpandableTags } from "@/components/ExpandableTags";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Blog",
+  description: "Read Emiliano Garcia Ochoa's blog posts on machine learning, software engineering, evaluation, and technical insights.",
+  alternates: {
+    canonical: "/blog",
+  },
+};
 
 export default async function BlogPage() {
   const posts = await getAllPosts();

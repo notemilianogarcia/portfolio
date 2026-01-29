@@ -4,12 +4,36 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { components as MDXComponents } from "@/components/mdx/MDXComponents";
 import remarkGfm from "remark-gfm";
 import { ExpandableTags } from "@/components/ExpandableTags";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   const projects = await getAllProjects();
   return projects.map((project: any) => ({
     slug: project.slug,
   }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
+  if (!project) return {};
+  return {
+    title: project.title,
+    description: project.summary,
+    alternates: {
+      canonical: `/projects/${slug}`,
+    },
+    openGraph: {
+      title: project.title,
+      description: project.summary,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.summary,
+    },
+  };
 }
 
 export default async function ProjectCasePage({ params }: { params: Promise<{ slug: string }> }) {
