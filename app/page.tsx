@@ -20,7 +20,7 @@ export default async function HomePage() {
       <SectionBand theme="dark" variant="full">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 py-6 md:py-12">
           <div className="flex flex-col items-center md:items-start justify-center gap-4 md:gap-6 min-w-0 text-center md:text-left">
-            <h1 className="font-heading text-3xl md:text-6xl font-bold text-[color:var(--color-text)] mb-2">
+            <h1 className="font-heading text-3xl md:text-6xl font-bold text-[var(--color-text)] mb-2">
               Emiliano Garcia
             </h1>
             <p className="text-base md:text-2xl text-text-2 max-w-xl md:max-w-2xl">

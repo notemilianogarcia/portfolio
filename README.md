@@ -6,7 +6,7 @@ Personal portfolio website showcasing ML engineering work, publications, and blo
 
 A statically-generated portfolio site designed for fast load times and straightforward content management. Content is authored in MDX files with YAML frontmatter, rendered at build time via `next-mdx-remote`. The site includes sections for professional experience, projects, publications, and blog posts.
 
-**Live:** [emilianogarcia.dev](https://emilianogarcia.dev)
+**Live:** [emilianogarcia.ca](https://emilianogarcia.ca)
 
 ## Tech Stack
 

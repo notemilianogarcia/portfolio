@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Sora } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { NavBar } from "@/components/NavBar";
@@ -68,6 +69,18 @@ export default function RootLayout({
         className={`${heading.variable} ${body.variable} ${mono.variable} bg-bg text-text antialiased`}
         suppressHydrationWarning
       >
+        <Script
+          id="theme-script"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const theme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+              } catch (e) {}
+            `,
+          }}
+        />
         <ThemeProvider>
           <div className="min-h-screen bg-bg flex flex-col" suppressHydrationWarning>
             <NavBar />

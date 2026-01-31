@@ -16,7 +16,7 @@ Offline-capable travel assistant language model built with evaluation-first disc
 - **Evaluation-driven development** with 72-example benchmark suite and objective metrics
 - **Synthetic data pipeline** with OpenRouter teacher models, rate limiting, and cost-controlled fallback chain
 - **Structured output contracts** with schema validation (v0 envelope + v1 payloads)
-- **Production engineering** with 169 passing tests, Makefile commands, and reproducible provenance tracking
+- **Production engineering** with 376 passing tests, Makefile commands, and reproducible provenance tracking
 
 **Status:** Foundation and evaluation infrastructure complete. Currently generating synthetic training data for model adaptation.
 
@@ -47,7 +47,7 @@ Features include dry-run mode for testing, resume support for interrupted runs, 
 - **Python 3.11+**: Core language with type hints and Google-style docstrings
 - **OpenRouter**: Teacher model backend for synthetic data generation with multi-model fallback
 - **Ruff**: Linting and formatting for code quality
-- **pytest**: Testing framework with 169 tests covering data generation, validation, and evaluation
+- **pytest**: Testing framework with 376 tests covering data generation, validation, and evaluation
 - **JSONL**: Append-only data format with provenance metadata and schema versioning
 
 ---
@@ -91,7 +91,7 @@ Every generated example includes full provenance: config snapshot, prompt hash, 
 
 **Clean Architecture & Testing**
 
-Modular separation: inference, evaluation, data generation, teacher providers. 169 tests cover validation logic, data pipeline, and evaluation framework. Makefile provides stable commands (`make test`, `make eval`, `make data`) for consistent developer experience. Type hints and docstrings throughout.
+Modular separation: inference, evaluation, data generation, teacher providers. 376 tests cover validation logic, data pipeline, and evaluation framework. Makefile provides stable commands (`make test`, `make eval`, `make data`) for consistent developer experience. Type hints and docstrings throughout.
 
 ---
 

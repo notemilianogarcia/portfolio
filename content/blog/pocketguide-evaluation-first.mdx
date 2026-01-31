@@ -31,7 +31,7 @@ The dataset specification targets 120 examples. Small by contemporary standards,
 
 ## Current state and next steps
 
-The project is not a prototype. It is not exploratory code. The foundation is established and stable. Clean repository structure, deterministic workflows via Makefile, 169 passing tests covering validation logic, data generation, and evaluation infrastructure. The synthetic data pipeline is operational. Teachers are generating examples. The framework is ready.
+The project is not a prototype. It is not exploratory code. The foundation is established and stable. Clean repository structure, deterministic workflows via Makefile, 376 passing tests covering validation logic, data generation, and evaluation infrastructure. The synthetic data pipeline is operational. Teachers are generating examples. The framework is ready.
 
 Current work focuses on data quality. Not all generated examples are equally useful. Some hallucinate, some produce valid but uninformative responses, some violate schemas. The project is implementing deduplication and balancing logic to filter weak examples, prevent leakage between training and evaluation splits, and ensure the training set is genuinely aligned with what the benchmark measures. This is systems work: the unsexy scaffolding that makes training reliable.
 
