@@ -20,7 +20,7 @@ export function Footer() {
               Email
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/notemilianogarcia/notemilianogarcia"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-text-2 hover:text-accent transition-colors"
