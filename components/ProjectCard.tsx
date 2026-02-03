@@ -21,20 +21,22 @@ interface ProjectCardProps {
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <div className="relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface-2 p-6 transition-all hover:border-accent/50 hover:shadow-lg">
-      {project.status === "in-progress" && (
-        <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold bg-accent/10 text-accent border border-accent/20">
-          In Progress
-        </div>
-      )}
       <Link
         href={`/projects/${project.slug}`}
         className="group/link block"
       >
-        <div className="mb-4 flex items-start justify-between pr-24">
-          <h3 className="font-heading text-xl font-bold text-text transition-colors group-hover/link:text-accent">
-            {project.title}
-          </h3>
-          <ArrowUpRight className="text-text-2 transition-colors group-hover/link:text-accent" size={20} />
+        <div className="mb-4 flex items-start justify-between">
+          <div className="flex-1">
+            <h3 className="font-heading text-xl font-bold text-text transition-colors group-hover/link:text-accent">
+              {project.title}
+            </h3>
+            {project.status === "in-progress" && (
+              <div className="mt-1 text-xs italic text-accent font-medium">
+                In Progress
+              </div>
+            )}
+          </div>
+          <ArrowUpRight className="text-text-2 transition-colors group-hover/link:text-accent ml-2" size={20} />
         </div>
         <p className="text-sm text-text-2 leading-relaxed mb-6">{project.summary}</p>
       </Link>
