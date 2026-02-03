@@ -26,17 +26,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
         className="group/link block"
       >
         <div className="mb-4 flex items-start justify-between">
-          <div className="flex-1">
+          <div className="flex items-center gap-2 flex-1">
             <h3 className="font-heading text-xl font-bold text-text transition-colors group-hover/link:text-accent">
               {project.title}
             </h3>
             {project.status === "in-progress" && (
-              <div className="mt-1 text-xs italic text-text font-medium">
-                In Progress
-              </div>
+              <span className="text-xs italic text-text font-medium">
+                (In Progress)
+              </span>
             )}
           </div>
-          <ArrowUpRight className="text-text-2 transition-colors group-hover/link:text-accent ml-2" size={20} />
+          <ArrowUpRight className="text-text-2 transition-colors group-hover/link:text-accent" size={20} />
         </div>
         <p className="text-sm text-text-2 leading-relaxed mb-6">{project.summary}</p>
       </Link>
