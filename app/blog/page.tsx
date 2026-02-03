@@ -15,7 +15,7 @@ export default async function BlogPage() {
   const posts = await getAllPosts();
   
   // Custom order for blog posts
-  const postOrder = ["rag-benchmark-service", "pocketguide-evaluation-first", "where-are-my-publications", "building-this-portfolio", "about-me"];
+  const postOrder = ["coming-right-up-explainable-medical", "rag-benchmark-service", "pocketguide-evaluation-first", "where-are-my-publications", "building-this-portfolio", "about-me"];
   const orderedPosts = postOrder
     .map(slug => posts.find((p: any) => p.slug === slug))
     .filter(Boolean)
