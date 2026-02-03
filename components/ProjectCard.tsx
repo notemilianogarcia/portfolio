@@ -29,12 +29,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <div className="flex-1">
             <h3 className="font-heading text-xl font-bold text-text transition-colors group-hover/link:text-accent">
               {project.title}
+              {project.status === "in-progress" && (
+                <span className="ml-2 text-sm italic text-accent font-medium">
+                  (In Progress)
+                </span>
+              )}
             </h3>
-            {project.status === "in-progress" && (
-              <div className="mt-1 text-xs italic text-accent font-medium">
-                In Progress
-              </div>
-            )}
           </div>
           <ArrowUpRight className="text-text-2 transition-colors group-hover/link:text-accent ml-2" size={20} />
         </div>
