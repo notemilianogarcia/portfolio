@@ -1,0 +1,371 @@
+---
+title: "Trustworthy Medical Vision"
+summary: "Explainability and uncertainty estimation for medical image classification with CNNs. Evaluation-first approach treating confidence and explanations as measurable outputs."
+date: "2026-02-03"
+tags: ["Deep Learning", "CNN", "Health Tech", "Evaluation", "Machine Learning", "Python"]
+featured: false
+status: "in-progress"
+---
+
+# Trustworthy Medical Vision
+
+**Status: Project Plan & Active Development** — This page outlines the technical roadmap for an upcoming medical image classification project focused on explainability, uncertainty estimation, and explanation reliability analysis. I will update this page as the project progresses through its milestones.
+
+## TL;DR
+
+- **Explainable medical image classifier** using pretrained CNN backbone (ResNet/EfficientNet) with visual explanations (Grad-CAM + Score-CAM)
+- **Uncertainty estimation** via MC Dropout and/or Deep Ensembles with calibration analysis (ECE, Brier, reliability diagrams)
+- **Explanation reliability analysis** measuring stability under perturbations and correlation with uncertainty/correctness
+- **Evaluation-first methodology** with fixed benchmark, deterministic splits, and rigorous failure case auditing
+- **Responsible AI framing** with explicit limitations, disclaimers, and trust failure mode analysis
+
+## Project Overview
+
+This project builds a medical image classification system that treats **confidence** and **explanations** as first-class outputs alongside predictions. The technical contribution is not "beating SOTA," but demonstrating **responsible ML research** and **production-minded ML engineering** by analyzing when the model should be trusted and when it should not.
+
+**Core idea:** In healthcare-relevant ML, a model's accuracy can look strong while its **confidence is miscalibrated** and its **explanations are unstable**. This project treats explanations as **objects of measurement**, not just visuals.
+
+---
+
+## Motivation
+
+Medical decision support requires trust, interpretability, and explicit acknowledgment of uncertainty. Pure classification performance is insufficient because:
+
+- Errors can be high-impact
+- Data shifts and hidden confounders are common
+- Explanations can be visually convincing yet wrong
+
+### What This Project Demonstrates
+
+**ML/Research Discipline**
+
+- **Transfer learning** with pretrained CNNs and disciplined experimental design
+- **Explainability engineering** with Grad-CAM/Score-CAM implementation and artifact generation
+- **Uncertainty estimation** (MC Dropout and/or Deep Ensembles) with calibration metrics
+- **Evaluation beyond accuracy**: reliability diagrams, ECE, Brier, selective prediction, uncertainty-error correlation
+- **Explanation reliability analysis**: stability metrics, overlap, sensitivity to perturbations, and failure case audits
+
+**ML Engineering**
+
+- **Reproducible, config-driven pipelines** with tracked artifacts and clean repo hygiene
+- **Deterministic data splits** with patient-level separation to avoid leakage
+- **Artifact logging** for checkpoints, metrics, explanations, and failure cases
+- **CLI-driven workflow** for training, inference, explanation generation, and evaluation
+
+**Software Engineering**
+
+- Modular architecture with clear separation of concerns
+- Comprehensive testing across data, model, and evaluation modules
+- Production-grade error handling and validation
+- Documentation-first approach with ethical considerations
+
+### What This Project Does NOT Claim
+
+- Clinical readiness, diagnostic capability, or deployment in real care
+- Fairness across all demographics unless dataset supports it
+- Explanations as "ground truth" — they are assessed as signals with limitations
+
+---
+
+## Planned Architecture
+
+The system follows an evaluation-first pipeline where trust analysis is as important as prediction performance.
+
+<code style={{ display: 'block', whiteSpace: 'pre', margin: '0 0 1rem 0' }} className="bg-surface-2 border border-border rounded-lg p-4 overflow-x-auto text-sm font-mono text-text-2">{`Medical Dataset (CheXpert / NIH ChestXray14)
+      ↓
+[Data Module: Patient-Level Splits → Train/Val/Test]
+      ↓
+[Model: Pretrained CNN + Classifier Head]
+      ↓
+[Training: Transfer Learning + Early Stopping]
+      ↓
+[Uncertainty: MC Dropout / Deep Ensembles]
+      ↓
+[Explanation: Grad-CAM + Score-CAM]
+      ↓
+[Stability Analysis: Perturbation Protocol]
+      ↓                       ↓
+[Calibration Metrics]   [Explanation Metrics]
+  - ECE                   - Heatmap overlap
+  - Brier                 - Rank correlation
+  - Reliability           - COM shift
+      ↓                       ↓
+[Trust Analysis: Confidence × Correctness × Stability]
+      ↓
+[Failure Case Audit + Report Generation]`}</code>
+
+---
+
+## Technical Scope
+
+### In Scope
+
+- One medical imaging task (binary or small multi-class)
+- Pretrained CNN backbone (ResNet50 / EfficientNet-B0/B1)
+- Visual explanations: Grad-CAM + Score-CAM (or Integrated Gradients)
+- Uncertainty: MC Dropout and/or Deep Ensembles
+- Reliability analysis: calibration + explanation stability + trust failure cases
+- Clean data splits, deterministic runs, artifact logging
+
+### Out of Scope
+
+- Large-scale training from scratch
+- Clinical validation or deployment
+- Fancy UI or web app
+- Extensive hyperparameter sweeps beyond justified minimal set
+
+### Target Dataset
+
+Planned options (public, well-documented, feasible on consumer hardware):
+
+- **CheXpert (small subset)** or **NIH ChestXray14 (selected labels)** for multi-label or binary
+- **Diabetic Retinopathy (Kaggle)** (alternative if compute allows)
+- **Skin lesion datasets** (ISIC variants; ensure license & splits)
+
+Initial framing will start with **binary classification** for a single label to keep analyses focused (e.g., "Pneumonia vs No Pneumonia" or "Pleural Effusion vs Not").
+
+---
+
+## Evaluation Methodology
+
+### Predictive Performance
+
+- Accuracy (secondary)
+- AUROC (primary baseline)
+- F1 / Precision-Recall (for imbalance)
+
+### Calibration & Uncertainty
+
+- **ECE** (Expected Calibration Error)
+- **Brier score**
+- **Reliability diagrams**
+- **Selective prediction curves** (coverage vs AUROC/accuracy)
+
+### Trust-Focused Analysis
+
+Create "trust quadrants" for systematic analysis:
+
+- **Correct + confident + stable explanation** (ideal)
+- **Correct + uncertain** (appropriate caution)
+- **Incorrect + confident** (danger zone)
+- **Incorrect + uncertain** (less dangerous)
+
+Primary analyses will quantify:
+
+- Proportion of samples in each quadrant
+- Qualitative case studies for worst quadrant(s)
+
+### Explanation Stability
+
+For each input, explanations will be generated under controlled perturbations:
+
+- MC Dropout runs (same image, different stochastic passes)
+- Test-time augmentation (mild shifts, flips, crops)
+- Optional: additive noise / brightness changes
+
+**Stability metrics:**
+
+- **Heatmap overlap**: IoU / Dice on thresholded saliency regions
+- **Rank correlation**: Spearman correlation between heatmap pixel intensities
+- **Center-of-mass shift**: distance between heatmap COM across runs
+- **Deletion/insertion tests** (optional): prediction changes when masking top-saliency regions
+
+---
+
+## Milestones
+
+### Milestone 0 — Project Scaffold ✅
+
+Create repo, packaging, linting, formatting, Makefile, config system, and artifact folder conventions.
+
+**Exit criteria:** `python -m tmv.cli.train --dry_run` works and writes a run folder.
+
+### Milestone 1 — Dataset Ingestion + Clean Splits
+
+Implement dataset download/instructions, loader, and patient-level (if possible) deterministic splits. Add `docs/data.md`.
+
+**Exit criteria:** Can iterate train/val/test without leakage and with fixed split files.
+
+### Milestone 2 — Baseline Transfer Learning Model
+
+Implement pretrained backbone + head, train baseline, and log AUROC/metrics. Save checkpoint + metrics.
+
+**Exit criteria:** A reproducible baseline run with documented performance.
+
+### Milestone 3 — Uncertainty Estimation (MC Dropout)
+
+Add dropout strategy, implement T-pass inference and uncertainty measures. Add calibration metrics + reliability plots.
+
+**Exit criteria:** Calibration + selective prediction results exist for a run.
+
+### Milestone 4 — Visual Explanations (Grad-CAM)
+
+Generate Grad-CAM heatmaps for curated samples. Save overlays + raw heatmaps to artifacts.
+
+**Exit criteria:** Explanation artifacts generated deterministically and referenced in README.
+
+### Milestone 5 — Second Explainability Method (Score-CAM or IG)
+
+Add second method and compare side-by-side.
+
+**Exit criteria:** Side-by-side explanation comparison on the same samples.
+
+### Milestone 6 — Explanation Stability Analysis
+
+Define perturbation protocol, compute stability metrics (overlap, correlation, COM shift), and relate stability to uncertainty/confidence/correctness.
+
+**Exit criteria:** A table/plot answering: "Does uncertainty predict explanation instability?"
+
+### Milestone 7 — Failure Case Audit + Final Report
+
+Curate top failure examples across categories. Write report with narrative and limitations.
+
+**Exit criteria:** `docs/methodology.md` + report notebook produce a polished analysis.
+
+### Milestone 8 — Portfolio Packaging
+
+Polish README with motivation, architecture diagram, outputs, and "what this proves / does not prove." Add repro instructions.
+
+**Exit criteria:** A recruiter can run inference + view artifacts in under 30 minutes.
+
+---
+
+## Planned Repository Structure
+
+```
+trustworthy-medical-vision/
+  README.md
+  LICENSE
+  PROJECT_STATUS.md
+  pyproject.toml
+  Makefile
+  configs/
+    data.yaml
+    train.yaml
+    infer.yaml
+    explain.yaml
+    eval.yaml
+  src/tmv/
+    data/
+      datasets.py
+      transforms.py
+      splits.py
+    models/
+      backbones.py
+      classifier.py
+      uncertainty/
+        mc_dropout.py
+        ensembles.py
+    explain/
+      gradcam.py
+      scorecam.py
+      utils.py
+    eval/
+      metrics.py
+      calibration.py
+      stability.py
+      selective.py
+      failure_cases.py
+    cli/
+      train.py
+      predict.py
+      explain.py
+      evaluate.py
+      report.py
+    utils/
+      seed.py
+      io.py
+      config.py
+  notebooks/
+    00_sanity_check.ipynb
+    01_report.ipynb
+  docs/
+    data.md
+    methodology.md
+    ethics.md
+  artifacts/
+    splits/
+    runs/
+      [run_id]/
+        config.yaml
+        checkpoints/
+        metrics/
+        explanations/
+        figures/
+        failure_cases/
+```
+
+---
+
+## Planned Deliverables
+
+- ✅ Config-driven training/inference/explain/eval
+- ✅ Checkpointed baseline + uncertainty-enabled variant
+- ✅ Calibration evaluation + selective prediction
+- ✅ Explanation generation (2 methods)
+- ✅ Explanation stability analysis with metrics
+- ✅ Failure case audit with curated examples
+- ✅ Responsible AI docs + disclaimers
+- ✅ Clean README + architecture diagram + example outputs
+
+---
+
+## Responsible AI & Safety
+
+### Required Disclaimers
+
+- Research/educational decision-support only
+- Not a medical device
+- Not for diagnosis
+
+### Ethical Considerations
+
+- Dataset bias, label noise, and missing demographic metadata
+- Domain shift risks (different hospitals, devices, populations)
+- Confounders (text markers, acquisition artifacts)
+
+### Limitations
+
+- No external validation
+- Explanations are not ground truth
+- Calibration and stability are dataset-dependent
+
+### Misuse Prevention
+
+The system will provide guidance: "Use uncertainty + explanation stability to decide when to defer," avoiding "diagnostic" language in outputs.
+
+---
+
+## Future Extensions
+
+If time permits and it strengthens the story:
+
+- **Deep ensembles** (K=3) to compare against MC Dropout
+- **Domain shift testing** (train on subset A, test on subset B if dataset supports)
+- **Advanced explainability evaluation**: insertion/deletion or sanity checks
+- **Model cards**: concise `MODEL_CARD.md` with risks and intended use
+
+---
+
+## Current Status
+
+**Active Development** — This project is currently in the early stages. I am working through the initial milestones and will update this page with:
+
+- Implementation progress
+- Preliminary results and findings
+- Code repository link
+- Curated explanation artifacts
+- Final report and analysis
+
+Check back for updates as the project progresses through its milestones.
+
+<div className="mt-12 pt-8 border-t border-border">
+  <div className="flex flex-wrap gap-4">
+    <div className="inline-flex items-center gap-2 rounded-lg bg-surface-2 border border-border px-6 py-3 text-sm font-bold text-text-2">
+      <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>Repository Coming Soon</span>
+    </div>
+  </div>
+</div>

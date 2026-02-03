@@ -11,6 +11,7 @@ export interface Project {
   summary: string;
   tags?: string[];
   featured?: boolean;
+  status?: string;
 }
 
 interface ProjectCardProps {
@@ -20,11 +21,16 @@ interface ProjectCardProps {
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <div className="relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface-2 p-6 transition-all hover:border-accent/50 hover:shadow-lg">
+      {project.status === "in-progress" && (
+        <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold bg-accent/10 text-accent border border-accent/20">
+          In Progress
+        </div>
+      )}
       <Link
         href={`/projects/${project.slug}`}
         className="group/link block"
       >
-        <div className="mb-4 flex items-start justify-between">
+        <div className="mb-4 flex items-start justify-between pr-24">
           <h3 className="font-heading text-xl font-bold text-text transition-colors group-hover/link:text-accent">
             {project.title}
           </h3>
