@@ -123,32 +123,17 @@ Explanations generated under perturbations (MC Dropout runs, test-time augmentat
 
 ## Milestones
 
-### Milestone 0 — Project Scaffold ✅
-Create repo, packaging, config system, and artifact conventions.
-
-### Milestone 1 — Dataset Ingestion + Clean Splits
-Implement dataset loader and patient-level deterministic splits.
-
-### Milestone 2 — Baseline Transfer Learning Model
-Implement pretrained backbone + head, train baseline with AUROC metrics.
-
-### Milestone 3 — Uncertainty Estimation (MC Dropout)
-Add dropout strategy, implement T-pass inference and calibration metrics.
-
-### Milestone 4 — Visual Explanations (Grad-CAM)
-Generate Grad-CAM heatmaps for curated samples.
-
-### Milestone 5 — Second Explainability Method (Score-CAM)
-Add Score-CAM and compare side-by-side.
-
-### Milestone 6 — Explanation Stability Analysis
-Compute stability metrics and relate to uncertainty/confidence/correctness.
-
-### Milestone 7 — Failure Case Audit + Final Report
-Curate failure examples and write report with limitations.
-
-### Milestone 8 — Portfolio Packaging
-Polish README with motivation, architecture, and repro instructions.
+| Milestone | Description |
+|-----------|-------------|
+| 0 — Project Scaffold | Create repo, packaging, config system, and artifact conventions |
+| 1 — Dataset Ingestion | Implement dataset loader and patient-level deterministic splits |
+| 2 — Baseline Model | Implement pretrained backbone + head, train baseline with AUROC metrics |
+| 3 — Uncertainty Estimation | Add dropout strategy, implement T-pass inference and calibration metrics |
+| 4 — Visual Explanations | Generate Grad-CAM heatmaps for curated samples |
+| 5 — Second Explainability Method | Add Score-CAM and compare side-by-side |
+| 6 — Explanation Stability Analysis | Compute stability metrics and relate to uncertainty/confidence/correctness |
+| 7 — Failure Case Audit | Curate failure examples and write report with limitations |
+| 8 — Portfolio Packaging | Polish README with motivation, architecture, and repro instructions |
 
 ---
 
@@ -156,48 +141,35 @@ Polish README with motivation, architecture, and repro instructions.
 
 ```
 trustworthy-medical-vision/
-  README.md
-  pyproject.toml
-  Makefile
-  configs/
-    data.yaml
-    train.yaml
-    infer.yaml
-    explain.yaml
-    eval.yaml
-  src/tmv/
-    data/ (datasets.py, transforms.py, splits.py)
-    models/ (backbones.py, classifier.py, uncertainty/)
-    explain/ (gradcam.py, scorecam.py, utils.py)
-    eval/ (metrics.py, calibration.py, stability.py)
-    cli/ (train.py, predict.py, explain.py, evaluate.py)
-  notebooks/
-    00_sanity_check.ipynb
-    01_report.ipynb
-  docs/
-    data.md
-    methodology.md
-    ethics.md
-  artifacts/
-    splits/
-    runs/[run_id]/
-      config.yaml
-      checkpoints/
-      metrics/
-      explanations/
-      failure_cases/
+├── README.md, pyproject.toml, Makefile
+├── configs/ (data.yaml, train.yaml, infer.yaml, explain.yaml, eval.yaml)
+├── src/tmv/
+│   ├── data/ (datasets.py, transforms.py, splits.py)
+│   ├── models/ (backbones.py, classifier.py, uncertainty/)
+│   ├── explain/ (gradcam.py, scorecam.py, utils.py)
+│   ├── eval/ (metrics.py, calibration.py, stability.py)
+│   └── cli/ (train.py, predict.py, explain.py, evaluate.py)
+├── notebooks/ (00_sanity_check.ipynb, 01_report.ipynb)
+├── docs/ (data.md, methodology.md, ethics.md)
+└── artifacts/
+    ├── splits/
+    └── runs/[run_id]/
+        ├── config.yaml, checkpoints/, metrics/
+        ├── explanations/, failure_cases/
 ```
 
 ---
 
 ## Planned Deliverables
 
-- ✅ Config-driven training/inference/explain/eval
-- ✅ Checkpointed baseline + uncertainty-enabled variant
-- ✅ Calibration evaluation + selective prediction
-- ✅ Explanation generation (2 methods)
-- ✅ Explanation stability analysis with metrics
-- ✅ Failure case audit with curated examples
+- Config-driven training/inference/explain/eval
+- Checkpointed baseline + uncertainty-enabled variant
+- Calibration evaluation + selective prediction
+- Explanation generation (2 methods)
+- Explanation stability analysis with metrics
+- Failure case audit with curated examples
+- Responsible AI docs + disclaimers
+- Clean README + architecture diagram + example outputs
 - ✅ Responsible AI docs + disclaimers
 - ✅ Clean README + architecture diagram + example outputs
 
