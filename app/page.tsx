@@ -1,4 +1,6 @@
 
+import Image from "next/image";
+
 import { SectionBand } from "@/components/SectionBand";
 import { ExperienceAccordion } from "@/components/ExperienceAccordion";
 import { ProjectGrid } from "@/components/ProjectGrid";
@@ -36,11 +38,14 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="flex items-center justify-center shrink-0 max-w-[420px] w-full">
-            <img
+            <Image
               src="/illustration-home.svg"
               alt="Homepage illustration"
+              width={420}
+              height={350}
               className="illustration-home h-auto max-h-[35vh] md:max-h-[70vh] w-3/4 md:w-full rounded-2xl translate-y-12 md:translate-y-20"
-              style={{ objectFit: 'contain', display: 'block' }}
+              style={{ objectFit: 'contain' }}
+              priority
             />
           </div>
         </div>

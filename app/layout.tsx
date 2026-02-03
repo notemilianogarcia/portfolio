@@ -65,6 +65,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preload" href="/illustration-home.svg" as="image" />
+      </head>
       <body
         className={`${heading.variable} ${body.variable} ${mono.variable} bg-bg text-text antialiased`}
         suppressHydrationWarning
