@@ -123,17 +123,17 @@ Explanations generated under perturbations (MC Dropout runs, test-time augmentat
 
 ## Milestones
 
-| Milestone | Description |
-|-----------|-------------|
-| 0 — Project Scaffold | Create repo, packaging, config system, and artifact conventions |
-| 1 — Dataset Ingestion | Implement dataset loader and patient-level deterministic splits |
-| 2 — Baseline Model | Implement pretrained backbone + head, train baseline with AUROC metrics |
-| 3 — Uncertainty Estimation | Add dropout strategy, implement T-pass inference and calibration metrics |
-| 4 — Visual Explanations | Generate Grad-CAM heatmaps for curated samples |
-| 5 — Second Explainability Method | Add Score-CAM and compare side-by-side |
-| 6 — Explanation Stability Analysis | Compute stability metrics and relate to uncertainty/confidence/correctness |
-| 7 — Failure Case Audit | Curate failure examples and write report with limitations |
-| 8 — Portfolio Packaging | Polish README with motivation, architecture, and repro instructions |
+| Phase | Milestone | Description |
+|-------|-----------|-------------|
+| **Setup** | 0 — Project Scaffold | Create repo, packaging, config system, and artifact conventions |
+| **Data** | 1 — Dataset Ingestion | Implement dataset loader and patient-level deterministic splits |
+| **Model** | 2 — Baseline Model | Implement pretrained backbone + head, train baseline with AUROC metrics |
+| **Uncertainty** | 3 — Uncertainty Estimation | Add dropout strategy, implement T-pass inference and calibration metrics |
+| **Explainability** | 4 — Visual Explanations | Generate Grad-CAM heatmaps for curated samples |
+| **Explainability** | 5 — Second Explainability Method | Add Score-CAM and compare side-by-side |
+| **Analysis** | 6 — Explanation Stability Analysis | Compute stability metrics and relate to uncertainty/confidence/correctness |
+| **Evaluation** | 7 — Failure Case Audit | Curate failure examples and write report with limitations |
+| **Packaging** | 8 — Portfolio Packaging | Polish README with motivation, architecture, and repro instructions |
 
 ---
 
@@ -170,8 +170,6 @@ trustworthy-medical-vision/
 - Failure case audit with curated examples
 - Responsible AI docs + disclaimers
 - Clean README + architecture diagram + example outputs
-- ✅ Responsible AI docs + disclaimers
-- ✅ Clean README + architecture diagram + example outputs
 
 ---
 
