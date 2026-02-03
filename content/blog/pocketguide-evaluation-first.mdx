@@ -1,55 +1,83 @@
 ---
-title: "PocketGuide: Offline Travel LLM, Built Evaluation-First"
-summary: "Building a domain-adapted, offline-capable travel assistant through evaluation-driven development, synthetic data generation, and rigorous benchmarking."
+title: "Building a Domain-Adapted LLM for Travel Guidance"
+summary: "Adapting a 7B language model to produce reliable, structured travel guidance through evaluation-first design, synthetic instruction tuning, and measured iteration."
 date: "2026-01-29"
-tags: ["Machine Learning", "LLM", "Evaluation", "Data Generation", "Production Engineering"]
+tags: ["Machine Learning", "LLM", "Evaluation", "Fine-tuning", "Structured Outputs"]
 ---
 
-# PocketGuide: Offline Travel LLM, Built Evaluation-First
+# Building a Domain-Adapted LLM for Travel Guidance
 
-Most language model projects optimize for scale: larger datasets, more parameters, bigger compute. PocketGuide optimizes for constraints: compute limits, reliability, offline operation, and structured outputs. This inversion of priorities produces a different kind of system. One where evaluation precedes training, where data quality matters more than data quantity, and where measurable improvement is the only metric that counts.
+Language models are good at many things. They are not, by default, good at producing reliable, structured outputs under constraints. PocketGuide is a system designed to address that gap in a specific domain: travel planning.
 
-The project emerged from a practical problem: existing travel assistants are either cloud-dependent or unreliable. They hallucinate visa requirements, confuse customs rules, or require internet connectivity. A travel assistant needs to work offline, produce trustworthy information, and operate on modest hardware. This is not a problem that scale solves. It is a problem that careful systems design solves.
+The goal was not to build the most capable travel assistant or the most sophisticated model. It was to demonstrate how domain adaptation works when reliability matters more than coverage, when outputs must follow contracts, and when the system needs to run offline on consumer hardware. This is also not another GPT wrapper with formatted outputs—it involves working directly with model weights through fine-tuning and quantization.
 
-## Starting with evaluation
+## Why travel guidance
 
-The standard approach to language model development is straightforward: collect data, train a model, evaluate the result. PocketGuide inverts this. Evaluation comes first. Before any fine-tuning, before any training data is generated, the project established a 72-example benchmark suite covering seven travel categories: visa, customs, health, budget, itinerary, safety, local culture, across three difficulty levels. This benchmark is fixed. It will not change. Everything else is measured against it.
+Travel planning is a useful domain for exploring structured output generation. The space is large enough to be interesting but constrained enough to evaluate rigorously. Queries have clear types—itineraries, checklists, decision trees, procedures—each with distinct structure. Outputs should acknowledge uncertainty, reference verification steps, and avoid overconfidence.
 
-Baseline evaluation on a pre-adaptation open-source model established reference metrics. The point was not to start with a high score. The point was to have an objective standard, documented and reproducible, against which all future improvements would be measured. This frame makes progress visible in a way that most projects never achieve.
+The practical motivation was simple: existing travel assistants are cloud-dependent and unreliable. They hallucinate visa rules, conflate customs regulations across countries, and fail when connectivity drops. Upcoming international travel made this concrete—being in a country with unreliable internet or expensive data roaming, needing quick answers to straightforward questions, with no trusted offline option. A system that works offline, produces structured outputs, and flags its own uncertainty gaps is more useful than one that optimizes for conversational fluency.
 
-The evaluation framework itself is rigorous. It does not just measure accuracy. It measures specific contract compliance: does the model respect the schema it is supposed to follow? Does it handle edge cases gracefully? Can we parse its output consistently? These are not nice-to-haves. They are requirements. The system validates every response against behavioral contracts: envelope schemas for response structure, specialized payloads for different travel query types. Anything that does not conform fails objectively.
+## Evaluation before training
 
-## Domain adaptation through synthetic data
+Most LLM projects follow a predictable pattern: collect data, train a model, see what happens. PocketGuide inverts this. Evaluation infrastructure was built first.
 
-With evaluation established, the project moved to data. Generating training data for a travel domain from scratch is expensive. Using generic instruction-tuning datasets produces noise. PocketGuide uses a different approach: teacher-driven synthetic data generation.
+Before any fine-tuning, I defined output contracts. A JSON envelope schema enforces consistent structure across all responses—summary, assumptions, uncertainty notes, verification steps. Typed payload schemas handle domain-specific outputs for different query types. These contracts are not suggestions. They are validated at inference time with deterministic pass/fail criteria.
 
-The system uses OpenRouter to access multiple models as teachers. A prompt template defines the structure for each of seven travel categories. The generator submits these prompts to teachers, collects responses, and builds a training dataset. But this is not a simple API call loop. The implementation is production-grade: cost-controlled fallback chains (free models first, then paid if necessary), exponential backoff and rate limiting (15 requests per minute) to avoid throttling, dry-run mode for testing without cost, and complete provenance tracking.
+A fixed 20-prompt benchmark suite measures three things: parse success (can the output be parsed as valid JSON), schema compliance (does it match the required structure), and uncertainty marker presence (does it acknowledge gaps in knowledge). This benchmark does not change. All training iterations are measured against it.
 
-Every generated example records its full history: the config snapshot, the exact prompt, which teacher model produced it, token counts, generation timestamp, and whether fallbacks were used. Append-only JSONL format prevents data loss. This infrastructure is not elegant. It is boring. It is also reliable and reproducible, which is the entire point.
+The baseline model—an unmodified open-source 7B model—established reference metrics. Parse success was 80%. Uncertainty markers appeared 85% of the time. Envelope field compliance was effectively zero. These numbers were not good, but they were objective. Everything that followed would be measured against them.
 
-The dataset specification targets 120 examples. Small by contemporary standards, massive by domain-specific standards. The prompt planner ensures consistent distribution across categories, difficulty levels, and response types. Initial generation runs produce pass-rate statistics by category and difficulty, enabling visibility into which areas of the domain are harder to teach.
+## Synthetic data and teacher models
 
-## Current state and next steps
+Training a domain-adapted model requires domain-specific instruction data. Scraping travel forums or hiring annotators is expensive and noisy. PocketGuide uses synthetic generation with quality gating.
 
-The project is not a prototype. It is not exploratory code. The foundation is established and stable. Clean repository structure, deterministic workflows via Makefile, 376 passing tests covering validation logic, data generation, and evaluation infrastructure. The synthetic data pipeline is operational. Teachers are generating examples. The framework is ready.
+The pipeline uses OpenRouter to access teacher models. A spec defines desired diversity: categories (visa, customs, health, budget, itinerary), regions, difficulty levels. The system generates prompts, submits them to teachers, and collects responses. But this is not a naive API loop. Cost control matters. Free models are tried first. Paid models are fallback options with explicit flags. Rate limiting prevents throttling. Every generated example includes full provenance: config snapshot, prompt hash, teacher model ID, token counts, generation timestamp.
 
-Current work focuses on data quality. Not all generated examples are equally useful. Some hallucinate, some produce valid but uninformative responses, some violate schemas. The project is implementing deduplication and balancing logic to filter weak examples, prevent leakage between training and evaluation splits, and ensure the training set is genuinely aligned with what the benchmark measures. This is systems work: the unsexy scaffolding that makes training reliable.
+The first dataset produced 120 examples. Small by contemporary standards, but every example was inspected. Quality gating filtered weak samples. Deduplication prevented leakage. The goal was not scale. It was signal density.
 
-Next comes model adaptation. Fine-tuning via LoRA or QLoRA on the cleaned synthetic dataset, with experiment tracking for reproducible ablations. Then rigorous evaluation: baseline vs. adapted model compared objectively on held-out benchmarks, with qualitative failure analysis to guide the next iteration. The project plans multiple cycles of targeted fixes, retraining, and re-evaluation, each one tightening the system based on evidence rather than intuition.
+## Five iterations of adaptation
 
-Down the line, deployment realism: model quantization, packaging for offline inference, documentation of resource constraints. Then portfolio finalization. But that is future work. Right now, the project is in the messy middle where systems get built: careful data work, repeated evaluation, iterative improvement.
+LoRA fine-tuning on Llama-2-7B provided a path to parameter-efficient adaptation. Five training iterations followed, each one targeting failure modes identified through evaluation.
 
-## Design philosophy
+Version 1 established a baseline with the initial synthetic dataset. Parse success stayed at 80%. Uncertainty markers reached 100%, showing the model learned to acknowledge gaps. But envelope field compliance remained low.
 
-This approach reflects a few core commitments. First, evaluation-driven development. Metrics are established early and remain fixed. Improvements are measured objectively. Speculation is replaced with numbers. Second, reproducibility and provenance. Every result is traceable. Every decision is documented. Experiments can be repeated exactly. Third, cost consciousness. Free models are tried first. API budgets are tracked. Fallback chains are explicit. This is not about being cheap. It is about being accountable.
+Version 2 adjusted dataset quality—harder prompts, stricter acceptance thresholds—and lowered the learning rate. Parse success climbed to 95%. Envelope fields began appearing, but inconsistently.
 
-There is also a deeper philosophy here about domain adaptation and scale. Modern LLM discourse assumes that bigger is better: more parameters, more training data, more compute. But large, noisy datasets produce unreliable models. PocketGuide takes a different bet: a small, high-quality dataset adapted to a specific domain produces better behavior in that domain than a huge general-purpose model. This is not a novel idea. It is just unfashionable. The project is testing it anyway.
+Version 3 increased training epochs and sequence length. Parse success hit 100% and stayed there. The model now consistently produces valid JSON. Envelope field compliance reached 15%.
 
-## Progress as iteration
+Version 4 normalized prompts and payload formatting in the training data. Envelope compliance peaked at 20%, then regressed slightly in version 5 despite extended training.
 
-PocketGuide will not ship tomorrow. It will ship when the system reliably answers travel questions better than alternatives, when the offline constraint is real, when the evaluation metrics reflect genuine improvement. These are not arbitrary gates. They are the project's way of saying: we built this to work, not to prove we could build it.
+The pattern was clear: parse success and partial compliance respond to data quality and training duration. Full schema compliance requires architectural changes—constrained decoding, loss weighting, or different objectives. That work is not urgent. The system reached a coherent stopping point.
 
-The repository is public. The infrastructure is documented. The progress is measurable. This is how serious systems work: iteration, documentation, accountability, and an honest assessment of what has been completed and what remains.
+## What the system does now
+
+The adapted model runs in two modes. Hugging Face + PEFT loads LoRA adapters for evaluation and experimentation. llama.cpp handles quantized inference (Q4_K_M) for offline deployment. A registry maps logical model names to GGUF artifacts.
+
+Output contracts are enforced at runtime. Strict parsing validates full schema compliance. Lenient parsing accepts partial structures. Both modes surface what succeeded and what failed, making debugging tractable.
+
+The evaluation framework produces timestamped reports with metrics breakdowns, failure analysis, and example outputs. Every run is reproducible. Every result is traceable.
+
+## Why this is a good stopping point
+
+PocketGuide is not abandoned. It reached a milestone where the system is coherent, measurable, and functional within its scope.
+
+Parse success is 100%. The model consistently produces valid JSON. Uncertainty markers appear reliably. Envelope field compliance is partial but documented. The evaluation harness is stable. The synthetic data pipeline is operational. The quantized model runs offline.
+
+The next phase—full schema compliance—requires different techniques. Constrained decoding could enforce structure during generation. Loss weighting could prioritize envelope fields during training. Larger base models might handle structure more naturally. These are extensions, not missing foundations.
+
+Stopping here is intentional. Not every project needs to exhaust every avenue. Demonstrating disciplined iteration, measurable improvement, and honest assessment of what works and what remains challenging is more valuable than incremental optimization.
+
+## What comes next
+
+The natural extensions are clear. Constrained decoding or grammar-based generation could enforce schema compliance mechanically. Loss weighting or curriculum learning could teach the model to prioritize required fields. A FastAPI service could wrap the quantized model for persistent inference. Multi-domain benchmarks could test whether the methodology generalizes beyond travel.
+
+These are tractable next steps. They are not urgent. The system demonstrates what it was designed to demonstrate: domain adaptation through evaluation-first design, synthetic instruction tuning with quality control, and iterative improvement based on evidence rather than intuition.
+
+## Reflection
+
+PocketGuide is one piece of a broader approach to building ML systems. It prioritizes evaluation over scale, reproducibility over speed, and measured iteration over intuition. The repository is public. The infrastructure is documented. The results are honest.
+
+This project shows how domain adaptation works when constraints shape design, how structured outputs require explicit contracts, and how iterative improvement requires fixed benchmarks. The technical details live in GitHub. This post captures the reasoning behind the system and what was learned by building it.
 
 <div className="mt-12 pt-8 border-t border-border">
 	<div className="flex flex-wrap gap-4">

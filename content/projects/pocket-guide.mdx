@@ -1,163 +1,143 @@
 ---
 title: "PocketGuide"
-summary: "Offline travel assistant LLM with evaluation-first design, synthetic data generation pipeline, and rigorous benchmarking for visa requirements, customs, and itinerary planning."
+summary: "Domain-adapted LLM for structured travel guidance with evaluation-first design, synthetic instruction tuning, and offline inference."
 date: "2026-01-28"
-tags: ["Deep Learning", "Evaluation", "Python", "Machine Learning", "Data Generation", "API"]
+tags: ["Deep Learning", "Evaluation", "Python", "Machine Learning", "LLM", "Fine-tuning"]
 featured: false
 ---
 
 # PocketGuide
 
-Offline-capable travel assistant language model built with evaluation-first discipline, synthetic data generation, and production-ready architecture. Currently in active development with core infrastructure complete and data pipeline operational.
+Domain-adapted language model for structured travel guidance. Built with evaluation-first methodology, synthetic instruction tuning, and quantized for offline inference.
 
 ## TL;DR
 
-- **Offline-first LLM** for travel guidance (visa, customs, budgeting, itineraries) with no external dependencies
-- **Evaluation-driven development** with 72-example benchmark suite and objective metrics
-- **Synthetic data pipeline** with OpenRouter teacher models, rate limiting, and cost-controlled fallback chain
-- **Structured output contracts** with schema validation (v0 envelope + v1 payloads)
-- **Production engineering** with 376 passing tests, Makefile commands, and reproducible provenance tracking
-
-**Status:** Foundation and evaluation infrastructure complete. Currently generating synthetic training data for model adaptation.
+- **Evaluation-first LLM adaptation** with fixed 20-prompt benchmark suite and objective metrics (parse success, schema compliance, uncertainty markers)
+- **Synthetic instruction pipeline** using teacher-student generation with multi-stage quality gating and cost-controlled OpenRouter backend
+- **LoRA fine-tuning** on Llama-2-7B with 5 documented iterations improving parse success from 80% to 100%
+- **Structured output contracts** (JSON envelope + typed payloads) validated at inference time for reliable schema compliance
+- **GGUF quantization** via llama.cpp for offline deployment on consumer hardware
 
 ## What I Built
 
-**Project Foundation**
+The system addresses a specific ML challenge: adapting a general-purpose 7B model to produce reliable, schema-compliant JSON for travel planning—under constraints that matter in practice.
 
-Established clean repository structure with stable Makefile commands, configuration management, and end-to-end pipeline placeholders. The architecture supports deterministic workflows with environment-based configuration via `.env` files and typed error handling throughout.
+**Evaluation Infrastructure**
 
-**Evaluation Framework**
+I defined output contracts and benchmarks before training. A fixed 20-prompt suite measures parse success, schema compliance, and uncertainty marker presence. All training iterations are evaluated against these contracts with timestamped runs and artifact archiving for reproducibility.
 
-Built comprehensive evaluation system with 72-example benchmark suite covering 7 travel categories (visa, customs, health, budget, itinerary, safety, local culture) across 3 difficulty levels. The framework includes schema-first validation, strict/lenient parsing modes, and automated report generation with metrics summary, failure analysis, and curated examples. Baseline evaluation of pre-adaptation model established reference metrics for all future improvements.
+**Synthetic Data Pipeline**
 
-**Behavioral Contracts**
+Built a three-stage teacher-student pipeline for training data generation:
 
-Implemented standard envelope schema (v0) for consistent response structure and specialized payload schemas (v1) for different travel query types. The validation engine enforces objective contract compliance with deterministic pass/fail criteria, enabling measurable improvements during model adaptation.
+- **Prompt planning** with spec-driven diversity across categories, regions, and difficulty levels
+- **Draft generation** using OpenRouter with rate limiting (15 RPM) and multi-model fallback
+- **Quality gating** with critique-based filtering and acceptance thresholds
 
-**Synthetic Data Engine**
+The pipeline produces balanced datasets with full provenance tracking (config snapshots, prompt hashes, token counts).
 
-Designed and implemented teacher-driven data generation pipeline with versioned prompt templates covering 4 payload types. The system uses **OpenRouter** as the backend with cost-controlled fallback chain (2 free models → 1 paid model) and 15 RPM rate limiting with exponential backoff. Dataset spec targets 120 examples across categories and difficulty levels with deterministic prompt planner CLI.
+**Output Contracts**
 
-Features include dry-run mode for testing, resume support for interrupted runs, append-only JSONL output with full provenance tracking (config snapshots, run metadata, reproducible hashing), and pass-rate statistics by type/category/difficulty/error. Teacher provider includes typed error handling, full observability (tokens, latency, fallback tracking), and optional `fallback_to_paid` flag for cost control.
+Implemented JSON schema validation with two layers:
 
----
+- **Envelope schema (v0)** enforcing consistent structure: summary, assumptions, uncertainty notes, verification steps
+- **Payload schemas (v1)** for domain-specific outputs: itinerary, checklist, decision_tree, procedure
 
-## Tech Stack
+Validation occurs at inference time with strict and lenient parsing modes.
 
-- **Python 3.11+**: Core language with type hints and Google-style docstrings
-- **OpenRouter**: Teacher model backend for synthetic data generation with multi-model fallback
-- **Ruff**: Linting and formatting for code quality
-- **pytest**: Testing framework with 376 tests covering data generation, validation, and evaluation
-- **JSONL**: Append-only data format with provenance metadata and schema versioning
+**Parameter-Efficient Fine-Tuning**
 
----
+LoRA adapters on Llama-2-7B with config-driven training, gradient checkpointing, and checkpoint management. Five training iterations (v1–v5) targeted specific failure modes identified through evaluation, with each intervention measured and documented.
 
-## Current Status
+**Local Inference Runtime**
 
-**✅ Completed (Milestones 0-3)**
-
-- *Foundation:* Clean repository, stable commands, configuration files, end-to-end pipeline
-- *Baseline Evaluation:* Benchmark suite, evaluation framework, base model metrics, automated reporting
-- *Behavioral Contracts:* Envelope schema, payload schemas, validation engine, compliance measurement
-- *Synthetic Data Engine:* Prompt templates, dataset spec, teacher provider with rate limiting and fallback, draft generation CLI with provenance tracking and pass-rate statistics
-
-**🔄 In Progress (Milestone 4)**
-
-- *Data Quality & Splits:* Implementing deduplication, balancing, rejection filters, and leakage prevention. Creating clean held-out benchmark split separate from training data.
-
-**📋 Planned (Milestones 5-9)**
-
-- *Model Adaptation (M5):* LoRA/QLoRA fine-tuning on cleaned synthetic dataset with experiment tracking
-- *Rigorous Evaluation (M6):* Base vs adapted model comparison with objective metrics and qualitative examples
-- *Evidence-Driven Iteration (M7):* Targeted fixes based on failure analysis, retrain, re-evaluate
-- *Deployment Realism (M8):* Model quantization, packaging for local/offline inference, resource constraints documentation
-- *Portfolio Finalization (M9):* Polish documentation, demo, results summary, limitations, safety considerations
+GGUF quantization enables offline inference on consumer hardware. A registry-driven model selection system maps logical names to quantized artifacts. The runtime supports both Hugging Face + PEFT for evaluation and llama.cpp for production deployment.
 
 ---
 
-## Engineering Decisions
+## Why It Matters
 
-**Evaluation-First Development**
+**ML/Research Discipline**
 
-The project follows rigorous evaluation discipline before any model adaptation. Baseline metrics from open-source model establish reference point. Synthetic data generation is validated against schemas before training. All improvements will be measured objectively against held-out benchmarks with reproducible metrics and provenance tracking.
+Evaluation-first development ensures all improvements are measured objectively. Fixed benchmarks, deterministic seeding, and versioned schemas provide reproducible baselines. Structured outputs with uncertainty markers demonstrate domain adaptation beyond generic chat capabilities.
 
-**Cost-Controlled Data Generation**
+**ML Engineering**
 
-Teacher provider implements fallback chain from free models to paid models with explicit `fallback_to_paid` flag for cost control. Rate limiting (15 RPM) and exponential backoff prevent API throttling. Dry-run mode enables testing without API costs. All generation runs include token usage tracking and fallback statistics for budget visibility.
+The system demonstrates production ML practices: synthetic data generation at scale, parameter-efficient fine-tuning with experiment tracking, quantization for deployment constraints, and iterative improvement based on measured failure modes. All pipeline stages are config-driven with artifact provenance.
 
-**Reproducibility & Provenance**
+**Software Engineering**
 
-Every generated example includes full provenance: config snapshot, prompt hash, teacher model ID, generation timestamp, token counts. Append-only JSONL format prevents data loss. Deterministic prompt planning ensures consistent category/difficulty distribution. All evaluation runs saved with metadata for exact reproduction.
-
-**Clean Architecture & Testing**
-
-Modular separation: inference, evaluation, data generation, teacher providers. 376 tests cover validation logic, data pipeline, and evaluation framework. Makefile provides stable commands (`make test`, `make eval`, `make data`) for consistent developer experience. Type hints and docstrings throughout.
+Clean architecture with modular separation: evaluation, data generation, training, inference. Comprehensive test coverage across all pipeline stages. Makefile provides stable commands for consistent developer experience. Type hints and docstrings throughout.
 
 ---
 
-## Development Workflow
+## Architecture
 
-**Setup**
+The system follows a contracts-first, evaluation-driven design:
 
-```bash
-git clone <repository-url>
-cd pocket-guide
-make env              # Create virtual environment
-source .venv/bin/activate
-make test             # Run test suite
-cp .env.example .env  # Configure API keys
-```
-
-**Synthetic Data Generation**
-
-```bash
-# Dry-run (no API calls)
-python -m pocketguide.teachers.smoke --dry-run
-
-# Real generation with free models only
-python -m pocketguide.data_generation.draft
-
-# Allow paid fallback if free models fail
-python -m pocketguide.data_generation.draft --fallback_to_paid
-```
-
-**Evaluation**
-
-```bash
-make eval  # Run full benchmark suite
-python -m pocketguide.eval.report_base_v0 --run_dir runs/eval/<timestamp>
-```
-
-**Code Quality**
-
-```bash
-make lint    # Check linting
-make format  # Auto-format
-```
+<code style={{ display: 'block', whiteSpace: 'pre', margin: '0 0 1rem 0' }} className="bg-surface-2 border border-border rounded-lg p-4 overflow-x-auto text-sm font-mono text-text-2">{`Output Schemas (Envelope + Payloads)
+      ↓
+[Benchmark Suite: 20 prompts → Fixed Eval]
+      ↓
+[Prompt Planning] → [Teacher Generation (OpenRouter)]
+      ↓                       ↓
+[Draft Generation]      [Quality Gating]
+      ↓                       ↓
+[Dataset v1-v5] ←──────┘
+      ↓
+[LoRA Training: Llama-2-7B + PEFT]
+      ↓
+[Checkpoint] → [Evaluation Run]
+      ↓                ↓
+[Metrics]        [Failure Analysis]
+      ↓                ↓
+[Iteration v+1] ←┘
+      ↓
+[GGUF Quantization (llama.cpp)]
+      ↓
+[Local Inference Runtime]`}</code>
 
 ---
 
-## Results (Baseline)
+## Results
 
-Baseline evaluation completed on open-source student model pre-adaptation. Metrics provide reference point for measuring improvements post-fine-tuning.
+Five training iterations demonstrated measurable improvement on the held-out evaluation suite:
 
-Detailed results and failure analysis available in evaluation reports under `runs/eval/`. Full comparison with adapted model will be documented once Milestone 5 (Model Adaptation) is complete.
+| Metric | v1 | v3 | v5 | Target |
+|--------|----|----|----|----|
+| **Parse Success** | 0.80 | 1.00 | 1.00 | 1.00 ✓ |
+| **Uncertainty Markers** | 0.85 | 1.00 | 1.00 | 1.00 ✓ |
+| **Envelope Fields** | 0.00 | 0.15 | 0.20 | 1.00 |
+
+**Key findings:**
+
+- Parse success improved from 80% to 100% through data quality interventions and training duration adjustments
+- Uncertainty marker presence reached 100%, ensuring reliable acknowledgment of assumptions
+- Envelope field compliance improved to 20% but requires further architectural exploration
+
+The iteration process confirmed that structural compliance responds to targeted data interventions while full schema enforcement requires additional objective design. Quantized models (Q4_K_M) maintain acceptable latency for interactive use.
 
 ---
 
-## Safety & Limitations
+## Reliability & Safety
 
-**Current Limitations**
+PocketGuide enforces uncertainty by design through required schema fields (`uncertainty_notes`, `verification_steps`). The system is a research prototype for demonstrating domain adaptation and structured output generation—not an authoritative travel information source.
 
-This is a demonstration system in active development. The model has not been adapted yet and operates with baseline open-source capabilities. Output quality and reliability will improve significantly after synthetic data fine-tuning in Milestone 5.
+Training data has a knowledge cutoff; visa requirements, border policies, and local conditions change. Users must verify time-sensitive or safety-critical information with official government sources.
 
-**Intended Use**
+---
 
-PocketGuide provides general travel guidance and should not replace official government sources for visa requirements, health advisories, or safety warnings. Users must verify critical information independently.
+## Future Directions
 
-**Future Hardening**
+**Schema Compliance Improvements** — Explore loss weighting, constrained decoding, or architectural changes to improve envelope field coverage beyond 20%.
 
-Planned safety improvements include evidence attribution, uncertainty quantification, and explicit abstention when information reliability is low. Production deployment (Milestone 8) will include additional safeguards and resource constraint documentation.
+**JSON Repair** — Post-processing to recover from minor format violations without full regeneration.
+
+**Larger Model Exploration** — Adapter training on 13B+ base models to assess capacity vs efficiency trade-offs.
+
+**Server Mode** — FastAPI wrapper for persistent inference service with request logging and performance measurement.
+
+**Multi-Domain Benchmarks** — Expand evaluation beyond travel to test generalization of structured output methodology.
 
 <div className="mt-12 pt-8 border-t border-border">
   <div className="flex flex-wrap gap-4">
