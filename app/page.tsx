@@ -90,7 +90,7 @@ export default async function HomePage() {
 
       {/* Selected Projects Band */}
       <SectionBand theme="dark" variant="panel" title="Selected Projects">
-        <ProjectGrid projects={projects.slice(0, 2)} />
+        <ProjectGrid projects={projects.filter((p: any) => ['rag-benchmark-service', 'pocket-guide'].includes(p.slug))} />
         <div className="mt-6 text-right">
           <a href="/projects" className="text-sm text-accent underline">See all on Projects</a>
         </div>
