@@ -22,115 +22,53 @@ Rigorous ML pipeline for binary chest X-ray classification emphasizing model cal
 
 ## What I Built
 
-This is not a competition for raw accuracy. It is a **trustworthiness study** showing that reliability signals—calibration, uncertainty, explanation consistency, and failure semantics—matter more than confidence alone.
+Binary pneumonia classification on the **Kaggle Chest X-Ray Images dataset** with a rigorous reliability pipeline. The system answers a specific question: **when should predictions be trusted?**
 
-**Dataset & Benchmarking**
+**Core Models & Metrics**
+- DenseNet-121 baseline: **0.9576 AUROC**, 0.8990 accuracy, 0.9240 F1
+- ResNet-50 comparator: **0.9713 AUROC**, 0.8798 accuracy (complementary strengths)
+- Deterministic train/val/test splits with patient-level separation
 
-Binary pneumonia classification on the **Kaggle Chest X-Ray Images dataset** with patient-level deterministic train/validation/test splits to prevent leakage. Data pipeline includes class balance analysis, augmentation strategies, and split reproducibility via seeding.
+**Reliability Stack**
+- **Calibration**: Temperature scaling with adaptive binning; reliability diagrams quantify confidence alignment
+- **Uncertainty**: MC Dropout with strategic placement yielding nuanced uncertainty signals vs. raw confidence
+- **Explainability**: Grad-CAM visual explanations validated against untrained model baselines (sanity checks)
+- **Explanation Stability**: Robustness under perturbations (±5° rotation, brightness shifts) via Spearman correlation and spatial metrics
+- **Failure Audit**: Systematic categorization of 63 misclassifications into 4 distinct modes (clinical ambiguity, annotation noise, model blindness, spurious features)
+- **Ensemble & Deferral**: 3-model ensemble with learned abstention policies; **36.63% estimated cost reduction** in failure scenarios
+- **Interactive Demo**: Next.js web application for per-case and system-level exploration without local setup
 
-**Baseline Training**
-
-Trained DenseNet-121 and ResNet-50 as primary and comparator models using transfer learning from ImageNet-pretrained weights. Weighted BCE loss addresses class imbalance. Checkpoints selected on validation AUROC with early stopping. Both models achieved AUROC > 0.95, forming a strong foundation for downstream analysis.
-
-**Calibration Analysis**
-
-Temperature scaling improved miscalibration; ECE analysis showed that deterministic confidence alone is insufficient. Implemented adaptive binned calibration with configurable bin edges (default: `[0.0, 0.6, 0.8, 1.0]`). Reliability diagrams visualize alignment between predicted confidence and empirical accuracy. Brier scores and calibration metrics are archived per run.
-
-**Uncertainty Quantification**
-
-MC Dropout implemented with strategic placement—classifier head and late feature blocks—yielding nuanced uncertainty signals. MC inference with T passes (default 20) produces uncertainty estimates (predictive entropy, mutual information). Compared against deterministic confidence baselines. Selective prediction curves show accuracy-retention trade-offs when abstaining on high-uncertainty cases.
-
-**Explainability Infrastructure**
-
-Grad-CAM visual explanations generated for all test cases, curated by prediction state (correct/incorrect, high/low confidence). Sanity checks validate against untrained model baseline to detect explanation artifacts. Explanations stored with metadata linking to predictions and confidence scores.
-
-**Explanation Stability**
-
-Tested explanation robustness under mild perturbations (brightness/contrast adjustments, ±5° rotations). Computed Spearman rank correlation (ranking consistency), spatial overlap (IoU top-k regions), and center-of-mass drift. Stability metrics enable detection of brittle explanations despite stable predictions.
-
-**Failure-Case Audit & Trust Synthesis**
-
-Systematic audit of all 63 misclassifications across DenseNet and ResNet, categorized into 4 modes (clinical ambiguity, annotation noise, model blindness, spurious features). Curated case studies with markdown documentation. Trust quadrants synthesized prediction correctness, confidence, and explanation stability into actionable trust states.
-
-**Cross-Model & Ensemble Analysis**
-
-DenseNet and ResNet made 32 disagreements across 624 test cases. Deep dive analysis revealed complementary strengths: ResNet better for ranking (AUROC), DenseNet better for calibration. Trained 3-model ensemble (DenseNet121, ResNet50, EfficientNet-B0) with deferral policies. Ensemble + deferral achieved **36.63% estimated cost reduction** in failure scenarios.
-
-**Interactive Web Demo**
-
-Next.js application with dual browsing modes: representative cases and difficult/stress-test cases. Per-case panels show prediction, confidence, uncertainty, Grad-CAM, and sanity checks. System-level insights include calibration curves, selective prediction, stability distributions, cross-model diagnostics, ensemble performance, and OOD robustness analysis.
+**The Key Insight**: High AUROC ≠ trustworthy. Calibration adjustments don't change accuracy but reveal reliability gaps. Uncertainty and explanation stability distinguish confident-but-fragile predictions from robust ones. Cross-model disagreement (32 of 624 cases) becomes valuable signal, not a problem.
 
 ---
 
 ## Why It Matters
 
-**ML/Research Discipline**
+**ML Systems Thinking**: Reliability isn't bolted on—it's architected. This project shows disciplined multi-dimensional evaluation (accuracy + calibration + uncertainty + explanation + failure modes) as standard practice.
 
-This project demonstrates disciplined evaluation in a high-stakes domain. It prioritizes reproducibility (deterministic splits, artifact versioning), multi-dimensional assessment (accuracy + calibration + uncertainty + explanation + failure taxonomy), and responsible AI framing (explicit limitations, disclaimer). The stack shows how ML reliability is built methodically, not assumed.
+**Production ML Engineering**: Temperature scaling, MC Dropout placement, and selective prediction are practical mechanisms. Failure audits convert error patterns into actionable insights. Deferral policies quantify the cost-benefit of abstention.
 
-**ML Engineering**
-
-Production ML systems must operate safely under uncertainty. This project shows how to quantify uncertainty, detect miscalibration, and design deferral policies. Temperature scaling, MC Dropout placement, and selective prediction are practical reliability mechanisms. Failure audits convert error patterns into actionable insights. The system trades raw accuracy for trustworthiness—acknowledging when predictions are ambiguous or risky.
-
-**Software Engineering & Deployment**
-
-The codebase is modular, reproducible, and maintainable. 8-stage pipeline with clear responsibility boundaries. Config-driven workflows (configs/default.yaml). All artifacts (checkpoints, metrics, explanations, case studies) are versioned and archived. CI/CD pipeline with pytest for validation. Web demo turns raw outputs into interactive insights, enabling stakeholders to explore results without technical setup.
+**Responsible AI in Practice**: Not just statements but concrete limitations, disclaimers, and failure taxonomies. Medical AI demands this rigor.
 
 ---
 
-## Architecture
+## Architecture & Implementation
 
-```
-Chest X-Ray Dataset (Kaggle)
-      ↓
-[Stage 1: Data Pipeline]
-  - Deterministic train/val/test split
-  - Class distribution analysis
-  - Augmentation strategy
-      ↓
-[Stage 2: Baseline Training]
-  - DenseNet-121 + ResNet-50
-  - Weighted BCE loss
-  - AUROC-based checkpoint selection
-      ↓
-[Stage 3: Model Comparison]
-  - Side-by-side metrics
-  - Disagreement analysis
-      ↓
-[Stage 4: Calibration Analysis]
-  - Temperature scaling (adaptive binned)
-  - Reliability diagrams (ECE, Brier)
-      ↓
-[Stage 5: Uncertainty Quantification]
-  - MC Dropout inference
-  - Selective prediction curves
-  - Deterministic vs. probabilistic comparison
-      ↓
-[Stage 6: Explainability]
-  - Grad-CAM generation
-  - Sanity checks (untrained baseline)
-  - Curation by prediction state
-      ↓
-[Stage 7: Explanation Stability]
-  - Perturbation protocol
-  - Spearman rank correlation
-  - Spatial overlap metrics
-      ↓
-[Stage 8: Failure Audit]
-  - Misclassification categorization
-  - Trust quadrant synthesis
-  - Case study documentation
-      ↓
-[Stage 9: Ensemble & Deferral]
-  - 3-model ensemble
-  - Deferral cost-benefit analysis
-  - OOD robustness evaluation
-      ↓
-[Interactive Web Demo]
-  - Per-case dashboard
-  - System-level metrics
-  - Cross-model diagnostics
-```
+**9-Stage Pipeline**
+1. Data preparation (deterministic splits, stratification)
+2. Baseline model training (DenseNet-121, ResNet-50)
+3. Model comparison & cross-validation
+4. Calibration analysis & temperature scaling
+5. Uncertainty quantification (MC Dropout)
+6. Explainability validation (Grad-CAM + sanity checks)
+7. Explanation stability (perturbation robustness)
+8. Failure-case audit & trust synthesis
+9. Ensemble & deferral policies
+
+**Config-Driven & Reproducible**
+- All artifacts versioned and archived (checkpoints, metrics, explanations, case studies)
+- Deterministic reproducibility via seeding
+- Full audit trail from data → models → insights
 
 ---
 
