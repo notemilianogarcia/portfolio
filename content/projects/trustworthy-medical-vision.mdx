@@ -18,27 +18,20 @@ Rigorous ML pipeline for binary chest X-ray classification emphasizing model cal
 - **Uncertainty quantification**: MC Dropout inference with selective prediction and abstention policies
 - **Explainability validation**: Grad-CAM generation with untrained model sanity checks and stability metrics (Spearman correlation, spatial robustness)
 - **Failure audit**: 4-mode taxonomy across 63 analyzed error cases; ensemble + deferral reduces estimated cost by 36.63%
-- **Interactive demo**: https://trustworthy-medical-vision.vercel.app/ showcasing per-case analysis and system-level metrics
 
 ## What I Built
 
-Binary pneumonia classification on the **Kaggle Chest X-Ray Images dataset** with a rigorous reliability pipeline. The system answers a specific question: **when should predictions be trusted?**
+Binary pneumonia classification on the **Kaggle Chest X-Ray Images dataset** with a rigorous reliability pipeline that answers: **when should predictions be trusted?**
 
-**Core Models & Metrics**
-- DenseNet-121 baseline: **0.9576 AUROC**, 0.8990 accuracy, 0.9240 F1
-- ResNet-50 comparator: **0.9713 AUROC**, 0.8798 accuracy (complementary strengths)
-- Deterministic train/val/test splits with patient-level separation
+I trained two complementary models—DenseNet-121 (**0.9576 AUROC**, 0.8990 accuracy, 0.9240 F1) and ResNet-50 (**0.9713 AUROC**, 0.8798 accuracy)—on deterministic train/val/test splits with patient-level separation. But getting strong numbers was just the starting point.
 
-**Reliability Stack**
-- **Calibration**: Temperature scaling with adaptive binning; reliability diagrams quantify confidence alignment
-- **Uncertainty**: MC Dropout with strategic placement yielding nuanced uncertainty signals vs. raw confidence
-- **Explainability**: Grad-CAM visual explanations validated against untrained model baselines (sanity checks)
-- **Explanation Stability**: Robustness under perturbations (±5° rotation, brightness shifts) via Spearman correlation and spatial metrics
-- **Failure Audit**: Systematic categorization of 63 misclassifications into 4 distinct modes (clinical ambiguity, annotation noise, model blindness, spurious features)
-- **Ensemble & Deferral**: 3-model ensemble with learned abstention policies; **36.63% estimated cost reduction** in failure scenarios
-- **Interactive Demo**: Next.js web application for per-case and system-level exploration without local setup
+The reliability stack treats trustworthiness as a first-class problem. Temperature scaling and reliability diagrams audit calibration—revealing confidence alignment. MC Dropout generates uncertainty estimates that signal genuine doubt versus confident mistakes. Grad-CAM visualizations show what the model attends to, validated against untrained model baselines to catch spurious reasoning. I then measured explanation stability under perturbations (±5° rotation, brightness shifts)—and found that explanations shifted dramatically while predictions stayed the same. Unstable explanations preceded errors.
 
-**The Key Insight**: High AUROC ≠ trustworthy. Calibration adjustments don't change accuracy but reveal reliability gaps. Uncertainty and explanation stability distinguish confident-but-fragile predictions from robust ones. Cross-model disagreement (32 of 624 cases) becomes valuable signal, not a problem.
+I systematically audited all 63 misclassifications into 4 distinct modes: clinical ambiguity (legitimate hard cases), annotation noise (human disagreement), model blindness (patterns the model never learned), and spurious features (getting the answer right for the wrong reason). Each type required different handling.
+
+Finally, I combined both models with learned abstention policies. The result: a 3-model ensemble with deferral reduced estimated failure cost by **36.63%**. Cross-model disagreement (32 of 624 cases) wasn't noise—it was signal revealing which cases were genuinely hard and where model diversity added value.
+
+The key insight: high AUROC doesn't mean trustworthy. Calibration adjustments don't change accuracy but reveal reliability gaps. Uncertainty and explanation stability distinguish confident-but-fragile predictions from robust ones. Model disagreement becomes a design lever, not a problem to minimize.
 
 ---
 
@@ -120,19 +113,9 @@ The project demonstrates that asking **when the model should be trusted** yields
 
 ---
 
-## Repository & Resources
+## Workflow
 
-**GitHub**: https://github.com/notemilianogarcia/trustworthy-medical-vision
-
-**Live Demo**: https://trustworthy-medical-vision.vercel.app/
-
-**Workflow**: 8-stage modular pipeline with config-driven training, evaluation, and deployment. Clean separation of data, modeling, calibration, uncertainty, explainability, failure audit, and ensemble analysis. Full artifact versioning and reproducibility.
-
-## Project Overview
-
-This project builds a medical image classification system that treats **confidence** and **explanations** as first-class outputs alongside predictions. The technical contribution is not "beating SOTA," but demonstrating **responsible ML research** and **production-minded ML engineering** by analyzing when the model should be trusted and when it should not.
-
-**Core idea:** In healthcare-relevant ML, a model's accuracy can look strong while its **confidence is miscalibrated** and its **explanations are unstable**. This project treats explanations as **objects of measurement**, not just visuals.
+8-stage modular pipeline with config-driven training, evaluation, and deployment. Clean separation of data, modeling, calibration, uncertainty, explainability, failure audit, and ensemble analysis. Full artifact versioning and reproducibility.
 
 ---
 
