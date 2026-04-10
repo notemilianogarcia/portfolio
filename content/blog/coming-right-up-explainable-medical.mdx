@@ -1,38 +1,73 @@
 ---
-title: "Coming Right Up: Explainable Medical Vision"
-summary: "Starting work on a medical image classification project focused on explainability and uncertainty estimation, connecting my research interests in trustworthy ML."
-date: "2026-02-04"
-tags: ["Machine Learning", "Explainability", "Medical AI", "Research", "Deep Learning"]
+title: "Building Trustworthiness into Medical Vision Systems"
+summary: "Completing a rigorous ML reliability study for chest X-ray classification—beyond accuracy to ask: when should this model's predictions actually be trusted?"
+date: "2026-04-10"
+tags: ["Machine Learning", "Calibration", "Uncertainty Quantification", "Explainability", "ML Engineering", "Research"]
 featured: false
 ---
 
-# Coming Right Up: Explainable Medical Vision
+# Building Trustworthiness into Medical Vision Systems
 
-I've been working on a new project that bridges my research interests in trustworthy machine learning with practical application in healthcare. It's called **Trustworthy Medical Vision**, and it's a medical image classification system designed from the ground up with explainability and uncertainty estimation as first-class concerns.
+I recently finished **Trustworthy Medical Vision**, a project that took me deeper into a question I've been thinking about for years: *What does it actually mean to trust an ML model's decision in a high-stakes domain?*
 
-## What I'm Building
+It's not a question I started out trying to answer cleanly. The journey began with a research motivation—explainability and uncertainty quantification—but evolved into something different. It became less about making the model better at the typical metrics (accuracy, AUROC) and more about systematically asking: **When is this prediction reliable? When is it risky? When should we abstain entirely?**
 
-The project focuses on building a CNN-based classifier for medical images that doesn't just predict — it explains *why* it makes predictions and quantifies *how confident* it is. This isn't about achieving state-of-the-art accuracy; it's about demonstrating responsible ML engineering in a high-stakes domain.
+## Why medical imaging motivated this
 
-Key components include:
-- **Grad-CAM and Score-CAM** for visual explanations of model decisions
-- **Monte Carlo Dropout** for uncertainty quantification
-- **Stability analysis** to measure how explanations change under perturbations
-- **Trust quadrant analysis** to identify when the model should and shouldn't be trusted
+Medical decision support is where the gaps in standard ML become impossible to ignore. A model can report 95% accuracy and still be critically unreliable in practice. Why? Because:
 
-## Connecting to My Research Work
+- **Confidence ≠ Correctness**: A model can be confidently wrong. Real medicine needs to know the difference.
+- **Accidents cluster**: When a model fails, it often fails on similar cases—the cases quietly flagged as ambiguous by uncertainty signals but confidently classified anyway.
+- **Explanations can mislead**: Pretty visualizations don't prove the model is reasoning correctly. An explanation can look convincing while being fundamentally brittle.
+- **Failure modes matter**: Not all misclassifications are created equal. Confusing pneumonia with normal lung tissue is categorically different from model blindness to certain features.
 
-This project directly builds on my ongoing research in explainable AI and model interpretability. My graduate research has focused on understanding why deep learning models behave the way they do, particularly in multimodal settings. The Trustworthy Medical Vision project takes those research insights and applies them to a concrete, production-minded implementation.
+What I realized over the course of the project is that answering these questions rigorously requires moving beyond single metrics. You need calibration curves. You need uncertainty. You need explanations validated against sanity checks. You need to audit failures, not just count them. And you need all of this *together*, not in isolation.
 
-It's also an opportunity to showcase the full ML engineering lifecycle: from experimental design and reproducible pipelines to evaluation metrics that go beyond simple accuracy. In healthcare applications, knowing *when* a model is reliable versus when it might be misleading is just as important as knowing *what* it predicts.
+## The approach: turning reliability into engineering practice
 
-## Why This Matters
+I structured the project as an 8-stage pipeline where each stage answers a specific question about trustworthiness:
 
-Medical AI systems need to be trustworthy, especially when they're used to inform clinical decisions. A model that can say "I'm 95% confident this is pneumonia, and here's why" is more useful than one that just says "pneumonia" with no explanation or uncertainty quantification.
+1. **Baseline training**: Can we achieve strong performance? (Yes: 0.9576 AUROC on DenseNet-121)
+2. **Comparator baseline**: What if we use a different architecture? (ResNet-50 achieved 0.9713 AUROC—higher ranking, but different calibration)
+3. **Calibration analysis**: Does the model's confidence actually reflect its correctness? (Temperature scaling improved calibration; most models overestimate certainty)
+4. **Uncertainty quantification**: When is the model genuinely unsure? (MC Dropout uncertainty signals correlated with error cases better than raw confidence)
+5. **Explainability**: Can we see *why* the model makes predictions? (Grad-CAM visualizations with sanity checks against untrained baselines)
+6. **Explanation stability**: Are those explanations robust or brittle? (Stability metrics revealed that explanations were surprisingly fragile under perturbations)
+7. **Failure audit**: What exactly went wrong in error cases? (Categorized failures into 4 modes: clinical ambiguity, annotation noise, model blindness, spurious features)
+8. **Ensemble and deferral**: What if we combine models and learn when to abstain? (Ensemble + deferral policy reduced estimated failure cost by 36.63%)
 
-The project serves as both a technical demonstration and a portfolio piece, showing how research insights translate into practical, responsible ML systems. I'm currently in the early implementation phases, setting up the evaluation framework and baseline models.
+Each stage output artifacts—metrics, visualizations, case studies, curated examples. Each stage built on the previous. By the end, it wasn't about a single number. It was about a framework.
 
-Stay tuned for updates as the project progresses — I'll be sharing insights on explainability techniques, uncertainty estimation, and the challenges of building trustworthy medical AI systems.
+## What surprised me
+
+**Explanation stability mattered more than I expected.** I thought explanations, once validated, would be stable. They weren't. Under mild perturbations (±5° rotation, small brightness shifts), explanations sometimes changed dramatically—even when predictions stayed the same. This wasn't a failure; it was a signal. Unstable explanations often preceded errors.
+
+**Model disagreement revealed complementary strengths.** DenseNet and ResNet disagreed on 32 of 624 test cases. Rather than treating disagreement as a problem, I dug into it. ResNet was better at ranking (higher AUROC), DenseNet at calibration. Each handled uncertainty differently. That complementarity became the foundation for ensemble design.
+
+**Deferral is quantifiable.** I framed abstention as a deferral policy: "If uncertainty is high, ask a human." The web demo lets viewers see the cost-benefit trade-off. At a certain uncertainty threshold, the system's effective error rate dropped by 36%. That's not a small optimization—it's a shift in how the system operates.
+
+## Why this matters beyond the project
+
+Most ML work treats reliability as optional—something to add after the model is built and deemed "good enough." This project inverts that. Reliability *is* the model.
+
+For recruiting or collaboration, it demonstrates:
+- **Disciplined evaluation**: Multi-dimensional metrics trump single-number performance claims
+- **Responsible AI in practice**: Not just statements about ethics, but concrete limitations, disclaimers, and failure-mode audits
+- **ML systems thinking**: Understanding that models are one component in a larger system of uncertainty, deferral, and human judgment
+- **Reproducibility**: Deterministic splits, versioned artifacts, config-driven workflows—the infrastructure that separates research from production
+
+For the field of ML in healthcare:
+- **Trustworthiness is measurable**: Calibration, uncertainty, explanation stability, and failure taxonomy are concrete handles to evaluate system reliability
+- **Accuracy is not enough**: A 96% AUROC model is not trustworthy by default. Trustworthiness requires systematic validation across multiple dimensions
+- **Complementary models add value**: Ensemble disagreement is signal, not noise—it reveals which cases are hard and which benefits come from diversity
+
+## What's next
+
+The system is deployed at https://trustworthy-medical-vision.vercel.app/ as an interactive dashboard. Viewers can explore predictions, confidence, uncertainty, explanations, failure cases, and system-level metrics without any local setup.
+
+The codebase is open at https://github.com/notemilianogarcia/trustworthy-medical-vision for anyone who wants to extend it—retrain on different datasets, test new uncertainty methods, explore different audit frameworks.
+
+But the real outcome isn't the code or the demo. It's the framework: a way of thinking about trustworthiness that's systematic, measurable, and reproducible. That's what I hope others build on.
 
 <div className="mt-12 pt-8 border-t border-border">
   <div className="flex flex-wrap gap-4">

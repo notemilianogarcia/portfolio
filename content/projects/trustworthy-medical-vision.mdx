@@ -1,23 +1,194 @@
 ---
 title: "Trustworthy Medical Vision"
-summary: "Explainability and uncertainty estimation for medical image classification with CNNs. Evaluation-first approach treating confidence and explanations as measurable outputs."
+summary: "Production ML pipeline for binary chest X-ray classification (0.9576 AUROC, DenseNet-121). Rigorous evaluation of calibration, uncertainty quantification, explanation reliability, and failure mode taxonomy. Interactive web demo included."
 date: "2026-02-03"
-tags: ["Deep Learning", "CNN", "Health Tech", "Evaluation", "Machine Learning", "Python"]
+tags: ["Deep Learning", "CNN", "Medical AI", "Calibration", "Uncertainty Quantification", "Explainability", "Python", "PyTorch"]
 featured: false
-status: "in-progress"
 ---
 
 # Trustworthy Medical Vision
 
-**Status: Project Plan & Active Development** — This page outlines the technical roadmap for an upcoming medical image classification project focused on explainability, uncertainty estimation, and explanation reliability analysis. I will update this page as the project progresses through its milestones.
+Rigorous ML pipeline for binary chest X-ray classification emphasizing model calibration, uncertainty quantification, and trustworthy decision-making. The system evaluates **when classifier outputs should be trusted**, **when predictions warrant caution**, and **when decisions should be deferred**.
 
 ## TL;DR
 
-- **Explainable medical image classifier** using pretrained CNN backbone (ResNet/EfficientNet) with visual explanations (Grad-CAM + Score-CAM)
-- **Uncertainty estimation** via MC Dropout and/or Deep Ensembles with calibration analysis (ECE, Brier, reliability diagrams)
-- **Explanation reliability analysis** measuring stability under perturbations and correlation with uncertainty/correctness
-- **Evaluation-first methodology** with fixed benchmark, deterministic splits, and rigorous failure case auditing
-- **Responsible AI framing** with explicit limitations, disclaimers, and trust failure mode analysis
+- **Production baseline**: DenseNet-121 achieving **0.9576 AUROC**, **0.8990 accuracy**, **0.9240 F1** on 624 test cases
+- **Comparator model**: ResNet-50 with **0.9713 AUROC**, **0.8798 accuracy** for complementary evaluation
+- **Calibration pipeline**: Adaptive temperature scaling and reliability diagram analysis (ECE, Brier scores)
+- **Uncertainty quantification**: MC Dropout inference with selective prediction and abstention policies
+- **Explainability validation**: Grad-CAM generation with untrained model sanity checks and stability metrics (Spearman correlation, spatial robustness)
+- **Failure audit**: 4-mode taxonomy across 63 analyzed error cases; ensemble + deferral reduces estimated cost by 36.63%
+- **Interactive demo**: https://trustworthy-medical-vision.vercel.app/ showcasing per-case analysis and system-level metrics
+
+## What I Built
+
+This is not a competition for raw accuracy. It is a **trustworthiness study** showing that reliability signals—calibration, uncertainty, explanation consistency, and failure semantics—matter more than confidence alone.
+
+**Dataset & Benchmarking**
+
+Binary pneumonia classification on the **Kaggle Chest X-Ray Images dataset** with patient-level deterministic train/validation/test splits to prevent leakage. Data pipeline includes class balance analysis, augmentation strategies, and split reproducibility via seeding.
+
+**Baseline Training**
+
+Trained DenseNet-121 and ResNet-50 as primary and comparator models using transfer learning from ImageNet-pretrained weights. Weighted BCE loss addresses class imbalance. Checkpoints selected on validation AUROC with early stopping. Both models achieved AUROC > 0.95, forming a strong foundation for downstream analysis.
+
+**Calibration Analysis**
+
+Temperature scaling improved miscalibration; ECE analysis showed that deterministic confidence alone is insufficient. Implemented adaptive binned calibration with configurable bin edges (default: `[0.0, 0.6, 0.8, 1.0]`). Reliability diagrams visualize alignment between predicted confidence and empirical accuracy. Brier scores and calibration metrics are archived per run.
+
+**Uncertainty Quantification**
+
+MC Dropout implemented with strategic placement—classifier head and late feature blocks—yielding nuanced uncertainty signals. MC inference with T passes (default 20) produces uncertainty estimates (predictive entropy, mutual information). Compared against deterministic confidence baselines. Selective prediction curves show accuracy-retention trade-offs when abstaining on high-uncertainty cases.
+
+**Explainability Infrastructure**
+
+Grad-CAM visual explanations generated for all test cases, curated by prediction state (correct/incorrect, high/low confidence). Sanity checks validate against untrained model baseline to detect explanation artifacts. Explanations stored with metadata linking to predictions and confidence scores.
+
+**Explanation Stability**
+
+Tested explanation robustness under mild perturbations (brightness/contrast adjustments, ±5° rotations). Computed Spearman rank correlation (ranking consistency), spatial overlap (IoU top-k regions), and center-of-mass drift. Stability metrics enable detection of brittle explanations despite stable predictions.
+
+**Failure-Case Audit & Trust Synthesis**
+
+Systematic audit of all 63 misclassifications across DenseNet and ResNet, categorized into 4 modes (clinical ambiguity, annotation noise, model blindness, spurious features). Curated case studies with markdown documentation. Trust quadrants synthesized prediction correctness, confidence, and explanation stability into actionable trust states.
+
+**Cross-Model & Ensemble Analysis**
+
+DenseNet and ResNet made 32 disagreements across 624 test cases. Deep dive analysis revealed complementary strengths: ResNet better for ranking (AUROC), DenseNet better for calibration. Trained 3-model ensemble (DenseNet121, ResNet50, EfficientNet-B0) with deferral policies. Ensemble + deferral achieved **36.63% estimated cost reduction** in failure scenarios.
+
+**Interactive Web Demo**
+
+Next.js application with dual browsing modes: representative cases and difficult/stress-test cases. Per-case panels show prediction, confidence, uncertainty, Grad-CAM, and sanity checks. System-level insights include calibration curves, selective prediction, stability distributions, cross-model diagnostics, ensemble performance, and OOD robustness analysis.
+
+---
+
+## Why It Matters
+
+**ML/Research Discipline**
+
+This project demonstrates disciplined evaluation in a high-stakes domain. It prioritizes reproducibility (deterministic splits, artifact versioning), multi-dimensional assessment (accuracy + calibration + uncertainty + explanation + failure taxonomy), and responsible AI framing (explicit limitations, disclaimer). The stack shows how ML reliability is built methodically, not assumed.
+
+**ML Engineering**
+
+Production ML systems must operate safely under uncertainty. This project shows how to quantify uncertainty, detect miscalibration, and design deferral policies. Temperature scaling, MC Dropout placement, and selective prediction are practical reliability mechanisms. Failure audits convert error patterns into actionable insights. The system trades raw accuracy for trustworthiness—acknowledging when predictions are ambiguous or risky.
+
+**Software Engineering & Deployment**
+
+The codebase is modular, reproducible, and maintainable. 8-stage pipeline with clear responsibility boundaries. Config-driven workflows (configs/default.yaml). All artifacts (checkpoints, metrics, explanations, case studies) are versioned and archived. CI/CD pipeline with pytest for validation. Web demo turns raw outputs into interactive insights, enabling stakeholders to explore results without technical setup.
+
+---
+
+## Architecture
+
+```
+Chest X-Ray Dataset (Kaggle)
+      ↓
+[Stage 1: Data Pipeline]
+  - Deterministic train/val/test split
+  - Class distribution analysis
+  - Augmentation strategy
+      ↓
+[Stage 2: Baseline Training]
+  - DenseNet-121 + ResNet-50
+  - Weighted BCE loss
+  - AUROC-based checkpoint selection
+      ↓
+[Stage 3: Model Comparison]
+  - Side-by-side metrics
+  - Disagreement analysis
+      ↓
+[Stage 4: Calibration Analysis]
+  - Temperature scaling (adaptive binned)
+  - Reliability diagrams (ECE, Brier)
+      ↓
+[Stage 5: Uncertainty Quantification]
+  - MC Dropout inference
+  - Selective prediction curves
+  - Deterministic vs. probabilistic comparison
+      ↓
+[Stage 6: Explainability]
+  - Grad-CAM generation
+  - Sanity checks (untrained baseline)
+  - Curation by prediction state
+      ↓
+[Stage 7: Explanation Stability]
+  - Perturbation protocol
+  - Spearman rank correlation
+  - Spatial overlap metrics
+      ↓
+[Stage 8: Failure Audit]
+  - Misclassification categorization
+  - Trust quadrant synthesis
+  - Case study documentation
+      ↓
+[Stage 9: Ensemble & Deferral]
+  - 3-model ensemble
+  - Deferral cost-benefit analysis
+  - OOD robustness evaluation
+      ↓
+[Interactive Web Demo]
+  - Per-case dashboard
+  - System-level metrics
+  - Cross-model diagnostics
+```
+
+---
+
+## Key Results
+
+**Model Performance**
+
+| Metric | DenseNet-121 | ResNet-50 |
+|--------|--------------|-------------|
+| AUROC | 0.9576 | 0.9713 |
+| Accuracy | 0.8990 | 0.8798 |
+| F1 | 0.9240 | 0.9117 |
+
+**Reliability Signals**
+
+- Temperature scaling improved calibration; MC Dropout sensitivity to model uncertainty varied by architecture
+- Selective prediction showed 2-3% accuracy gains when abstaining on top 10% uncertainty cases
+- Explanation stability (Spearman > 0.85) correlated with correct predictions; unstable explanations often preceded errors
+
+**Failure Analysis**
+
+- Cross-model disagreement: 32 of 624 cases (5.1%)
+- Oracle ensemble accuracy: 0.9151 (removing all disagreements)
+- Deferral policy reduced estimated failure cost by 36.63%
+- Failure modes: clinical ambiguity (40%), annotation errors (25%), model blindness (20%), spurious features (15%)
+
+**System-Level Insights**
+
+The project demonstrates that asking **when the model should be trusted** yields more value than asking **how accurate is the model**. Calibration adjustments improve reliability signals without changing raw accuracy. Uncertainty and explanation stability distinguish cases where high confidence is justified from cases where it masks fragility. Ensemble disagreement reveals complementary model strengths. Deferral policies quantify the cost-benefit of abstention.
+
+---
+
+## Responsible AI & Safety
+
+### Important Disclaimers
+- **Research/educational project for methodological validation only**
+- **Not a medical diagnostic tool or approved for clinical use**
+- Requires medical professional review before any healthcare application
+
+### Ethical Considerations
+- Dataset reflects demographic patterns in training data; external validation on diverse populations required
+- Explanations are model-derived signals, not ground truth
+- Calibration and stability metrics are dataset-dependent and may not generalize
+
+### Limitations
+- Single-source dataset; external validation on independent cohorts needed before clinical claims
+- Failure due to dataset bias, labeling noise, or domain shift cannot be fully ruled out
+- Model decisions should never override radiologist judgment
+
+---
+
+## Repository & Resources
+
+**GitHub**: https://github.com/notemilianogarcia/trustworthy-medical-vision
+
+**Live Demo**: https://trustworthy-medical-vision.vercel.app/
+
+**Workflow**: 8-stage modular pipeline with config-driven training, evaluation, and deployment. Clean separation of data, modeling, calibration, uncertainty, explainability, failure audit, and ensemble analysis. Full artifact versioning and reproducibility.
 
 ## Project Overview
 
@@ -27,183 +198,31 @@ This project builds a medical image classification system that treats **confiden
 
 ---
 
-## Motivation
-
-Medical decision support requires trust, interpretability, and explicit acknowledgment of uncertainty. Pure classification performance is insufficient because errors can be high-impact, data shifts are common, and explanations can be visually convincing yet wrong.
-
-### What This Project Demonstrates
-
-**ML/Research Discipline**
-- Transfer learning with pretrained CNNs and disciplined experimental design
-- Explainability engineering with Grad-CAM/Score-CAM implementation
-- Uncertainty estimation (MC Dropout/Deep Ensembles) with calibration metrics
-- Evaluation beyond accuracy: reliability diagrams, ECE, Brier, selective prediction
-- Explanation reliability analysis: stability metrics and failure case audits
-
-**ML Engineering**
-- Reproducible, config-driven pipelines with tracked artifacts
-- Deterministic data splits with patient-level separation
-- CLI-driven workflow for training, inference, and evaluation
-
-### What This Project Does NOT Claim
-
-- Clinical readiness, diagnostic capability, or deployment in real care
-- Fairness across all demographics unless dataset supports it
-- Explanations as "ground truth" — they are assessed as signals with limitations
-
----
-
-## Planned Architecture
-
-The system follows an evaluation-first pipeline where trust analysis is as important as prediction performance.
-
-<code style={{ display: 'block', whiteSpace: 'pre', margin: '0 0 1rem 0' }} className="bg-surface-2 border border-border rounded-lg p-4 overflow-x-auto text-sm font-mono text-text-2">{`Medical Dataset (CheXpert / NIH ChestXray14)
-      ↓
-[Data Module: Patient-Level Splits → Train/Val/Test]
-      ↓
-[Model: Pretrained CNN + Classifier Head]
-      ↓
-[Training: Transfer Learning + Early Stopping]
-      ↓
-[Uncertainty: MC Dropout / Deep Ensembles]
-      ↓
-[Explanation: Grad-CAM + Score-CAM]
-      ↓
-[Stability Analysis: Perturbation Protocol]
-      ↓                       ↓
-[Calibration Metrics]   [Explanation Metrics]
-  - ECE                   - Heatmap overlap
-  - Brier                 - Rank correlation
-  - Reliability           - COM shift
-      ↓                       ↓
-[Trust Analysis: Confidence × Correctness × Stability]
-      ↓
-[Failure Case Audit + Report Generation]`}</code>
-
----
-
-## Technical Scope
-
-### In Scope
-- Binary medical image classification task
-- Pretrained CNN backbone (ResNet50 / EfficientNet-B0/B1)
-- Visual explanations: Grad-CAM + Score-CAM
-- Uncertainty: MC Dropout and/or Deep Ensembles
-- Reliability analysis: calibration + explanation stability + trust failure cases
-
-### Out of Scope
-- Large-scale training from scratch
-- Clinical validation or deployment
-- Extensive hyperparameter sweeps
-
-### Target Dataset
-CheXpert or NIH ChestXray14 for binary classification (e.g., "Pneumonia vs No Pneumonia").
-
----
-
-## Evaluation Methodology
-
-### Predictive Performance
-- AUROC (primary), Accuracy, F1 / Precision-Recall
-
-### Calibration & Uncertainty
-- ECE, Brier score, Reliability diagrams, Selective prediction curves
-
-### Trust-Focused Analysis
-Create "trust quadrants" for systematic analysis:
-- **Correct + confident + stable explanation** (ideal)
-- **Correct + uncertain** (appropriate caution)
-- **Incorrect + confident** (danger zone)
-- **Incorrect + uncertain** (less dangerous)
-
-### Explanation Stability
-Explanations generated under perturbations (MC Dropout runs, test-time augmentation) with stability metrics: heatmap overlap, rank correlation, center-of-mass shift.
-
----
-
-## Milestones
-
-| Phase | Milestone | Description |
-|-------|-----------|-------------|
-| **Setup** | 0 — Project Scaffold | Create repo, packaging, config system, and artifact conventions |
-| **Data** | 1 — Dataset Ingestion | Implement dataset loader and patient-level deterministic splits |
-| **Model** | 2 — Baseline Model | Implement pretrained backbone + head, train baseline with AUROC metrics |
-| **Uncertainty** | 3 — Uncertainty Estimation | Add dropout strategy, implement T-pass inference and calibration metrics |
-| **Explainability** | 4 — Visual Explanations | Generate Grad-CAM heatmaps for curated samples |
-| **Explainability** | 5 — Second Explainability Method | Add Score-CAM and compare side-by-side |
-| **Analysis** | 6 — Explanation Stability Analysis | Compute stability metrics and relate to uncertainty/confidence/correctness |
-| **Evaluation** | 7 — Failure Case Audit | Curate failure examples and write report with limitations |
-| **Packaging** | 8 — Portfolio Packaging | Polish README with motivation, architecture, and repro instructions |
-
----
-
-## Planned Repository Structure
-
-```
-trustworthy-medical-vision/
-├── README.md, pyproject.toml, Makefile
-├── configs/ (data.yaml, train.yaml, infer.yaml, explain.yaml, eval.yaml)
-├── src/tmv/
-│   ├── data/ (datasets.py, transforms.py, splits.py)
-│   ├── models/ (backbones.py, classifier.py, uncertainty/)
-│   ├── explain/ (gradcam.py, scorecam.py, utils.py)
-│   ├── eval/ (metrics.py, calibration.py, stability.py)
-│   └── cli/ (train.py, predict.py, explain.py, evaluate.py)
-├── notebooks/ (00_sanity_check.ipynb, 01_report.ipynb)
-├── docs/ (data.md, methodology.md, ethics.md)
-└── artifacts/
-    ├── splits/
-    └── runs/[run_id]/
-        ├── config.yaml, checkpoints/, metrics/
-        ├── explanations/, failure_cases/
-```
-
----
-
-## Planned Deliverables
-
-- Config-driven training/inference/explain/eval
-- Checkpointed baseline + uncertainty-enabled variant
-- Calibration evaluation + selective prediction
-- Explanation generation (2 methods)
-- Explanation stability analysis with metrics
-- Failure case audit with curated examples
-- Responsible AI docs + disclaimers
-- Clean README + architecture diagram + example outputs
-
----
-
-## Responsible AI & Safety
-
-### Required Disclaimers
-- Research/educational decision-support only
-- Not a medical device or for diagnosis
-
-### Ethical Considerations
-- Dataset bias, label noise, missing demographic metadata
-- Domain shift risks and confounders
-
-### Limitations
-- No external validation
-- Explanations are not ground truth
-- Calibration and stability are dataset-dependent
-
----
-
-## Current Status
-
-**Active Development** — This project is currently in the early stages. I am working through the initial milestones and will update this page with implementation progress, results, and code repository link.
-
-Check back for updates as the project progresses through its milestones.
 
 <div className="mt-12 pt-8 border-t border-border">
   <div className="flex flex-wrap gap-4">
-    <div className="inline-flex items-center gap-2 rounded-lg bg-gray-400 px-6 py-3 text-sm font-bold text-gray-100 select-none cursor-default">
+    <a 
+      href="https://github.com/notemilianogarcia/trustworthy-medical-vision"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-bold text-bg hover:opacity-90 transition-opacity"
+    >
       <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
       </svg>
-      <span>Repository Coming Soon</span>
-    </div>
+      <span>View on GitHub</span>
+    </a>
+    <a 
+      href="https://trustworthy-medical-vision.vercel.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-bold text-bg hover:opacity-90 transition-opacity"
+    >
+      <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+      </svg>
+      <span>Live Demo</span>
+    </a>
     <a 
       href="/blog/coming-right-up-explainable-medical"
       className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-bold text-bg hover:opacity-90 transition-opacity"
