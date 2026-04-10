@@ -21,17 +21,13 @@ Rigorous ML pipeline for binary chest X-ray classification emphasizing model cal
 
 ## What I Built
 
-Binary pneumonia classification on the **Kaggle Chest X-Ray Images dataset** with a rigorous reliability pipeline that answers: **when should predictions be trusted?**
+Binary pneumonia classification on the **Kaggle Chest X-Ray Images dataset** with a rigorous reliability pipeline answering: **when should predictions be trusted?**
 
-I trained two complementary models—DenseNet-121 (**0.9576 AUROC**, 0.8990 accuracy, 0.9240 F1) and ResNet-50 (**0.9713 AUROC**, 0.8798 accuracy)—on deterministic train/val/test splits with patient-level separation. But getting strong numbers was just the starting point.
+I trained DenseNet-121 (**0.9576 AUROC**, 0.8990 accuracy) and ResNet-50 (**0.9713 AUROC**, 0.8798 accuracy) on deterministic splits. Strong numbers were just the start. The reliability stack—temperature scaling for calibration, MC Dropout for uncertainty, Grad-CAM for explanations validated against untrained baselines—audits trustworthiness systematically. I measured explanation stability under perturbations and found explanations shifted dramatically while predictions stayed the same, often preceding errors.
 
-The reliability stack treats trustworthiness as a first-class problem. Temperature scaling and reliability diagrams audit calibration—revealing confidence alignment. MC Dropout generates uncertainty estimates that signal genuine doubt versus confident mistakes. Grad-CAM visualizations show what the model attends to, validated against untrained model baselines to catch spurious reasoning. I then measured explanation stability under perturbations (±5° rotation, brightness shifts)—and found that explanations shifted dramatically while predictions stayed the same. Unstable explanations preceded errors.
+I audited all 63 misclassifications into 4 modes: clinical ambiguity, annotation noise, model blindness, and spurious features. Then combined both models with abstention policies: the ensemble + deferral reduced estimated failure cost by **36.63%**. Cross-model disagreement (32 of 624 cases) revealed complementary strengths, not noise.
 
-I systematically audited all 63 misclassifications into 4 distinct modes: clinical ambiguity (legitimate hard cases), annotation noise (human disagreement), model blindness (patterns the model never learned), and spurious features (getting the answer right for the wrong reason). Each type required different handling.
-
-Finally, I combined both models with learned abstention policies. The result: a 3-model ensemble with deferral reduced estimated failure cost by **36.63%**. Cross-model disagreement (32 of 624 cases) wasn't noise—it was signal revealing which cases were genuinely hard and where model diversity added value.
-
-The key insight: high AUROC doesn't mean trustworthy. Calibration adjustments don't change accuracy but reveal reliability gaps. Uncertainty and explanation stability distinguish confident-but-fragile predictions from robust ones. Model disagreement becomes a design lever, not a problem to minimize.
+The key insight: high AUROC doesn't mean trustworthy. Calibration, uncertainty, and explanation stability distinguish robust predictions from confident-but-fragile ones. Model disagreement becomes a design lever.
 
 ---
 
