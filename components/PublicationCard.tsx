@@ -50,39 +50,31 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
       </Link>
 
       <div className="mt-4 pt-3 border-t border-border flex flex-wrap items-center gap-3">
-        {publication.pdfUrl && (
-          <span className="flex items-center gap-1.5 text-xs font-bold text-text-2">
-            <FileText size={14} />
-            PDF
-          </span>
-        )}
+        <button
+          onClick={(e) => {
+            if (isPdfDisabled) e.preventDefault();
+          }}
+          disabled={isPdfDisabled}
+          className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
+            isPdfDisabled
+              ? "text-text-3 cursor-not-allowed opacity-50"
+              : "text-text-2 hover:text-accent"
+          }`}
+        >
+          <ExternalLink size={14} />
+          View PDF
+        </button>
         {publication.codeUrl && (
           <span className="flex items-center gap-1.5 text-xs font-bold text-text-2">
             <Github size={14} />
             Code
           </span>
         )}
-        <div className="ml-auto flex items-center gap-3">
-          <button
-            onClick={(e) => {
-              if (isPdfDisabled) e.preventDefault();
-            }}
-            disabled={isPdfDisabled}
-            className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-              isPdfDisabled
-                ? "text-text-3 cursor-not-allowed opacity-50"
-                : "text-text-2 hover:text-accent"
-            }`}
-          >
-            <ExternalLink size={14} />
-            View PDF
-          </button>
-          {isPdfDisabled && (
-            <div className="rounded-full bg-accent/10 px-2.5 py-1 text-xs font-bold text-accent">
-              Coming Soon
-            </div>
-          )}
-        </div>
+        {isPdfDisabled && (
+          <div className="ml-auto rounded-full bg-accent/10 px-2.5 py-1 text-xs font-bold text-accent">
+            Coming Soon
+          </div>
+        )}
       </div>
     </div>
   );
