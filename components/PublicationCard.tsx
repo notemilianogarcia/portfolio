@@ -22,9 +22,15 @@ interface PublicationCardProps {
 
 export function PublicationCard({ publication, showAbstract = false }: PublicationCardProps) {
   const pdfLink = publication.pdfUrl ?? `/publications/${publication.slug}`;
+  const isPdfDisabled = !publication.pdfUrl;
 
   return (
     <div className="relative flex flex-col gap-4 rounded-2xl border border-border bg-surface-2 p-6 transition-all hover:border-accent/30 hover:shadow-lg">
+      {isPdfDisabled && (
+        <div className="absolute top-4 right-4 rounded-full bg-accent/10 px-2.5 py-1 text-xs font-bold text-accent">
+          Coming Soon
+        </div>
+      )}
       <Link href={`/publications/${publication.slug}`} className="group/link block">
         <div className="flex flex-col gap-1">
           <div className="flex items-start justify-between gap-4">
@@ -61,14 +67,20 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
             Code
           </span>
         )}
-        <Link
-          href={pdfLink}
-          className="flex items-center gap-1.5 text-xs font-bold text-text-2 hover:text-accent transition-colors"
-          onClick={(e) => e.stopPropagation()}
+        <button
+          onClick={(e) => {
+            if (isPdfDisabled) e.preventDefault();
+          }}
+          disabled={isPdfDisabled}
+          className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
+            isPdfDisabled
+              ? "text-text-3 cursor-not-allowed opacity-50"
+              : "text-text-2 hover:text-accent"
+          }`}
         >
           <ExternalLink size={14} />
           View PDF
-        </Link>
+        </button>
       </div>
     </div>
   );
