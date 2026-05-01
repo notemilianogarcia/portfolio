@@ -44,7 +44,7 @@ export default async function PublicationDetailPage({ params }: { params: Promis
       <SectionBand theme="light" variant="panel">
         <div className="prose max-w-2xl mx-auto">
           {isComingSoon && (
-            <div className="mb-6 inline-flex rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
+            <div className="mb-0 inline-flex rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
               Coming Soon
             </div>
           )}
