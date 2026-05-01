@@ -28,16 +28,16 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
     <div className="relative flex flex-col gap-4 rounded-2xl border border-border bg-surface-2 p-6 transition-all hover:border-accent/30 hover:shadow-lg">
       <Link href={`/publications/${publication.slug}`} className="group/link block">
         <div className="flex flex-col gap-1">
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-5">
             <h3 className="font-heading text-lg font-bold text-text transition-colors group-hover/link:text-accent">
               {publication.title}
             </h3>
             {isPdfDisabled ? (
-              <span className="shrink-0 rounded-full bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
+              <span className="ml-6 shrink-0 rounded-full bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
                 Coming Soon
               </span>
             ) : (
-              <span className="shrink-0 rounded-full bg-surface px-3 py-1 text-xs font-bold text-accent">
+              <span className="ml-6 shrink-0 rounded-full bg-surface px-3 py-1 text-xs font-bold text-accent">
                 {publication.year}
               </span>
             )}

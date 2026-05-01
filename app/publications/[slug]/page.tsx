@@ -38,10 +38,16 @@ export default async function PublicationDetailPage({ params }: { params: Promis
   const { slug } = await params;
   const publication = await getPublicationBySlug(slug);
   if (!publication) return <div>Not found</div>;
+  const isComingSoon = !publication.metadata.pdfUrl;
   return (
     <main>
       <SectionBand theme="light" variant="panel">
         <div className="prose max-w-2xl mx-auto">
+          {isComingSoon && (
+            <div className="mb-6 inline-flex rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent">
+              Coming Soon
+            </div>
+          )}
           <MDXRemote source={publication.content} components={MDXComponents} />
         </div>
       </SectionBand>
