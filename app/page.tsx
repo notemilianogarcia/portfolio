@@ -14,7 +14,7 @@ import experience from "@/data/experience.json";
 export default async function HomePage() {
   const projects = await getAllProjects();
   const publications = await getAllPublications();
-  const featuredPub = publications.find((p: any) => p.featured);
+  const featuredPub = publications.find((p: any) => p.slug === "kolmogorov-arnold-networks-alzheimers" || p.featured);
 
   return (
     <main>
@@ -96,12 +96,12 @@ export default async function HomePage() {
         </div>
       </SectionBand>
 
-      {/* Featured Publication Band (light) */}
+      {/* Featured Publications Band (light) */}
       {featuredPub && (
-        <SectionBand theme="light" variant="panel" title="Featured Publication">
+        <SectionBand theme="light" variant="panel" title="Featured Publications">
           <PublicationCard publication={featuredPub} showAbstract />
-          <div className="mt-4 text-right">
-            <a href={`/publications/${featuredPub.slug}`} className="text-sm text-accent underline">Read full</a>
+          <div className="mt-6 text-right">
+            <a href="/publications" className="text-sm text-accent underline">See all on Publications</a>
           </div>
         </SectionBand>
       )}
