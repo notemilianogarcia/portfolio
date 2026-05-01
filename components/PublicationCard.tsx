@@ -32,9 +32,15 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
             <h3 className="font-heading text-lg font-bold text-text transition-colors group-hover/link:text-accent">
               {publication.title}
             </h3>
-            <span className="shrink-0 rounded-full bg-surface px-3 py-1 text-xs font-bold text-accent">
-              {publication.year}
-            </span>
+            {isPdfDisabled ? (
+              <span className="shrink-0 rounded-full bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
+                Coming Soon
+              </span>
+            ) : (
+              <span className="shrink-0 rounded-full bg-surface px-3 py-1 text-xs font-bold text-accent">
+                {publication.year}
+              </span>
+            )}
           </div>
           <p className="text-sm font-medium text-accent/80">{publication.venue}</p>
           {publication.authors && (
@@ -50,6 +56,18 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
       </Link>
 
       <div className="mt-4 pt-3 border-t border-border flex flex-wrap items-center gap-3">
+        {publication.pdfUrl && (
+          <span className="flex items-center gap-1.5 text-xs font-bold text-text-2">
+            <FileText size={14} />
+            PDF
+          </span>
+        )}
+        {publication.codeUrl && (
+          <span className="flex items-center gap-1.5 text-xs font-bold text-text-2">
+            <Github size={14} />
+            Code
+          </span>
+        )}
         <button
           onClick={(e) => {
             if (isPdfDisabled) e.preventDefault();
@@ -64,17 +82,6 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
           <ExternalLink size={14} />
           View PDF
         </button>
-        {publication.codeUrl && (
-          <span className="flex items-center gap-1.5 text-xs font-bold text-text-2">
-            <Github size={14} />
-            Code
-          </span>
-        )}
-        {isPdfDisabled && (
-          <div className="ml-auto rounded-full bg-accent/10 px-2.5 py-1 text-xs font-bold text-accent">
-            Coming Soon
-          </div>
-        )}
       </div>
     </div>
   );
