@@ -63,11 +63,6 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
           </span>
         )}
         <div className="ml-auto flex items-center gap-3">
-          {isPdfDisabled && (
-            <div className="rounded-full bg-accent/10 px-2.5 py-1 text-xs font-bold text-accent">
-              Coming Soon
-            </div>
-          )}
           <button
             onClick={(e) => {
               if (isPdfDisabled) e.preventDefault();
@@ -82,6 +77,11 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
             <ExternalLink size={14} />
             View PDF
           </button>
+          {isPdfDisabled && (
+            <div className="rounded-full bg-accent/10 px-2.5 py-1 text-xs font-bold text-accent">
+              Coming Soon
+            </div>
+          )}
         </div>
       </div>
     </div>
