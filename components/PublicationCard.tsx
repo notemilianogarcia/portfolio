@@ -32,16 +32,9 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
             <h3 className="font-heading text-lg font-bold text-text transition-colors group-hover/link:text-accent">
               {publication.title}
             </h3>
-            <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
-              <span className="rounded-full bg-surface px-3 py-1 text-xs font-bold text-accent">
-                {publication.year}
-              </span>
-              {isPdfDisabled && (
-                <span className="rounded-full bg-accent/10 px-2.5 py-1 text-xs font-bold text-accent">
-                  Coming Soon
-                </span>
-              )}
-            </div>
+            <span className="shrink-0 rounded-full bg-surface px-3 py-1 text-xs font-bold text-accent">
+              {publication.year}
+            </span>
           </div>
           <p className="text-sm font-medium text-accent/80">{publication.venue}</p>
           {publication.authors && (
@@ -69,20 +62,27 @@ export function PublicationCard({ publication, showAbstract = false }: Publicati
             Code
           </span>
         )}
-        <button
-          onClick={(e) => {
-            if (isPdfDisabled) e.preventDefault();
-          }}
-          disabled={isPdfDisabled}
-          className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-            isPdfDisabled
-              ? "text-text-3 cursor-not-allowed opacity-50"
-              : "text-text-2 hover:text-accent"
-          }`}
-        >
-          <ExternalLink size={14} />
-          View PDF
-        </button>
+        <div className="ml-auto flex items-center gap-3">
+          {isPdfDisabled && (
+            <div className="rounded-full bg-accent/10 px-2.5 py-1 text-xs font-bold text-accent">
+              Coming Soon
+            </div>
+          )}
+          <button
+            onClick={(e) => {
+              if (isPdfDisabled) e.preventDefault();
+            }}
+            disabled={isPdfDisabled}
+            className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
+              isPdfDisabled
+                ? "text-text-3 cursor-not-allowed opacity-50"
+                : "text-text-2 hover:text-accent"
+            }`}
+          >
+            <ExternalLink size={14} />
+            View PDF
+          </button>
+        </div>
       </div>
     </div>
   );
