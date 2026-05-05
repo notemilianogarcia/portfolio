@@ -5,12 +5,12 @@ const ThemeContext = createContext<{
   theme: "dark" | "light";
   toggleTheme: () => void;
 }>({
-  theme: "light",
+  theme: "dark",
   toggleTheme: () => {},
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const currentTheme = document.documentElement.getAttribute("data-theme") as "dark" | "light" | null;
     
     // Priority: localStorage > current data-theme > default dark
-    const initialTheme = savedTheme || currentTheme || "light";
+    const initialTheme = savedTheme || currentTheme || "dark";
     
     setTheme(initialTheme);
     setMounted(true);
