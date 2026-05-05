@@ -1,37 +1,34 @@
 ---
-title: "Where Are My Publications? A Look Into My Research Journey"
-summary: "A short update on my two accepted IEEE EMBC 2026 publications, with full paper links and detailed publication pages coming soon."
+title: "A Look Into My Research Journey"
+summary: "A short, conversational update on my two accepted IEEE EMBC 2026 papers and what they are about. Full paper links and detailed pages are coming soon."
 date: "2026-05-05"
 tags: ["Research", "Publications", "Career", "Machine Learning"]
 featured: true
 ---
 
-# Where Are My Publications? A Look Into My Research Journey
+# A Look Into My Research Journey
 
-Quick update: I now have two full papers accepted at **IEEE EMBC 2026**. This post is now a short overview of those publications while I finish preparing the final publication pages and proceedings links.
+Quick update: I now have **two full papers accepted at IEEE EMBC 2026**. I wanted this post to be a short, human summary of what they are about while I finish the full publication pages.
 
-## Current publications
+## Paper 1
 
-1. **Kolmogorov-Arnold Networks for Alzheimer's Disease Detection using Multimodal Speech Analysis**
-	- **Authors**: Emiliano Garcia, Emad A. Mohammed
-	- **Status**: Full paper accepted (IEEE EMBC 2026)
+**Kolmogorov-Arnold Networks for Alzheimer's Disease Detection using Multimodal Speech Analysis**
 
-2. **Analyzing Coronavirus Cough Sounds and Alzheimer's Speech with Deep Learning Models to Discover Common Patterns**
-	- **Authors**: Emad A. Mohammed, Salma J. Ahmed, Emiliano Garcia Ochoa, Behrouz H. Far, Amir Sanati Nezhad
-	- **Status**: Full paper accepted (IEEE EMBC 2026)
+This paper focuses on early Alzheimer's screening from speech and transcripts. The core idea was practical: instead of fully fine-tuning huge models, we kept large pre-trained audio/text encoders frozen and trained lightweight classifier heads on top. That makes the approach more data-efficient and compute-efficient for low-data settings.
 
-## What this means
+We compared three head designs (MLP, pure KAN, and a Feedforward-KAN-Feedforward setup). The FKF head gave the most stable results, and the best multimodal late-fusion setup reached **0.8556 ± 0.0382 macro-F1** and **0.9220 ± 0.0295 AUC**. We also included mechanistic analyses to understand why the architecture works, not just whether it works.
 
-These papers reflect the direction of my research: applied machine learning for health-related signals, with a strong focus on multimodal data, rigorous experimentation, and models that are not only accurate but also interpretable and reliable.
+## Paper 2
 
-## Coming soon
+**Analyzing Coronavirus Cough Sounds and Alzheimer's Speech with Deep Learning Models to Discover Common Patterns**
 
-The publication entries are now live in my portfolio. I am currently preparing:
+This paper explores whether COVID-19 and Alzheimer's data can show overlapping acoustic/linguistic patterns. We combined ADReSSo speech data with crowdsourced COVID-19 cough recordings, used deep-learning embeddings, and examined clustering behavior across cohorts.
 
-- Full publication pages with expanded summaries
-- Proceedings/PDF links once they are officially available
+One interesting finding was pattern-level proximity between embeddings from younger COVID-19 participants and older Alzheimer's participants across multiple encodings. We also benchmarked Alzheimer's classification from 2D speech representations: **Inception-v3 + MFCC** performed best at around **70% accuracy/macro-F1**, and ensembles improved this to roughly **73% accuracy** and **72% macro-F1**.
 
-I will update the Publications section as soon as the final versions are public.
+## What is coming next
+
+The publication entries are already on my site, but the detailed publication pages and official proceedings/PDF links are still being finalized. I will publish those as soon as they are available.
 
 <div className="mt-12 pt-8 border-t border-border">
 	<div className="flex flex-wrap gap-4">
