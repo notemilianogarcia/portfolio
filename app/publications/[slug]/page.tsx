@@ -2,6 +2,7 @@ import { SectionBand } from "@/components/SectionBand";
 import { getPublicationBySlug, getAllPublications } from "@/lib/content";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { components as MDXComponents } from "@/components/mdx/MDXComponents";
+import remarkGfm from "remark-gfm";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
@@ -48,7 +49,7 @@ export default async function PublicationDetailPage({ params }: { params: Promis
               Coming Soon
             </div>
           )}
-          <MDXRemote source={publication.content} components={MDXComponents} />
+          <MDXRemote source={publication.content} components={MDXComponents} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
         </div>
       </SectionBand>
     </main>

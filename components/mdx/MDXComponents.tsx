@@ -43,12 +43,22 @@ export function Figure({ src, caption, alt }: { src: string; caption?: string; a
   );
 }
 
-export function Metric({ label, value, description }: { label: string; value: string; description?: string }) {
+export function Metric({
+  label,
+  value,
+  description,
+  compact = false,
+}: {
+  label: string;
+  value: string;
+  description?: string;
+  compact?: boolean;
+}) {
   return (
-    <div className="rounded-xl border border-border bg-surface-2 p-4">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-accent">{label}</p>
-      <p className="font-heading text-2xl font-bold text-text">{value}</p>
-      {description && <p className="mt-1 text-xs text-text-2">{description}</p>}
+    <div className={compact ? "rounded-xl border border-border bg-surface-2 p-3" : "rounded-xl border border-border bg-surface-2 p-4"}>
+      <p className={compact ? "text-[9px] font-bold uppercase tracking-[0.18em] text-accent" : "text-[10px] font-bold uppercase tracking-wider text-accent"}>{label}</p>
+      <p className={compact ? "font-heading text-lg font-bold text-text" : "font-heading text-2xl font-bold text-text"}>{value}</p>
+      {description && <p className={compact ? "mt-1 text-[11px] text-text-2" : "mt-1 text-xs text-text-2"}>{description}</p>}
     </div>
   );
 }
@@ -119,6 +129,8 @@ const MDXComponents = {
   th: ({ children }: { children: React.ReactNode }) => (
     <th className="px-4 py-3 text-left text-text font-bold text-sm bg-surface-2">{children}</th>
   ),
+  Callout,
+  Figure,
   Metric,
 };
 

@@ -4,7 +4,8 @@ date: "2026-05-02"
 venue: "IEEE EMBC 2026"
 year: 2026
 authors: "Emiliano Garcia, Emad A. Mohammed"
-abstract: "Full paper accepted at IEEE EMBC 2026. Proceedings link coming after publication."
+summary: "Poster-style summary of a frozen-encoder multimodal speech model for Alzheimer's screening presented at IEEE EMBC 2026."
+abstract: "Frozen-encoder multimodal speech model for Alzheimer's screening presented at IEEE EMBC 2026."
 pdfUrl: ""
 codeUrl: ""
 featured: true
@@ -12,10 +13,156 @@ featured: true
 
 # Kolmogorov-Arnold Networks for Alzheimer's Disease Detection using Multimodal Speech Analysis
 
-**Status**: Full paper accepted at IEEE EMBC 2026
+<div className="max-w-3xl text-lg md:text-xl leading-relaxed text-text-2">
+A frozen-encoder multimodal architecture with lightweight FKF classifier heads achieved 0.8556 ± 0.0382 macro-F1 and 0.9220 ± 0.0295 ROC-AUC using learned late fusion.
+</div>
 
-**Authors**: Emiliano Garcia, Emad A. Mohammed
+<div className="mt-6 grid gap-3 md:grid-cols-3">
+<Metric compact label="Conference" value="IEEE EMBC 2026" description="Toronto, Canada" />
+<Metric compact label="Best score" value="0.8556 / 0.9220" description="Macro-F1 and ROC-AUC" />
+<Metric compact label="Status" value="Paper coming soon" description="Full text will be linked later" />
+</div>
 
-**Venue**: IEEE Engineering in Medicine and Biology Conference (EMBC) 2026
+## Introduction
 
-Proceedings link coming after publication.
+Changes in speech and language can emerge before the clinical diagnosis of Alzheimer's disease, making spoken-language analysis a promising non-invasive and scalable screening approach.
+
+Speech-based AD detection remains difficult for three reasons: labeled datasets are small, complex end-to-end models can overfit and require substantial computation, and clinical-facing systems benefit from interpretable and auditable decision mechanisms.
+
+## Motivation
+
+Freezing large pretrained encoders can reduce the number of trainable parameters and improve stability in low-data settings. The classifier head still has to learn effective nonlinear decision boundaries from fixed audio and text representations.
+
+Kolmogorov-Arnold Networks use learnable spline-based functions instead of fixed activation functions. Prior speech work suggests that placing a KAN block between two feedforward layers may provide a particularly effective configuration.
+
+## Objective
+
+Primary objective: determine whether a Feedforward-KAN-Feedforward classifier head can provide more accurate and stable Alzheimer's disease classification than conventional MLP and pure KAN heads under comparable low-parameter budgets.
+
+Specific objectives:
+
+1. Compare MLP, KAN, and FKF heads across audio-only, transcript-only, and multimodal settings.
+2. Evaluate Small, Medium, and Large classifier-head capacity tiers using aligned subject-independent cross-validation.
+3. Investigate whether FKF performance depends on the ordering of its feedforward and KAN components.
+4. Examine training dynamics, internal activation flow, and learned spline functions to explain FKF behaviour.
+
+## Methods
+
+### Dataset and Evaluation
+
+The evaluation used ADReSSo 2021: 237 participants, including 122 with probable AD and 115 cognitively normal controls.
+
+Binary AD-versus-control classification was evaluated using aligned, stratified, subject-independent five-fold cross-validation. Macro-F1 and ROC-AUC were reported, with participant-level splitting used to prevent data leakage.
+
+### Audio and Transcript Processing
+
+Audio recordings were cleaned, converted to mono, resampled to 16 kHz, and divided into overlapping 10-second windows with 50% overlap. Low-energy windows were removed.
+
+Transcripts were generated automatically using Whisper-large-v3 and divided into fixed-length 64-token chunks.
+
+### Proposed Architecture
+
+Frozen wav2vec2 and DistilBERT encoders produced audio-window and transcript-chunk embeddings. Lightweight classifier heads generated local predictions, which were averaged to obtain participant-level audio and text outputs. A learned late-fusion module combined both modalities.
+
+Only the classifier and fusion heads were trained; the pretrained encoders remained frozen.
+
+<Figure src="/publications/kan/01-architecture-overview.svg" caption="Figure 1. Frozen audio and text encoders feed lightweight FKF heads. Window- and chunk-level predictions are aggregated per participant and combined through learned late fusion." alt="Multimodal speech architecture with frozen audio and text encoders and late fusion" />
+
+### Classifier Head Comparison
+
+Three classifier families were evaluated at Small, Medium, and Large parameter tiers:
+
+- MLP: conventional feedforward classifier
+- KAN: pure spline-based Kolmogorov-Arnold Network
+- FKF: Feedforward-KAN-Feedforward
+
+A small-tier audio ablation also compared MLP, KAN, FKF, Feedforward-KAN, and KAN-Feedforward.
+
+## Results
+
+### Best Late-Fusion Result
+
+<div className="grid gap-3 md:grid-cols-2">
+<Metric label="Macro-F1" value="0.8556 ± 0.0382" description="Best learned late-fusion result" />
+<Metric label="ROC-AUC" value="0.9220 ± 0.0295" description="Best learned late-fusion result" />
+</div>
+
+### Overall Performance
+
+FKF was consistently strong across audio-only, transcript-only, and multimodal settings. Learned late fusion improved over the unimodal outputs and was the best-performing fusion strategy in eight of nine evaluated settings.
+
+### Performance Under Limited Capacity
+
+The clearest FKF advantages appeared under tight classifier-head budgets.
+
+Small-tier fusion macro-F1:
+
+- FKF: 0.8068 ± 0.0235
+- KAN: 0.7812 ± 0.0556
+- MLP: 0.7015 ± 0.1067
+
+Small FKF models were frequently competitive with larger alternatives, supporting a structural advantage rather than an effect of parameter count alone.
+
+<Figure src="/publications/kan/02-performance-comparison.svg" caption="Figure 2. Macro-F1 versus trainable head parameters across audio, text, and fusion. FKF provides a favourable performance-capacity trade-off, particularly under limited capacity." alt="Three-panel performance comparison across audio, text, and fusion settings" />
+
+## Ordering Ablation
+
+FKF achieved both the highest macro-F1 and the lowest fold-to-fold variability, showing that the ordering of the feedforward and KAN components matters.
+
+| Metric | MLP | KAN | FKF | FK | KF |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Macro-F1 | 0.641 ± 0.096 | 0.543 ± 0.102 | 0.681 ± 0.010 | 0.641 ± 0.095 | 0.645 ± 0.047 |
+
+Model definitions:
+
+- MLP: conventional multilayer perceptron
+- KAN: pure Kolmogorov-Arnold Network
+- FKF: Feedforward-KAN-Feedforward
+- FK: Feedforward-KAN
+- KF: KAN-Feedforward
+
+## Discussion
+
+The FKF ordering appears to matter because FF1 conditions frozen features, KAN learns spline nonlinearities, and FF2 produces stable logits. The first feedforward layer mixes and rescales the frozen encoder representations before nonlinear modeling, and the final feedforward layer recombines the KAN outputs into stable class predictions.
+
+Mechanistically, FKF showed smoother convergence and lower across-fold variability than alternative orderings. Activation analysis indicated progressive nonlinear engagement and class-margin formation, while representative spline functions remained low-complexity and interpretable.
+
+## Conclusion
+
+- Frozen audio and text encoders paired with lightweight FKF heads provide strong low-parameter AD classification.
+- FKF was the most consistent head family, with its clearest advantages appearing under tight parameter budgets.
+- Learned late fusion combined complementary acoustic and linguistic information, reaching 0.8556 macro-F1 and 0.9220 ROC-AUC.
+
+### Future Work
+
+External validation, lower-cost ASR, temporal and token-level interpretability, and richer multimodal fusion.
+
+## References
+
+1. Luz S, Haider F, de la Fuente S, Fromm D, MacWhinney B. Detecting Cognitive Decline Using Speech Only: The ADReSSo Challenge. Interspeech, 2021.
+2. Liu Z, Wang Y, Vaidya S, et al. KAN: Kolmogorov-Arnold Networks. 2024.
+3. Koudounas A, La Quatra M, Pastor E, Siniscalchi SM, Baralis E. "KAN You Hear Me?" Exploring Kolmogorov-Arnold Networks for Spoken Language Understanding. Interspeech, 2025.
+4. Baevski A, Zhou H, Mohamed A, Auli M. wav2vec 2.0. NeurIPS, 2020.
+5. Sanh V, Debut L, Chaumond J, Wolf T. DistilBERT. 2019.
+
+## Acknowledgements
+
+This work was conducted at Wilfrid Laurier University. The authors gratefully acknowledge institutional support for this research. Computational resources were provided by the Digital Research Alliance of Canada.
+
+<div className="mt-12 pt-8 border-t border-border">
+	<div className="flex flex-wrap gap-4">
+		<a
+			href="#"
+			className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-bold text-bg hover:opacity-90 transition-opacity"
+		>
+			<svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+			</svg>
+			<span>Full paper</span>
+		</a>
+	</div>
+</div>
+
+<div className="mt-4 text-sm text-text-2">
+Emiliano Garcia and Emad A. Mohammed · Department of Computer Science and Physics, Wilfrid Laurier University, Waterloo, Canada · IEEE EMBC 2026 · Toronto, Canada · Paper ID 1777
+</div>
