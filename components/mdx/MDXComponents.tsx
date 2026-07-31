@@ -28,11 +28,11 @@ export function Callout({ children, type = "info" }: CalloutProps) {
   );
 }
 
-export function Figure({ src, caption, alt }: { src: string; caption?: string; alt?: string }) {
+export function Figure({ src, caption, alt, className }: { src: string; caption?: string; alt?: string; className?: string }) {
   return (
-    <figure className="my-8">
+    <figure className={`my-8 ${className ?? ""}`}>
       <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-        <img src={src} alt={alt || caption} className="w-full object-cover" />
+        <img src={src} alt={alt || caption} className="w-full object-contain" />
       </div>
       {caption && (
         <figcaption className="mt-3 text-center text-xs text-text-2 italic">

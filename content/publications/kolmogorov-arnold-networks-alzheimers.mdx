@@ -109,9 +109,23 @@ Small FKF models were frequently competitive with larger alternatives, supportin
 
 FKF achieved both the highest macro-F1 and the lowest fold-to-fold variability, showing that the ordering of the feedforward and KAN components matters.
 
-| Metric | MLP | KAN | FKF | FK | KF |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Macro-F1 | 0.641 ± 0.096 | 0.543 ± 0.102 | 0.681 ± 0.010 | 0.641 ± 0.095 | 0.645 ± 0.047 |
+<div className="mt-4 mb-6 w-full">
+<table className="w-full text-sm text-text-2 border-collapse">
+<thead>
+<tr className="border-b border-border">
+<th className="py-2 px-2 text-left font-semibold text-text-1">Metric</th>
+<th className="py-2 px-2 text-right font-semibold text-text-1">MLP</th>
+<th className="py-2 px-2 text-right font-semibold text-text-1">KAN</th>
+<th className="py-2 px-2 text-right font-semibold text-text-1">FKF</th>
+<th className="py-2 px-2 text-right font-semibold text-text-1">FK</th>
+<th className="py-2 px-2 text-right font-semibold text-text-1">KF</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="py-1.5 px-2">Macro-F1</td><td className="py-1.5 px-2 text-right">0.641 ± 0.096</td><td className="py-1.5 px-2 text-right">0.543 ± 0.102</td><td className="py-1.5 px-2 text-right">0.681 ± 0.010</td><td className="py-1.5 px-2 text-right">0.641 ± 0.095</td><td className="py-1.5 px-2 text-right">0.645 ± 0.047</td></tr>
+</tbody>
+</table>
+</div>
 
 Model definitions:
 
