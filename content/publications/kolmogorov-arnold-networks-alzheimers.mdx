@@ -66,7 +66,7 @@ Frozen wav2vec2 and DistilBERT encoders produced audio-window and transcript-chu
 
 Only the classifier and fusion heads were trained; the pretrained encoders remained frozen.
 
-<Figure src="/publications/kan/01-architecture-overview.svg" caption="Figure 1. Frozen audio and text encoders feed lightweight FKF heads. Window- and chunk-level predictions are aggregated per participant and combined through learned late fusion." alt="Multimodal speech architecture with frozen audio and text encoders and late fusion" />
+<Figure src="/publications/kan/01-architecture-overview.png" caption="Figure 1. Frozen audio and text encoders feed lightweight FKF heads. Window- and chunk-level predictions are aggregated per participant and combined through learned late fusion." alt="Multimodal speech architecture with frozen audio and text encoders and late fusion" />
 
 ### Classifier Head Comparison
 
@@ -103,7 +103,7 @@ Small-tier fusion macro-F1:
 
 Small FKF models were frequently competitive with larger alternatives, supporting a structural advantage rather than an effect of parameter count alone.
 
-<Figure src="/publications/kan/02-performance-comparison.svg" caption="Figure 2. Macro-F1 versus trainable head parameters across audio, text, and fusion. FKF provides a favourable performance-capacity trade-off, particularly under limited capacity." alt="Three-panel performance comparison across audio, text, and fusion settings" />
+<Figure src="/publications/kan/02-performance-comparison.png" caption="Figure 2. Macro-F1 versus trainable head parameters across audio, text, and fusion. FKF provides a favourable performance-capacity trade-off, particularly under limited capacity." alt="Three-panel performance comparison across audio, text, and fusion settings" />
 
 ## Ordering Ablation
 

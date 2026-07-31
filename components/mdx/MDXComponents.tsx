@@ -124,10 +124,10 @@ const MDXComponents = {
     <tr className="border-b border-border last:border-b-0">{children}</tr>
   ),
   td: ({ children }: { children: React.ReactNode }) => (
-    <td className="px-4 py-3 text-text-2 text-sm">{children}</td>
+    <td className="px-4 py-3 text-text-2 text-sm whitespace-nowrap">{children}</td>
   ),
   th: ({ children }: { children: React.ReactNode }) => (
-    <th className="px-4 py-3 text-left text-text font-bold text-sm bg-surface-2">{children}</th>
+    <th className="px-4 py-3 text-left text-text font-bold text-sm bg-surface-2 whitespace-nowrap">{children}</th>
   ),
   Callout,
   Figure,
